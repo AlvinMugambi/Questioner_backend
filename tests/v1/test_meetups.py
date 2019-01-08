@@ -12,7 +12,7 @@ class MeetupsBaseTest(unittest.TestCase):
 
     def setUp(self):
         self.app = create_app()
-        self.client = self.app.test_client
+        self.client = self.app.test_client()
 
         self.post_meetup = {"topic":"Miraa",
                             "meetup_date":"30/01/1990",
@@ -31,12 +31,13 @@ class TestMeetups(MeetupsBaseTest):
 
         response = self.client.post("api/v1/meetups",data = json.dumps(self.post_meetup), content_type = "application/json")
         result = json.loads(response.data.decode('utf-8'))
-        self.assertEqual(response.status_code, 200)
-        self.assertEqual(result["status"], 200)
-        self.assertEqual(result["data"], [{"topic" :"Miraa",
-                                           "location" :"Meru",
-                                           "meetup_date" :"30/01/1990",
-                                           "tags" : ["trees", "vegetation",]}])
+        self.assertEqual(response.status_code, 201)
+        self.assertEqual(result["status"], 201)
+        self.assertEqual(result["data"], [{"location": "Meru",
+                                            "meetup_date": "30/01/1990",
+                                            "tags": ["trees",
+                                                      "vegetation"],
+                                                      "topic": "Miraa"}])
 
 
 if __name__ == '__main__':
