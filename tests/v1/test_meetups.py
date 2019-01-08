@@ -54,14 +54,16 @@ class TestMeetups(MeetupsBaseTest):
     """
 
     def test_user_can_create_a_meetup(self):
-
-        """ Test that a user can enter meetup details and create a meetup"""
+        """
+        Test that a user can enter meetup details and create a meetup
+        """
 
         response = self.client.post("api/v1/meetups", data = json.dumps(self.post_meetup1), content_type = "application/json")
         result = json.loads(response.data.decode('utf-8'))
         self.assertEqual(response.status_code, 201)
         self.assertEqual(result["status"], 201)
         self.assertEqual(result["data"], [{"location": "Meru", "meetup_date": "30/01/1990", "tags": ["trees", "vegetation"], "topic": "Miraa"}])
+
 
     def test_user_can_get_all_meetups(self):
         """
