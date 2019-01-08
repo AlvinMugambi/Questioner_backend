@@ -9,7 +9,7 @@ from app.api.v1.views.meetup_views import version1 as meetups
 from config import app_config
 
 
-def create_app(app_environment):
+def create_app(app_environment="development"):
     """Creates the app instance and returns the app """
     app = Flask(__name__)
     app.config.from_object(app_config[app_environment])
