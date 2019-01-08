@@ -1,6 +1,6 @@
 """The meetup routes"""
 
-from flask import Flask, jsonify, request
+from flask import jsonify, request
 
 from app.api.v1.models.models import Meetup
 from app.api.v1 import version1
@@ -39,7 +39,7 @@ def create_meetup():
         images=images,
         tags=tags
     )
-    meetup.create_meetup()
+    meetup.save_meetup()
 
     return jsonify({"status": 201,
                     "data": [{"topic": topic,
