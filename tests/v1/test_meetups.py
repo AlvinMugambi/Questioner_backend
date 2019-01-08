@@ -31,7 +31,7 @@ class TestMeetups(MeetupsBaseTest):
     The test meetups class that contains all the tests for meetups endpoints
     """
 
-    def test_user_can_post_question(self):
+    def test_user_can_create_a_meetup(self):
 
         """ Test that a user can enter meetup details and create a meetup"""
 
@@ -40,7 +40,3 @@ class TestMeetups(MeetupsBaseTest):
         self.assertEqual(response.status_code, 201)
         self.assertEqual(result["status"], 201)
         self.assertEqual(result["data"], [{"location": "Meru","meetup_date": "30/01/1990","tags": ["trees","vegetation"],"topic": "Miraa"}])
-
-
-if __name__ == '__main__':
-    unittest.main()
