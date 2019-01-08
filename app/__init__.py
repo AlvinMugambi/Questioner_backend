@@ -1,4 +1,6 @@
-"""Creates the app instance and returns the app """
+"""
+Creates the app instance and returns the app
+"""
 
 
 # local imports
@@ -9,7 +11,9 @@ from config import app_config
 
 
 def create_app(app_environment):
-    """Creates the app instance and returns the app """
+    """
+    Creates the app instance and returns the app
+    """
     app = Flask(__name__)
     app.config.from_object(app_config[app_environment])
     app.register_blueprint(meetups)
