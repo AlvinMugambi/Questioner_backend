@@ -13,8 +13,8 @@ class DevelopmentConfig(Config):
     """
     The development configuration class
     """
-
     DEBUG = True
+
 
 class TestingConfig(Config):
     """
@@ -23,7 +23,7 @@ class TestingConfig(Config):
     DEBUG = True
 
 
-APP_CONFIG = {
+app_config = {
     "development": DevelopmentConfig,
     "testing": TestingConfig
 }
