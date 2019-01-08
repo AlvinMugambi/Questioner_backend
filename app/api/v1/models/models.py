@@ -4,7 +4,7 @@ The meetups models
 
 from datetime import datetime
 
-meetups = []
+MEETUPS = []
 
 
 class Meetup:
@@ -15,7 +15,7 @@ class Meetup:
         """
         The initialization of the Meetup class that defines its variables
         """
-        self.id = len(meetups)+1
+        self.id = len(MEETUPS)+1
         self.topic = topic
         self.meetup_date = meetup_date
         self.location = location
@@ -23,11 +23,11 @@ class Meetup:
         self.tags = tags
         self.created_at = datetime.now()
 
-    def create_meetup(self):
+    def save_meetup(self):
         """
         saves new meetup to store
         """
-        meetups.append(self)
+        MEETUPS.append(self)
 
     @staticmethod
     def to_json(meetup):
