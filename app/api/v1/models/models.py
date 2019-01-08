@@ -30,6 +30,14 @@ class Meetup:
         MEETUPS.append(self)
 
     @staticmethod
+    def get_all_meetups():
+        """
+        gets all meetups
+        """
+        return [Meetup.to_json(meetup) for meetup in MEETUPS]
+
+
+    @staticmethod
     def to_json(meetup):
         """
         format meetup object to a readable dictionary
