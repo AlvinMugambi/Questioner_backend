@@ -36,6 +36,12 @@ class Meetup:
         """
         return [Meetup.to_json(meetup) for meetup in MEETUPS]
 
+    @staticmethod
+    def get_meetup(meet_id):
+        """
+        get a specific meetup using its id
+        """
+        return [Meetup.to_json(meetup) for meetup in MEETUPS if meetup.id == meet_id]
 
     @staticmethod
     def to_json(meetup):
@@ -47,7 +53,7 @@ class Meetup:
             "topic": meetup.topic,
             "meetup_date": meetup.meetup_date,
             "location": meetup.location,
-            "images": meetup.images,
+            # "images": meetup.images,
             "tags": meetup.tags,
-            "created_at": meetup.created_at
+            # "created_at": meetup.created_at
         }
