@@ -28,8 +28,6 @@ class Meetup:
         saves new meetup to store
         """
         meetups.append(self)
-        print(">>>>>>>>>>>\n", self.id, self.images, self.created_at)
-        print("STORE ", meetups)
 
     @staticmethod
     def to_json(meetup):
