@@ -1,10 +1,10 @@
 from flask import Flask, jsonify, request
 import datetime
 
-from app.api.v1.models.models import meetups
+from app.api.v1.models.models import meetups, Meetup
 from app.api.v1 import version1
 
-@version1.route("/meetups", methods= ['POST'])
+@version1.route("/meetups", methods=['POST'])
 def create_meetup():
     try:
         topic = request.get_json()['topic']
@@ -28,16 +28,13 @@ def create_meetup():
     if not tags:
         return jsonify({'Error':'tags fields is required'})
 
-    id = len(meetups)+1
-    meetup = {"id" : id,
-              "created_at" : datetime.datetime.utcnow(),
-              "location" : location,
-              "images" : images,
-              "topic" : topic ,
-              "meetup_date" : meetup_date ,
-                # // when the meetup is holding
-              "Tags" : tags,
-            }
-    meetups.append(meetup)
+    meetup = Meetup(
+        topic=topic,
+        meetup_date=meetup_date,
+        location=location,
+        images=images,
+        tags=tags
+    )
+    meetup.create_meetup()
 
-    return jsonify({"status": 201, "data":[{"topic":topic, "location":location, "meetup_date":meetup_date, "tags":tags}]}), 201
+    return jsonify({"status": 201, "data": [{"topic": topic, "location": location, "meetup_date": meetup_date, "tags": tags}]}), 201
