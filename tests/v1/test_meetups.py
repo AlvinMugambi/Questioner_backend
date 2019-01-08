@@ -1,5 +1,6 @@
 """The meetups tests"""
 
+import os
 import unittest
 import json
 
@@ -13,7 +14,8 @@ class MeetupsBaseTest(unittest.TestCase):
     """
 
     def setUp(self):
-        self.app = create_app()
+        APP_ENV = os.getenv("TESTING_ENV")
+        self.app = create_app(APP_ENV)
         self.client = self.app.test_client()
 
         self.post_meetup = {"topic":"Miraa",
