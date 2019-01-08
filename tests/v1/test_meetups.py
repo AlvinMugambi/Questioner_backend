@@ -8,7 +8,9 @@ from app import create_app
 
 class MeetupsBaseTest(unittest.TestCase):
 
-    """The meetups base test that contains the setUp funcion that occurs before each test"""
+    """
+    The meetups base test that contains the setUp funcion that occurs before each test
+    """
 
     def setUp(self):
         self.app = create_app()
@@ -23,7 +25,9 @@ class MeetupsBaseTest(unittest.TestCase):
 
 
 class TestMeetups(MeetupsBaseTest):
-    """ The test meetups class that contains all the tests for meetups endpoints"""
+    """
+    The test meetups class that contains all the tests for meetups endpoints
+    """
 
     def test_user_can_post_question(self):
 
@@ -33,11 +37,7 @@ class TestMeetups(MeetupsBaseTest):
         result = json.loads(response.data.decode('utf-8'))
         self.assertEqual(response.status_code, 201)
         self.assertEqual(result["status"], 201)
-        self.assertEqual(result["data"], [{"location": "Meru",
-                                            "meetup_date": "30/01/1990",
-                                            "tags": ["trees",
-                                                      "vegetation"],
-                                                      "topic": "Miraa"}])
+        self.assertEqual(result["data"], [{"location": "Meru","meetup_date": "30/01/1990","tags": ["trees","vegetation"],"topic": "Miraa"}])
 
 
 if __name__ == '__main__':
