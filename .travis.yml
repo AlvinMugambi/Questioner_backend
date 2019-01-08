@@ -8,7 +8,7 @@ install:
 
 # Run tests
 script:
-     - pytest --cov=app
+     - pytest tests/v1/test_meetups.py
 
 after_success:
     - coveralls
