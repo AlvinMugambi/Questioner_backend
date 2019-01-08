@@ -8,7 +8,7 @@ from app.api.v1 import version1
 @version1.route("/meetups", methods=['POST'])
 def create_meetup():
     """
-    The POST method for the meetups routes that allows a user to create a meetup
+    The POST method for the meetups route that allows a user to create a meetup
     """
     try:
         topic = request.get_json()['topic']
