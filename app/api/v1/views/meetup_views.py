@@ -2,7 +2,7 @@
 
 from flask import jsonify, request
 
-from app.api.v1.models.models import Meetup
+from app.api.v1.models.models import Meetup, MEETUPS
 from app.api.v1 import version1
 
 @version1.route("/meetups", methods=['POST'])
@@ -46,3 +46,17 @@ def create_meetup():
                               "location": location,
                               "meetup_date": meetup_date,
                               "tags": tags}]}), 201
+
+@version1.route("/meetups", methods=["GET"])
+def get_meetups():
+    """
+    Fetches all meetups
+    """
+    meetups = Meetup.get_all_meetups()
+
+    if meetups:
+        return jsonify({"status": 200, "data": meetups}), 200
+    return jsonify({
+        "status": 404,
+        "error": "Currently there are no meetups scheduled."
+    }), 404
