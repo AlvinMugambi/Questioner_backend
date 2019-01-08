@@ -83,3 +83,21 @@ class TestMeetups(MeetupsBaseTest):
         result = json.loads(response.data.decode('utf-8'))
         self.assertEqual(result["status"], 200)
         # self.assertEqual(result["data"], self.meetups)
+
+    def test_user_can_get_a_specific_meetup(self):
+        """
+        Test to show that a user can successfully get a specific meetup using a metup id
+        """
+        self.client.post("api/v1/meetups", data = json.dumps(self.post_meetup1), content_type = "application/json")
+        self.client.post("api/v1/meetups", data = json.dumps(self.post_meetup2),  content_type = "application/json")
+
+        response = self.client.get("api/v1/meetups/1", content_type = "application/json")
+        self.assertEqual(response.status_code, 200)
+
+        result = json.loads(response.data.decode('utf-8'))
+        self.assertEqual(result['status'], 200)
+        self.assertEqual(result['data'], [{"id" : 1,
+                                           "topic":"Miraa",
+                                           "location" : "Meru",
+                                           "meetup_date":"30/01/1990",
+                                           "tags" :["trees", "vegetation"]}])
