@@ -1,9 +1,18 @@
-"""Creates the app instance and returns the app """
+"""
+Creates the app function and returns the app
+"""
 
-from flask import Flask
+# local imports
+from flask import Flask, Blueprint
 
-def create_app():
+from app.api.v1.views.meetup_views import version1 as meetups
+from config import app_config
+
+
+def create_app(app_environment):
     """Creates the app instance and returns the app """
     app = Flask(__name__)
+    app.config.from_object(app_config[app_environment])
+    app.register_blueprint(meetups)
 
     return app
