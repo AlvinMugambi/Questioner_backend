@@ -15,7 +15,7 @@ class MeetupsBaseTest(unittest.TestCase):
         self.client = self.app.test_client
 
         self.post_meetup = {"topic":"Miraa",
-                            "happeningOn":"30/01/1990",
+                            "meetup_date":"30/01/1990",
                             "location":"Meru",
                             "images":["me.png", "you.png"],
                             "tags":["trees", "vegetation"]
@@ -35,7 +35,7 @@ class TestMeetups(MeetupsBaseTest):
         self.assertEqual(result["status"], 200)
         self.assertEqual(result["data"], [{"topic" :"Miraa",
                                            "location" :"Meru",
-                                           "happeningOn" :"30/01/1990",
+                                           "meetup_date" :"30/01/1990",
                                            "tags" : ["trees", "vegetation",]}])
 
 
