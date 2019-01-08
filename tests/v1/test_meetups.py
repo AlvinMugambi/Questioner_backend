@@ -14,8 +14,8 @@ class MeetupsBaseTest(unittest.TestCase):
     """
 
     def setUp(self):
-        APP_ENV = os.getenv("TESTING_ENV")
-        self.app = create_app(APP_ENV)
+        app_env = os.getenv("TESTING_ENV")
+        self.app = create_app(app_env)
         self.client = self.app.test_client()
 
         self.post_meetup = {"topic":"Miraa",
@@ -35,8 +35,8 @@ class TestMeetups(MeetupsBaseTest):
 
         """ Test that a user can enter meetup details and create a meetup"""
 
-        response = self.client.post("api/v1/meetups",data = json.dumps(self.post_meetup), content_type = "application/json")
+        response = self.client.post("api/v1/meetups", data = json.dumps(self.post_meetup), content_type = "application/json")
         result = json.loads(response.data.decode('utf-8'))
         self.assertEqual(response.status_code, 201)
         self.assertEqual(result["status"], 201)
-        self.assertEqual(result["data"], [{"location": "Meru","meetup_date": "30/01/1990","tags": ["trees","vegetation"],"topic": "Miraa"}])
+        self.assertEqual(result["data"], [{"location": "Meru", "meetup_date": "30/01/1990", "tags": ["trees","vegetation"], "topic": "Miraa"}])
