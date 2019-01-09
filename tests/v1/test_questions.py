@@ -32,6 +32,11 @@ class QuestionBaseTest(unittest.TestCase):
                                 "title": "what are we to eat?",
                                 "votes": 1}
 
+        self.downvoted_question= {"body": "I would like to know the kind of food being served at the meetup",
+                                  "meetup_id": 1,
+                                  "question_id": 1,
+                                  "title": "what are we to eat?",
+                                  "votes": -1}
 
 class TestQuestionEndpoint(QuestionBaseTest):
     """
@@ -60,3 +65,14 @@ class TestQuestionEndpoint(QuestionBaseTest):
         self.assertEqual(response.status_code, 200)
         result = json.loads(response.data.decode('utf-8'))
         self.assertEqual(result['data'], self.upvoted_question)
+
+    def test_downvote_question(self):
+        """
+        test a user can upvote a question
+        """
+        self.client.post("api/v1/meetups", data = json.dumps(self.meetup), content_type = "application/json")
+        self.client.post("api/v1/meetups/1/questions", data = json.dumps(self.post_question1), content_type = "application/json")
+        response = self.client.patch("api/v1/questions/1/downvote", content_type = "application/json")
+        self.assertEqual(response.status_code, 200)
+        result = json.loads(response.data.decode('utf-8'))
+        self.assertEqual(result['data'], self.downvoted_question)
