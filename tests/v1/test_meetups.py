@@ -96,8 +96,8 @@ class TestMeetups(MeetupsBaseTest):
 
         result = json.loads(response.data.decode('utf-8'))
         self.assertEqual(result['status'], 200)
-        self.assertEqual(result['data'], [{"id" : 1,
-                                           "topic":"Miraa",
-                                           "location" : "Meru",
-                                           "meetup_date":"30/01/1990",
-                                           "tags" :["trees", "vegetation"]}])
+        self.assertEqual(result['data'], [{"id": 1,
+                                           "location": "Meru",
+                                           "meetup_date": "30/01/1990",
+                                           "tags": ["trees", "vegetation"],
+                                           "topic": "Miraa"}])
