@@ -77,7 +77,7 @@ class TestMeetups(MeetupsBaseTest):
         self.client.post("api/v1/meetups", data = json.dumps(self.post_meetup1), content_type = "application/json")
         self.client.post("api/v1/meetups", data = json.dumps(self.post_meetup2),  content_type = "application/json")
 
-        response = self.client.get("api/v1/meetups", content_type = "application/json")
+        response = self.client.get("api/v1/meetups/upcoming", content_type = "application/json")
         self.assertEqual(response.status_code, 200)
 
         result = json.loads(response.data.decode('utf-8'))
