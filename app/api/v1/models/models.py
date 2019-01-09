@@ -5,6 +5,7 @@ The meetups models
 from datetime import datetime
 
 MEETUPS = []
+QUESTIONS = []
 
 
 class Meetup:
@@ -56,4 +57,39 @@ class Meetup:
             # "images": meetup.images,
             "tags": meetup.tags,
             # "created_at": meetup.created_at
+        }
+
+class Question:
+    """
+    The question class that contains the questions models and methods
+    """
+
+    def __init__(self, title, body, meetup_id):
+        """
+        The initialization of the Question class that defines its variables
+        """
+        self.question_id = len(QUESTIONS)+1
+        self.meetup_id = meetup_id
+        self.title = title
+        self.votes = 0
+        self.body = body
+        self.created_at = datetime.now()
+
+    def save_question(self):
+        """
+        saves the question to the question store
+        """
+        QUESTIONS.append(self)
+
+    @staticmethod
+    def to_json(question):
+        """
+        format question object to a readable dictionary
+        """
+        return {
+            "question_id": question.id,
+            "title": question.title,
+            "meetup_id": question.meetup_id,
+            "votes": question.votes,
+            "body": question.body,
         }
