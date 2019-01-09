@@ -47,6 +47,7 @@ def create_meetup():
                               "meetup_date": meetup_date,
                               "tags": tags}]}), 201
 
+
 @version1.route("/meetups", methods=["GET"])
 def get_meetups():
     """
@@ -60,3 +61,11 @@ def get_meetups():
         "status": 404,
         "error": "Currently there are no meetups scheduled."
     }), 404
+
+
+@version1.route("/meetups/<int:id>", methods=["GET"])
+def get_single_meetup(id):
+    meetup = Meetup.get_meetup(id)
+    if meetup:
+        return jsonify({"status": 200, "data": meetup}), 200
+    return jsonify({"status": 404, "data": "Meetup not found"}), 404
