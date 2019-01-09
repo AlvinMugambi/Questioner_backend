@@ -48,7 +48,7 @@ def create_meetup():
                               "tags": tags}]}), 201
 
 
-@version1.route("/meetups", methods=["GET"])
+@version1.route("/meetups/upcoming", methods=["GET"])
 def get_meetups():
     """
     Fetches all meetups
@@ -63,9 +63,12 @@ def get_meetups():
     }), 404
 
 
-@version1.route("/meetups/<int:id>", methods=["GET"])
-def get_single_meetup(id):
-    meetup = Meetup.get_meetup(id)
+@version1.route("/meetups/<int:meetup_id>", methods=["GET"])
+def get_single_meetup(meetup_id):
+    """
+    Fetches a single meetup
+    """
+    meetup = Meetup.get_meetup(meetup_id)
     if meetup:
         return jsonify({"status": 200, "data": meetup}), 200
     return jsonify({"status": 404, "data": "Meetup not found"}), 404
