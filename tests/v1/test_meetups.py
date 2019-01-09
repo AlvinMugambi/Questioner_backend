@@ -1,6 +1,5 @@
 """The meetups tests"""
 
-import os
 import unittest
 import json
 
