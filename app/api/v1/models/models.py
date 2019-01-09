@@ -87,9 +87,15 @@ class Question:
         format question object to a readable dictionary
         """
         return {
-            "question_id": question.id,
+            "question_id": question.question_id,
             "title": question.title,
             "meetup_id": question.meetup_id,
             "votes": question.votes,
             "body": question.body,
         }
+    @staticmethod
+    def get_question(quest_id):
+        """
+        get a specific question using its id
+        """
+        return [Question.to_json(question) for question in QUESTIONS if question.question_id == quest_id]
