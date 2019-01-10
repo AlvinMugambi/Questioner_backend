@@ -74,3 +74,21 @@ def get_all_questions_for_a_meetup(meet_id):
     if questions:
         return jsonify({"status": 200, "data": questions}), 200
     return jsonify({"status": 404, "data": "No questions posted yet for this meetup"}), 404
+
+
+@version1.route("/questions/<int:question_id>/comment", methods=['POST'])
+def comment_on_a_question(question_id):
+    """
+    The add comment to a question endpoint
+    """
+    try:
+        comment = request.get_json()['comment']
+    except KeyError:
+        abort(make_response(jsonify({'status': 400, 'error':'Check your json key. Should be comment'})))
+
+    question = Question.get_question(question_id)
+    if question:
+        my_question = question[0]
+        my_question['comments'].append(comment)
+        return jsonify({"status": 201, "data": my_question}), 201
+    return jsonify({'status': 404, 'error':'Question not found'}), 404
