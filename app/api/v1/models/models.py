@@ -6,6 +6,7 @@ from datetime import datetime
 
 MEETUPS = []
 QUESTIONS = []
+USERS = []
 
 
 class Meetup:
@@ -99,3 +100,47 @@ class Question:
         get a specific question using its id
         """
         return [Question.to_json(question) for question in QUESTIONS if question.question_id == quest_id]
+
+
+class User:
+    """
+    The user models
+    """
+
+    def __init__(self, firstname, username, lastname, email, password):
+        """
+        Define the user model and its attributes
+        """
+        self.firstname = firstname
+        self.lastname = lastname
+        self.username = username
+        self.email = email
+        self.registered_on = datetime.now()
+        self.password = password
+        self.is_admin = False
+
+    def save_user(self):
+        """
+        Add a new user to the users store
+        """
+        USERS.append(self)
+
+    @staticmethod
+    def query_users(username, password):
+        """
+        Query the users store for a user
+        """
+        return [User.to_json(user) for user in USERS if user.username == username and user.password == password]
+
+
+    @staticmethod
+    def to_json(user):
+        """
+        format user object to a readable dictionary
+        """
+        return {"firstname": user.firstname,
+                "lastname": user.lastname,
+                "username": user.username,
+                "email": user.email,
+                "password": user.password,
+                "registered_on": user.registered_on,}
