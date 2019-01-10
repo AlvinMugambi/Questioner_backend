@@ -1,6 +1,6 @@
 """The meetup routes"""
 
-from flask import jsonify, request
+from flask import jsonify, request, make_response, abort
 
 from app.api.v1.models.models import Meetup
 from app.api.v1 import version1
@@ -22,15 +22,15 @@ def create_meetup():
                         'error': 'Check your json keys. Should be topic, meetup_date, location, images and tags'}), 400
 
     if not topic:
-        return jsonify({'status':400, 'error':'topic field is required'}), 400
+        abort(make_response(jsonify({'status':400, 'error':'topic field is required'}), 400))
     if not meetup_date:
-        return jsonify({'status':400, 'error':'meetup_date field is required'}), 400
+        abort(make_response(jsonify({'status':400, 'error':'meetup_date field is required'}), 400))
 
     if not location:
-        return jsonify({'status':400, 'error':'location field is required'}), 400
+        abort(make_response(jsonify({'status':400, 'error':'location field is required'}), 400))
 
     if not tags:
-        return jsonify({'status':400, 'error':'tags field is required'}), 400
+        abort(make_response(jsonify({'status':400, 'error':'tags field is required'}), 400))
 
     meetup = Meetup(
         topic=topic,
