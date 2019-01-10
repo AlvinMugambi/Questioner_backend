@@ -21,18 +21,35 @@ class UserBaseTest(unittest.TestCase):
                              "lastname": "mugz",
                              "username":"alvomugz",
                              "email":"alvo@gmail.com",
-                             "password": "alvino",
-                             "confirm_password":"alvino"}
+                             "password": "Alvino123",
+                             "confirm_password":"Alvino123"}
 
         self.signup_user2 = {"firstname":"Lord",
                              "lastname": "Vader",
                              "username":"Lordvader",
                              "email":"darth@gmail.com",
-                             "password": "darth",
-                             "confirm_password":"darthvader"}
+                             "password": "LordDarthV1",
+                             "confirm_password":"Darthvader1"}
+
+        self.signup_user3 = {"firstname":"luke",
+                             "lastname": "Skywalker",
+                             "username":"skywalker",
+                             "email":"skywalker@gmail.com",
+                             "password": "LukeSkyies1",
+                             "confirm_password":"LukeSkyies1"}
+
+        self.signup_user4 = {"firstname":"obi",
+                             "lastname": "wan",
+                             "username":"obiwan",
+                             "email":"canobi@gmail.com",
+                             "password": "ObiLight1",
+                             "confirm_password":"ObiLight1"}
 
         self.login_user1 = {"username":"alvomugz",
                             "password":"alvino"}
+
+        self.login_user4 = {"username":"obiwan",
+                            "password":"ObiLight1"}
 
     def tearDown(self):
         """
@@ -49,7 +66,7 @@ class TestUserEndpoints(UserBaseTest):
         """
         Test to show a user can sign up successfully
         """
-        response = self.client.post("api/v1/auth/signup", data = json.dumps(self.signup_user1), content_type = "application/json")
+        response = self.client.post("api/v1/auth/signup", data = json.dumps(self.signup_user3), content_type = "application/json")
         self.assertEqual(response.status_code, 201)
         result = json.loads(response.data.decode('utf-8'))
         self.assertEqual(result['data'], 'Registered successfully!')
@@ -61,14 +78,14 @@ class TestUserEndpoints(UserBaseTest):
         response = self.client.post("api/v1/auth/signup", data = json.dumps(self.signup_user2), content_type = "application/json")
         self.assertEqual(response.status_code, 400)
         result = json.loads(response.data.decode('utf-8'))
-        self.assertEqual(result["error"], "Passwords don't match")
+        self.assertEqual(result["error"], "Passwords don't match!")
 
     def test_user_can_login(self):
         """
         Test to show a user can successfully login if registered
         """
-        self.client.post("api/v1/auth/signup", data = json.dumps(self.signup_user1), content_type = "application/json")
-        response = self.client.post("api/v1/auth/login", data = json.dumps(self.login_user1), content_type = "application/json")
+        self.client.post("api/v1/auth/signup", data = json.dumps(self.signup_user4), content_type = "application/json")
+        response = self.client.post("api/v1/auth/login", data = json.dumps(self.login_user4), content_type = "application/json")
         self.assertEqual(response.status_code, 200)
         result = json.loads(response.data.decode('utf-8'))
         self.assertEqual(result["data"], "Logged in successfully")
