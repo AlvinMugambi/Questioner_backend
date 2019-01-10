@@ -74,6 +74,7 @@ class Question:
         self.title = title
         self.votes = 0
         self.body = body
+        self.comments = []
         self.created_at = datetime.now()
 
     def save_question(self):
@@ -91,6 +92,13 @@ class Question:
 
 
     @staticmethod
+    def get_question(quest_id):
+        """
+        get a specific question using its id
+        """
+        return [Question.to_json(question) for question in QUESTIONS if question.question_id == quest_id]
+
+    @staticmethod
     def to_json(question):
         """
         format question object to a readable dictionary
@@ -101,15 +109,7 @@ class Question:
             "meetup_id": question.meetup_id,
             "votes": question.votes,
             "body": question.body,
-        }
-
-
-    @staticmethod
-    def get_question(quest_id):
-        """
-        get a specific question using its id
-        """
-        return [Question.to_json(question) for question in QUESTIONS if question.question_id == quest_id]
+            "comments": question.comments}
 
 
 class User:
