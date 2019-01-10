@@ -1,6 +1,6 @@
 """The Question routes"""
 
-from flask import jsonify, request
+from flask import jsonify, request, make_response, abort
 
 from app.api.v1.models.models import Question
 from app.api.v1 import version1
@@ -15,16 +15,16 @@ def create_question(meetup_id):
         body = request.get_json()['body']
 
     except KeyError:
-        return jsonify({'status': 400,
-                        ' error': "Check your json keys. Should be topic and body"})
+        abort(make_response(jsonify({'status': 400,
+                                     ' error': "Check your json keys. Should be topic and body"}), 400))
 
     if not title:
-        return jsonify({'status': 400,
-                        'error': 'topic field is required'})
+        abort(make_response(jsonify({'status': 400,
+                                     'error': 'topic field is required'}), 400))
 
     if not body:
-        return jsonify({'status': 400,
-                        'error': 'body field is required'})
+        abort(make_response(jsonify({'status': 400,
+                                     'error': 'body field is required'}), 400))
 
     question = Question(title=title,
                         body=body,
