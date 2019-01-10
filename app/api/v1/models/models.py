@@ -83,6 +83,14 @@ class Question:
         QUESTIONS.append(self)
 
     @staticmethod
+    def get_all_questions(meet_id):
+        """
+        get all questions asked for a specific meetup
+        """
+        return [Question.to_json(question) for question in QUESTIONS if question.meetup_id == meet_id]
+
+
+    @staticmethod
     def to_json(question):
         """
         format question object to a readable dictionary
@@ -94,6 +102,8 @@ class Question:
             "votes": question.votes,
             "body": question.body,
         }
+
+
     @staticmethod
     def get_question(quest_id):
         """
