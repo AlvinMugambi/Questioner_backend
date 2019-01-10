@@ -7,6 +7,7 @@ from datetime import datetime
 MEETUPS = []
 QUESTIONS = []
 USERS = []
+COMMENTS = []
 
 
 class Meetup:
@@ -74,7 +75,7 @@ class Question:
         self.title = title
         self.votes = 0
         self.body = body
-        self.comments = []
+        self.comments = COMMENTS
         self.created_at = datetime.now()
 
     def save_question(self):
@@ -112,6 +113,33 @@ class Question:
             "comments": question.comments}
 
 
+class Comment:
+    """
+    The comments models
+    """
+
+    def __init__(self, comment, question_id):
+        self.comment = comment
+        # self.user_id = user_id
+        self.comment_id = len(COMMENTS)+1
+        self.question_id = question_id
+
+    def save_comment(self):
+        """
+        Save the comment to the comments store
+        """
+        COMMENTS.append(self)
+
+    @staticmethod
+    def to_json(comment):
+        """
+        format comment object to a readable dictionary
+        """
+        return {"comment":comment.comment,
+                "comment_id":comment.comment_id,
+                "question_id":comment.question_id}
+
+
 class User:
     """
     The user models
@@ -121,6 +149,7 @@ class User:
         """
         Define the user model and its attributes
         """
+        self.user_id = len(USERS)+1
         self.firstname = firstname
         self.lastname = lastname
         self.username = username
