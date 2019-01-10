@@ -28,6 +28,10 @@ class QuestionBaseTest(unittest.TestCase):
         self.post_question1 = {"title":"what are we to eat?",
                                "body":"I would like to know the kind of food being served at the meetup"}
 
+        self.post_question2 = {"title":"what are the different extensions in flask?",
+                               "body":"I would like to know the various flask extensions"}
+
+
         self.upvoted_question = {"body": "I would like to know the kind of food being served at the meetup",
                                  "meetup_id": 1,
                                  "question_id": 1,
@@ -85,3 +89,13 @@ class TestQuestionEndpoint(QuestionBaseTest):
 
         result = json.loads(response.data.decode('utf-8'))
         self.assertEqual(result['data'], self.downvoted_question)
+
+    def test_get_all_questions(self):
+        """
+        Test a user can get all the questions posted to a meetup
+        """
+        self.client.post("api/v1/meetups", data = json.dumps(self.meetup), content_type = "application/json")
+        self.client.post("api/v1/meetups/1/questions", data = json.dumps(self.post_question1), content_type = "application/json")
+        self.client.post("api/v1/meetups/1/questions", data = json.dumps(self.post_question2), content_type = "application/json")
+        response = self.client.get("api/v1/meetups/1/questions", content_type = "application/json")
+        self.assertEqual(response.status_code, 200)
