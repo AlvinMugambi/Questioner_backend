@@ -2,7 +2,7 @@
 
 from flask import jsonify, request
 
-from app.api.v1.models.models import Meetup, MEETUPS
+from app.api.v1.models.models import Meetup
 from app.api.v1 import version1
 
 @version1.route("/meetups", methods=['POST'])
@@ -17,7 +17,7 @@ def create_meetup():
         images = request.get_json()['images']
         tags = request.get_json()['tags']
 
-    except:
+    except KeyError:
         return jsonify({'status':400,
                         'error': 'Check your json keys. Should be topic, meetup_date, location, images and tags'}), 400
 
