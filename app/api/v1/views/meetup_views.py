@@ -79,10 +79,10 @@ def meetup_rsvp(meetup_id, resp):
     A user can respond to a meetup rsvp
     """
     if resp not in ["yes", "no", "maybe"]:
-        return jsonify({'status':400, 'error':'Response should be either yes, no or maybe'})
+        return jsonify({'status':400, 'error':'Response should be either yes, no or maybe'}), 400
     meetup = Meetup.get_meetup(meetup_id)
     if meetup:
         meetup = meetup[0]
         return jsonify({'status':200, 'data':[{'meetup':meetup_id,
                                                'topic':meetup['topic'],
-                                               'Attending':resp}]})
+                                               'Attending':resp}]}), 200
