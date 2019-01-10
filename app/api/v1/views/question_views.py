@@ -2,7 +2,7 @@
 
 from flask import jsonify, request, make_response, abort
 
-from app.api.v1.models.models import Question
+from app.api.v1.models.models import Question, Comment
 from app.api.v1 import version1
 
 @version1.route("/meetups/<int:meetup_id>/questions", methods=['POST'])
@@ -85,6 +85,9 @@ def comment_on_a_question(question_id):
         comment = request.get_json()['comment']
     except KeyError:
         abort(make_response(jsonify({'status': 400, 'error':'Check your json key. Should be comment'})))
+
+    # my_comment = Comment(comment=comment, question_id=question_id)
+    # my_comment.save_comment()
 
     question = Question.get_question(question_id)
     if question:
