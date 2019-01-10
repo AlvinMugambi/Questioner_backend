@@ -137,7 +137,7 @@ class Comment:
         """
         return {"comment":comment.comment,
                 "comment_id":comment.comment_id,
-                "question_id":comment.question_id}
+                "question_id":comment.question}
 
 
 class User:
