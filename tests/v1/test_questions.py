@@ -34,12 +34,14 @@ class QuestionBaseTest(unittest.TestCase):
 
         self.upvoted_question = {"body": "I would like to know the kind of food being served at the meetup",
                                  "meetup_id": 1,
+                                 "comments": [],
                                  "question_id": 1,
                                  "title": "what are we to eat?",
                                  "votes": 1}
 
         self.downvoted_question = {"body": "I would like to know the kind of food being served at the meetup",
                                    "meetup_id": 1,
+                                   "comments": [],
                                    "question_id": 1,
                                    "title": "what are we to eat?",
                                    "votes": -1}
