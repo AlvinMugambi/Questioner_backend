@@ -16,15 +16,15 @@ def create_question(meetup_id):
 
     except KeyError:
         abort(make_response(jsonify({'status': 400,
-                                     ' error': "Check your json keys. Should be topic and body"})))
+                                     ' error': "Check your json keys. Should be topic and body"}), 400))
 
     if not title:
         abort(make_response(jsonify({'status': 400,
-                                     'error': 'topic field is required'})))
+                                     'error': 'topic field is required'}), 400))
 
     if not body:
         abort(make_response(jsonify({'status': 400,
-                                     'error': 'body field is required'})))
+                                     'error': 'body field is required'}), 400))
 
     question = Question(title=title,
                         body=body,
