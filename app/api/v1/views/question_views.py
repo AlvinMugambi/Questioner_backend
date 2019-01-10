@@ -1,6 +1,8 @@
+"""The Question routes"""
+
 from flask import jsonify, request
 
-from app.api.v1.models.models import Question, QUESTIONS
+from app.api.v1.models.models import Question
 from app.api.v1 import version1
 
 @version1.route("/meetups/<int:meetup_id>/questions", methods=['POST'])
@@ -12,7 +14,7 @@ def create_question(meetup_id):
         title = request.get_json()['title']
         body = request.get_json()['body']
 
-    except:
+    except KeyError:
         return jsonify({'status': 400,
                         ' error': "Check your json keys. Should be topic and body"})
 

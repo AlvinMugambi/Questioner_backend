@@ -1,3 +1,5 @@
+"""The questions routes tests"""
+
 import json
 import unittest
 
@@ -26,17 +28,21 @@ class QuestionBaseTest(unittest.TestCase):
         self.post_question1 = {"title":"what are we to eat?",
                                "body":"I would like to know the kind of food being served at the meetup"}
 
-        self.upvoted_question= {"body": "I would like to know the kind of food being served at the meetup",
-                                "meetup_id": 1,
-                                "question_id": 1,
-                                "title": "what are we to eat?",
-                                "votes": 1}
+        self.upvoted_question = {"body": "I would like to know the kind of food being served at the meetup",
+                                 "meetup_id": 1,
+                                 "question_id": 1,
+                                 "title": "what are we to eat?",
+                                 "votes": 1}
 
-        self.downvoted_question= {"body": "I would like to know the kind of food being served at the meetup",
-                                  "meetup_id": 1,
-                                  "question_id": 1,
-                                  "title": "what are we to eat?",
-                                  "votes": -1}
+        self.downvoted_question = {"body": "I would like to know the kind of food being served at the meetup",
+                                   "meetup_id": 1,
+                                   "question_id": 1,
+                                   "title": "what are we to eat?",
+                                   "votes": -1}
+
+    def tearDown(self):
+        """The tear down method that deletes records after tests run"""
+        self.app.testing = False
 
 class TestQuestionEndpoint(QuestionBaseTest):
     """
@@ -49,6 +55,7 @@ class TestQuestionEndpoint(QuestionBaseTest):
         self.client.post("api/v1/meetups", data = json.dumps(self.meetup), content_type = "application/json")
         response = self.client.post("api/v1/meetups/1/questions", data = json.dumps(self.post_question1), content_type = "application/json")
         self.assertEqual(response.status_code, 201)
+
         result = json.loads(response.data.decode('utf-8'))
         self.assertEqual(result['status'], 201)
         self.assertEqual(result['data'], [{"body": "I would like to know the kind of food being served at the meetup",
@@ -63,6 +70,7 @@ class TestQuestionEndpoint(QuestionBaseTest):
         self.client.post("api/v1/meetups/1/questions", data = json.dumps(self.post_question1), content_type = "application/json")
         response = self.client.patch("api/v1/questions/1/upvote", content_type = "application/json")
         self.assertEqual(response.status_code, 200)
+
         result = json.loads(response.data.decode('utf-8'))
         self.assertEqual(result['data'], self.upvoted_question)
 
@@ -74,5 +82,6 @@ class TestQuestionEndpoint(QuestionBaseTest):
         self.client.post("api/v1/meetups/1/questions", data = json.dumps(self.post_question1), content_type = "application/json")
         response = self.client.patch("api/v1/questions/1/downvote", content_type = "application/json")
         self.assertEqual(response.status_code, 200)
+
         result = json.loads(response.data.decode('utf-8'))
         self.assertEqual(result['data'], self.downvoted_question)

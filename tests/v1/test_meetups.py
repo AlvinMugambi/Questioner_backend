@@ -1,4 +1,4 @@
-"""The meetups tests"""
+"""The meetups routes tests"""
 
 import unittest
 import json
