@@ -30,6 +30,9 @@ class MeetupsBaseTest(unittest.TestCase):
                              "images":["them.png", "they.png"],
                              "tags":["Snake", "Camel"]
                             }
+        self.rsvp_response1 = [{"Attending": "yes",
+                                "meetup": 1,
+                                "topic": "Miraa"}]
 
         self.meetups = [{"created_at": "Wed, 09 Jan 2019 01:30:13 GMT",
                          "id": 1,
@@ -100,3 +103,13 @@ class TestMeetups(MeetupsBaseTest):
                                            "meetup_date": "30/01/1990",
                                            "tags": ["trees", "vegetation"],
                                            "topic": "Miraa"}])
+
+    def test_user_can_set_rsvp_response(self):
+        """
+        Tests to show a user can successfully post ther attendance status
+        """
+        self.client.post("api/v1/meetups", data = json.dumps(self.post_meetup2),  content_type = "application/json")
+        response = self.client.post("api/v1/meetups/1/rsvps/yes", content_type = "application/json")
+        self.assertEqual(response.status_code, 200)
+        result = json.loads(response.data.decode('utf-8'))
+        self.assertEqual(result['data'], self.rsvp_response1)
