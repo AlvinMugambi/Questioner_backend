@@ -63,3 +63,14 @@ def downvote_question(question_id):
         my_question['votes'] = my_question['votes'] - 1
         return jsonify({"status": 200, "data": my_question}), 200
     return jsonify({"status": 404, "error": "Question not found"}), 404
+
+
+@version1.route("/meetups/<int:meet_id>/questions", methods=['GET'])
+def get_all_questions_for_a_meetup(meet_id):
+    """
+    The get all questions for a specific meetup route endpoint
+    """
+    questions = Question.get_all_questions(meet_id)
+    if questions:
+        return jsonify({"status": 200, "data": questions}), 200
+    return jsonify({"status": 404, "data": "No questions posted yet for this meetup"}), 404
