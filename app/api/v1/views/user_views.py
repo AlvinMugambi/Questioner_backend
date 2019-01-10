@@ -1,6 +1,8 @@
 from flask import request, jsonify, abort, make_response
+from werkzeug.security import generate_password_hash, check_password_hash
 
-from app.api.v1.models.models import User, USERS
+from app.api.v1.utils.validators import validate_email, check_password
+from app.api.v1.models.models import User
 from app.api.v1 import version1
 
 @version1.route("/auth/signup", methods=['POST'])
@@ -17,9 +19,8 @@ def user_sign_up():
         abort(make_response(jsonify({'status': 400,
                                      'error': "Check your json keys"}), 400))
 
-    if password != confirm_pass:
-        abort(make_response(jsonify({'status': 400,
-                                     'error': "Passwords don't match"}), 400))
+    check_password(password, confirm_pass)
+    email = validate_email(email)
 
     user = User(firstname=firstname,
                 username=username,
@@ -42,6 +43,6 @@ def user_login():
                                      ' error': "Check your json keys. Should be username & password"}), 400))
 
     user = User.query_users(username, password)
-    if user:
-        return jsonify({"status": 200, "data":"Logged in successfully"}), 200
-    return jsonify({"status": 400, "data":"Register first"}), 400
+    if not user:
+        return jsonify({"status": 400, "data":"Register first"}), 400
+    return jsonify({"status": 200, "data":"Logged in successfully"}), 200
