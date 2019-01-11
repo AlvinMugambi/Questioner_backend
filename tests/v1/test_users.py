@@ -31,7 +31,6 @@ class UserBaseTest(unittest.TestCase):
                              "password": "darth",
                              "confirm_password":"darthvader"}
 
-
         self.login_user1 = {"username":"alvomugz",
                             "password":"alvino"}
 
@@ -82,4 +81,3 @@ class TestUserEndpoints(UserBaseTest):
         self.assertEqual(response.status_code, 400)
         result = json.loads(response.data.decode('utf-8'))
         self.assertEqual(result["data"], "Register first")
-
