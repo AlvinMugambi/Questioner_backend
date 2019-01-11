@@ -47,21 +47,21 @@ def validate_email(email):
 
     for user in USERS:
         if email == user.email:
-            abort(make_response(jsonify(Message="Email already taken!"), 400))
+            abort(make_response(jsonify(error="Email already taken!"), 400))
     try:
         user, domain = str(email).split("@")
     except ValueError:
-        abort(make_response(jsonify(message="Invalid Email"), 400))
+        abort(make_response(jsonify(error="Invalid Email"), 400))
     if not user or not domain:
-        abort(make_response(jsonify(message="Invalid Email"), 400))
+        abort(make_response(jsonify(error="Invalid Email"), 400))
 
     # Check that domain is valid
     try:
         dom_1, dom_2 = domain.split(".")
     except ValueError:
-        abort(make_response(jsonify(message="Invalid Email"), 400))
+        abort(make_response(jsonify(error="Invalid Email"), 400))
     if not dom_1 or not dom_2:
-        abort(make_response(jsonify(message="Invalid Email"), 400))
+        abort(make_response(jsonify(error="Invalid Email"), 400))
 
     return email
 
