@@ -65,17 +65,24 @@ class ValidatorsBaseTest(unittest.TestCase):
 
 class TestValidations(ValidatorsBaseTest):
 
+    def test_email_already_taken(self):
+        self.client.post("api/v1/auth/signup", data = json.dumps(self.user_signup), content_type = "application/json")
+        response = self.client.post("api/v1/auth/signup", data = json.dumps(self.user_signup), content_type = "application/json")
+        self.assertEqual(response.status_code, 400)
+        result = json.loads(response.data.decode('utf-8'))
+        self.assertEqual(result['error'],"Email already taken!")
+
     def test_invalid_email(self):
         response = self.client.post("api/v1/auth/signup", data = json.dumps(self.user_invalid_email1), content_type = "application/json")
         self.assertEqual(response.status_code, 400)
         result = json.loads(response.data.decode('utf-8'))
-        self.assertEqual(result['message'],"Invalid Email")
+        self.assertEqual(result['error'],"Invalid Email")
 
     def test_invalid_email_2(self):
         response = self.client.post("api/v1/auth/signup", data = json.dumps(self.user_invalid_email2), content_type = "application/json")
         self.assertEqual(response.status_code, 400)
         result = json.loads(response.data.decode('utf-8'))
-        self.assertEqual(result['message'],"Invalid Email")
+        self.assertEqual(result['error'],"Invalid Email")
 
     def test_pasword_length(self):
         response = self.client.post("api/v1/auth/signup", data = json.dumps(self.password_length), content_type = "application/json")
