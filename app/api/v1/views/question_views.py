@@ -3,10 +3,12 @@
 from flask import jsonify, request, make_response, abort
 
 from app.api.v1.models.models import Question, Comment
+from app.api.v1.utils.validators import token_required
 from app.api.v1 import version1
 
 @version1.route("/meetups/<int:meetup_id>/questions", methods=['POST'])
-def create_question(meetup_id):
+@token_required
+def create_question(current_user, meetup_id):
     """
     The POST method for the questions route that allows a user to post a question
     """
@@ -40,7 +42,8 @@ def create_question(meetup_id):
 
 
 @version1.route("/questions/<int:question_id>/upvote", methods=['PATCH'])
-def upvote_question(question_id):
+@token_required
+def upvote_question(current_user, question_id):
     """
     The upvote question route endpoint
     """
@@ -53,7 +56,8 @@ def upvote_question(question_id):
 
 
 @version1.route("/questions/<int:question_id>/downvote", methods=['PATCH'])
-def downvote_question(question_id):
+@token_required
+def downvote_question(current_user, question_id):
     """
     The downvote question route endpoint
     """
@@ -77,7 +81,8 @@ def get_all_questions_for_a_meetup(meet_id):
 
 
 @version1.route("/questions/<int:question_id>/comment", methods=['POST'])
-def comment_on_a_question(question_id):
+@token_required
+def comment_on_a_question(current_user, question_id):
     """
     The add comment to a question endpoint
     """
