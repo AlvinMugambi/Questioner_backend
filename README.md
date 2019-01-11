@@ -8,16 +8,16 @@ Crowd-source questions for a meetup. Questioner helps the meetup organizer prior
 
 The project is managed using [Pivotal Tracker](https://www.pivotaltracker.com). You can view the board https://www.pivotaltracker.com/n/projects/2235202.
 
-The repo for the frontend is available at 
+The repo for the frontend is available at https://github.com/AlvinMugambi/Questioner
 
 ## Deployment
-Website is hosted on [Questioner]()
+Website is hosted on [Questioner](https://alvinmugambi.github.io/Questioner/UI/templates/homepage.html)
 
-Project API demo is hosted on [Heroku]()
+Project API demo is hosted on [Heroku](https://the-questioner-backend.herokuapp.com)
 
 ## Prerequisites
 
-- [Atom]()
+- [Atom](https://atom.io/)
 - [Python 3.6](https://www.python.org)
 - [Insomnia](https://insomnia.rest) / [Postman](https://www.getpostman.com)
 
@@ -82,4 +82,4 @@ $ pytest --cov=app
 
 ## Author
 
-Alvin Mugambi - [Alv0]()
+Alvin Mugambi - [Alv0](https://github.com/AlvinMugambi)
