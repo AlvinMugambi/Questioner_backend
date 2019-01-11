@@ -111,7 +111,7 @@ class Question:
             "votes": question.votes,
             "body": question.body,
             "comments": question.comments}
-      
+
 
 class Comment:
     """
@@ -155,7 +155,7 @@ class Comment:
         return {"comment":comment.comment,
                 "comment_id":comment.comment_id,
                 "question_id":comment.question}
-                "question_id":comment.question_id}
+
 
 
 
