@@ -157,8 +157,6 @@ class Comment:
                 "question_id":comment.question}
 
 
-
-
 class User:
     """
     The user models
