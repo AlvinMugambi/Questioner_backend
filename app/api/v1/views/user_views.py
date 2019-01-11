@@ -1,9 +1,14 @@
+import os
+import jwt
 from flask import request, jsonify, abort, make_response
+import datetime
 from werkzeug.security import generate_password_hash, check_password_hash
 
 from app.api.v1.utils.validators import validate_email, check_password
 from app.api.v1.models.models import User
 from app.api.v1 import version1
+
+KEY = os.getenv('SECRET_KEY')
 
 @version1.route("/auth/signup", methods=['POST'])
 def user_sign_up():
@@ -45,4 +50,6 @@ def user_login():
     user = User.query_users(username, password)
     if not user:
         return jsonify({"status": 400, "data":"Register first"}), 400
-    return jsonify({"status": 200, "data":"Logged in successfully"}), 200
+
+    token = jwt.encode({"username":username, "exp": datetime.datetime.utcnow() + datetime.timedelta(minutes=120)}, KEY, algorithm='HS256')
+    return jsonify({"status": 200, "data":token.decode('UTF-8')}), 200
