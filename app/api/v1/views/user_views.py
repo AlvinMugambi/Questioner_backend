@@ -15,11 +15,11 @@ def user_sign_up():
 
     except KeyError:
         abort(make_response(jsonify({'status': 400,
-                                     ' error': "Check your json keys"}), 400))
+                                     'error': "Check your json keys"}), 400))
 
     if password != confirm_pass:
         abort(make_response(jsonify({'status': 400,
-                                     ' error': "Passwords don't match"}), 400))
+                                     'error': "Passwords don't match"}), 400))
 
     user = User(firstname=firstname,
                 username=username,
@@ -28,7 +28,7 @@ def user_sign_up():
                 password=password)
 
     user.save_user()
-    return jsonify({"status":201, "data":"Registered successfully!"})
+    return jsonify({"status":201, "data":"Registered successfully!"}), 201
 
 
 @version1.route("/auth/login", methods=['POST'])
