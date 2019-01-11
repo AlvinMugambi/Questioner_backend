@@ -3,7 +3,7 @@
 from flask import jsonify, request, make_response, abort
 
 from app.api.v1.models.models import Question, Comment
-from app.api.v1.utils.validators import token_required
+from app.api.v1.utils.validators import token_required, decode_token
 from app.api.v1 import version1
 
 @version1.route("/meetups/<int:meetup_id>/questions", methods=['POST'])
@@ -93,10 +93,13 @@ def comment_on_a_question(current_user, question_id):
 
     # my_comment = Comment(comment=comment, question_id=question_id)
     # my_comment.save_comment()
+    username = decode_token()
 
     question = Question.get_question(question_id)
     if question:
         my_question = question[0]
-        my_question['comments'].append(comment)
+        comments = my_question['comments']
+        comments.append(comment)
+        comments.append(username)
         return jsonify({"status": 201, "data": my_question}), 201
     return jsonify({'status': 404, 'error':'Question not found'}), 404
