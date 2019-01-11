@@ -1,13 +1,16 @@
 """The validator functions that validate user data"""
-
+import os
 import re
+from functools import wraps
 
+import jwt
 from flask import jsonify, request, abort, make_response
 from werkzeug.security import generate_password_hash
 
 # local imports
 from app.api.v1.models.models import USERS
 
+key = os.getenv("SECRET_KEY")
 
 def check_password(password, confirmed_password):
     """
@@ -66,6 +69,33 @@ def validate_email(email):
     return email
 
 
-def verify_password(password):
-    if check_password_hash(hashed_password, password):
-        pass
+def token_required(f):
+    @wraps(f)
+    def decorated(*args, **kwargs):
+        token = None
+        if 'x-access-token' in request.headers:
+            token = request.headers['x-access-token']
+        if not token:
+            return jsonify({'message':"Token is missing"}), 401
+
+        try:
+            data = jwt.decode(token, key)
+            current_user = None
+            for user in USERS:
+                if user.username == data['username']:
+                    current_user = user
+
+        except:
+            return jsonify({'message':'Token is expired or invalid'}), 401
+
+        return f(current_user, *args, **kwargs)
+    return decorated
+
+def decode_token():
+    token = request.headers['x-access-token']
+    try:
+        username = jwt.decode(token, key)
+    except:
+        return jsonify({"message":"Token is expired or invalid"}), 401
+
+    return username
