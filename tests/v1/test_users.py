@@ -31,11 +31,15 @@ class UserBaseTest(unittest.TestCase):
                              "password": "darth",
                              "confirm_password":"darthvader"}
 
-        def tearDown(self):
-            """
-            The teardown function
-            """
-            self.app.testing = False
+
+        self.login_user1 = {"username":"alvomugz",
+                            "password":"alvino"}
+
+    def tearDown(self):
+        """
+        The teardown function
+        """
+        self.app.testing = False
 
 class TestUserEndpoints(UserBaseTest):
     """
@@ -59,3 +63,23 @@ class TestUserEndpoints(UserBaseTest):
         self.assertEqual(response.status_code, 400)
         result = json.loads(response.data.decode('utf-8'))
         self.assertEqual(result["error"], "Passwords don't match")
+
+    def test_user_can_login(self):
+        """
+        Test to show a user can successfully login if registered
+        """
+        self.client.post("api/v1/auth/signup", data = json.dumps(self.signup_user1), content_type = "application/json")
+        response = self.client.post("api/v1/auth/login", data = json.dumps(self.login_user1), content_type = "application/json")
+        self.assertEqual(response.status_code, 200)
+        result = json.loads(response.data.decode('utf-8'))
+        self.assertEqual(result["data"], "Logged in successfully")
+
+    def test_unregistered_user_no_login(self):
+        """
+        Test to show an unregistered user cannot be logged in
+        """
+        response = self.client.post("api/v1/auth/login", data = json.dumps(self.login_user1), content_type = "application/json")
+        self.assertEqual(response.status_code, 400)
+        result = json.loads(response.data.decode('utf-8'))
+        self.assertEqual(result["data"], "Register first")
+
