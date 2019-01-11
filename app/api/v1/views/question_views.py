@@ -95,3 +95,4 @@ def comment_on_a_question(question_id):
         my_question['comments'].append(comment)
         return jsonify({"status": 201, "data": my_question}), 201
     return jsonify({'status': 404, 'error':'Question not found'}), 404
+
