@@ -87,11 +87,12 @@ def meetup_rsvp(meetup_id, resp):
     if resp not in ["yes", "no", "maybe"]:
         return jsonify({'status':400, 'error':'Response should be either yes, no or maybe'}), 400
     meetup = Meetup.get_meetup(meetup_id)
-    if meetup:
-        meetup = meetup[0]
-        return jsonify({'status':200, 'data':[{'meetup':meetup_id,
-                                               'topic':meetup['topic'],
-                                               'Attending':resp}]}), 200
+    if not meetup:
+        return jsonify({'status': 404, 'error':'Meetup with id {} not found'.format(meetup_id)}), 404
+    meetup = meetup[0]
+    return jsonify({'status':200, 'data':[{'meetup':meetup_id,
+                                           'topic':meetup['topic'],
+                                           'Attending':resp}]}), 200
 
 @version1.route("/meetups/<int:meetup_id>", methods=['DELETE'])
 @token_required
