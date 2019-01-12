@@ -47,6 +47,21 @@ class Meetup:
         return [Meetup.to_json(meetup) for meetup in MEETUPS if meetup.id == meet_id]
 
     @staticmethod
+    def delete_meetup(meet_id):
+        """
+        Delete a specific meetup in the db
+        """
+        found = None
+        for meetup in MEETUPS:
+            if meetup.id == meet_id:
+                MEETUPS.remove(meetup)
+                found = True
+            elif meetup.id != meet_id:
+                found = False
+        return found
+
+
+    @staticmethod
     def to_json(meetup):
         """
         format meetup object to a readable dictionary
