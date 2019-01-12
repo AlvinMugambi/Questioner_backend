@@ -8,7 +8,7 @@ from flask import jsonify, request, abort, make_response
 from werkzeug.security import generate_password_hash
 
 # local imports
-from app.api.v1.models.models import USERS
+from app.api.v1.models.models import User, USERS
 
 key = os.getenv("SECRET_KEY")
 
@@ -67,6 +67,29 @@ def validate_email(email):
         abort(make_response(jsonify(error="Invalid Email"), 400))
 
     return email
+
+def verify_if_admin(username):
+    """
+    Verifies if the user is admin
+    """
+    admin = None
+    for user in USERS:
+        if username == 'iamtheadmin':
+            user.is_admin = True
+            admin = True
+        admin = False
+    return admin
+
+def check_if_admin():
+    """
+    Checks if the user is an admin
+    """
+    username = decode_token()
+
+    if username['username'] != "iamtheadmin":
+        return False
+    return True
+
 
 
 def token_required(f):
