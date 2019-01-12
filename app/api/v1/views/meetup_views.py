@@ -65,7 +65,7 @@ def get_meetups():
         return jsonify({"status": 200, "data": meetups}), 200
     return jsonify({
         "status": 404,
-        "error": "Currently there are no meetups scheduled."
+        "data": "Currently there are no meetups scheduled."
     }), 404
 
 
