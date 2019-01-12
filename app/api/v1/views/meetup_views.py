@@ -2,11 +2,13 @@
 
 from flask import jsonify, request, make_response, abort
 
+from app.api.v1.utils.validators import token_required, check_if_admin
 from app.api.v1.models.models import Meetup
 from app.api.v1 import version1
 
 @version1.route("/meetups", methods=['POST'])
-def create_meetup():
+@token_required
+def create_meetup(current_user):
     """
     The POST method for the meetups route that allows a user to create a meetup
     """
@@ -31,6 +33,10 @@ def create_meetup():
 
     if not tags:
         abort(make_response(jsonify({'status':400, 'error':'tags field is required'}), 400))
+
+    admin = check_if_admin()
+    if not admin:
+        return jsonify({'status': 401, 'error':"You are not allowed to perfom this function"}), 401
 
     meetup = Meetup(
         topic=topic,
@@ -86,3 +92,19 @@ def meetup_rsvp(meetup_id, resp):
         return jsonify({'status':200, 'data':[{'meetup':meetup_id,
                                                'topic':meetup['topic'],
                                                'Attending':resp}]}), 200
+
+@version1.route("/meetups/<int:meetup_id>", methods=['DELETE'])
+@token_required
+def delete_a_meetup(current_user, meetup_id):
+    """
+    The endpoint that allows a user to delete a meetup
+    """
+    admin = check_if_admin()
+    if not admin:
+        return jsonify({'status': 401, 'error':"You are not allowed to perfom this function"}), 401
+
+    deleted = Meetup.delete_meetup(meetup_id)
+
+    if deleted:
+        return jsonify({'status': 200, 'data':"Deleted successfully"}), 200
+    return jsonify({'status': 404, 'data':"Meetup with id {} not found".format(meetup_id)}), 404

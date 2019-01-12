@@ -4,7 +4,7 @@ from flask import request, jsonify, abort, make_response
 import datetime
 from werkzeug.security import generate_password_hash, check_password_hash
 
-from app.api.v1.utils.validators import validate_email, check_password
+from app.api.v1.utils.validators import validate_email, check_password, check_if_admin,verify_if_admin
 from app.api.v1.models.models import User
 from app.api.v1 import version1
 
@@ -46,6 +46,8 @@ def user_login():
     except KeyError:
         abort(make_response(jsonify({'status': 400,
                                      ' error': "Check your json keys. Should be username & password"}), 400))
+
+    verify_if_admin(username)
 
     user = User.query_users(username, password)
     if not user:
