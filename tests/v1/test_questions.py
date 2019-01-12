@@ -46,7 +46,7 @@ class QuestionBaseTest(unittest.TestCase):
         self.post_comment = {"comment":"I would love to hear this question answered"}
 
         self.question_and_comment = {"body": "I would like to know this",
-                                     "comments": ["I would love to hear this question answered"],
+                                     "comments": ["I would love to hear this question answered",{"username": "obiwan"}],
                                      "meetup_id": 1,
                                      "question_id": 1,
                                      "title": "what are languages?",
@@ -66,6 +66,7 @@ class QuestionBaseTest(unittest.TestCase):
                                    "question_id": 1,
                                    "title": "what are we to eat?",
                                    "votes": -1}
+        self.token = ''
 
     def tearDown(self):
         """The tear down method that deletes records after tests run"""
@@ -80,8 +81,8 @@ class TestQuestionEndpoint(QuestionBaseTest):
             'api/v1/auth/signup', data=json.dumps(self.signup_user), content_type="application/json")
         login = self.client.post(
             'api/v1/auth/login', data=json.dumps(self.login_user), content_type="application/json")
-        self.token = json.loads(login.data.decode('utf-8'))
-        self.token = self.token["token"]
+        data = json.loads(login.data.decode('utf-8'))
+        self.token = data["token"]
         return self.token
 
 
@@ -131,9 +132,10 @@ class TestQuestionEndpoint(QuestionBaseTest):
         """
         Test a user can get all the questions posted to a meetup
         """
+        self.token = self.login()
         self.client.post("api/v1/meetups", data = json.dumps(self.meetup), content_type = "application/json")
-        self.client.post("api/v1/meetups/1/questions", data = json.dumps(self.post_question1), headers={'x-access-token': token}, content_type = "application/json")
-        self.client.post("api/v1/meetups/1/questions", data = json.dumps(self.post_question2), headers={'x-access-token': token}, content_type = "application/json")
+        self.client.post("api/v1/meetups/1/questions", data = json.dumps(self.post_question1), headers={'x-access-token': self.token}, content_type = "application/json")
+        self.client.post("api/v1/meetups/1/questions", data = json.dumps(self.post_question2), headers={'x-access-token': self.token}, content_type = "application/json")
         response = self.client.get("api/v1/meetups/1/questions", content_type = "application/json")
         self.assertEqual(response.status_code, 200)
 
