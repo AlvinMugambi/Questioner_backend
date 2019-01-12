@@ -2,12 +2,13 @@
 
 from flask import jsonify, request, make_response, abort
 
-from app.api.v1.utils.validators import token_required, decode_token, check_if_admin
+from app.api.v1.utils.validators import token_required, check_if_admin
 from app.api.v1.models.models import Meetup
 from app.api.v1 import version1
 
 @version1.route("/meetups", methods=['POST'])
-def create_meetup():
+@token_required
+def create_meetup(current_user):
     """
     The POST method for the meetups route that allows a user to create a meetup
     """
@@ -32,6 +33,10 @@ def create_meetup():
 
     if not tags:
         abort(make_response(jsonify({'status':400, 'error':'tags field is required'}), 400))
+
+    admin = check_if_admin()
+    if not admin:
+        return jsonify({'status': 401, 'error':"You are not allowed to perfom this function"}), 401
 
     meetup = Meetup(
         topic=topic,
