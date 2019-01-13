@@ -1,6 +1,7 @@
 """
 The app configurations
 """
+import os
 
 class Config:
     """
@@ -25,5 +26,6 @@ class TestingConfig(Config):
 
 app_config = {
     "development": DevelopmentConfig,
-    "testing": TestingConfig
+    "testing": TestingConfig,
+    "db_url": os.getenv('DATABASE_URL')
 }
