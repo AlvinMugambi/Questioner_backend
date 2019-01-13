@@ -71,6 +71,7 @@ $ pytest --cov=app
 | **POST** | `/api/v1/auth/login` | Login |
 | **POST** | `/api/v1/auth/Sign Up` | Sign Up |
 | **POST** | `/api/v1/meetups` | Create a meetup |
+| **DELETE** | `/api/v1/meetups/<int:meetup_id>` | Delete a meetup |
 | **POST** | `/api/v1/questions` | Post a question to a specific meetup |
 | **GET** | `/api/v1/meetups/<int:meet_id>/questions` | Get all questions on a meetup |
 | **POST** | `/api/v1/questions/<int:question_id>/comment` | Comment on a question |
