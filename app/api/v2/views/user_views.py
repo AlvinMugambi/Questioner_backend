@@ -44,7 +44,7 @@ def user_login():
 
     except KeyError:
         abort(make_response(jsonify({'status': 400,
-                                     ' error': "Check your json keys. Should be username & password"}), 400))
+                                     'error': "Check your json keys. Should be username & password"}), 400))
     try:
         user = User.get_user_by_username(username)
         if not user:
@@ -58,7 +58,7 @@ def user_login():
         password = User.check_if_password_in_db(hashed_password, password)
         if not password:
             abort(make_response(jsonify({'status': 400,
-                                         ' error': "wrong password"}), 400))
+                                         'error': "wrong password"}), 400))
 
         token = jwt.encode({"username":username}, KEY, algorithm='HS256')
         return jsonify({"status": 200, "token":token.decode('UTF-8'),
