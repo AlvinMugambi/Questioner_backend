@@ -2,11 +2,11 @@
 
 from flask import jsonify, request, make_response, abort
 
-from app.api.v1.utils.validators import token_required, check_if_admin
-from app.api.v1.models.models import Meetup
-from app.api.v1 import version1
+from app.api.v2.utils.validators import token_required, check_if_admin
+from app.api.v2.models.models import Meetup
+from app.api.v2 import version2
 
-@version1.route("/meetups", methods=['POST'])
+@version2.route("/meetups", methods=['POST'])
 @token_required
 def create_meetup(current_user):
     """
@@ -54,7 +54,7 @@ def create_meetup(current_user):
                               "tags": tags}]}), 201
 
 
-@version1.route("/meetups/upcoming", methods=["GET"])
+@version2.route("/meetups/upcoming", methods=["GET"])
 def get_meetups():
     """
     Fetches all meetups
@@ -69,7 +69,7 @@ def get_meetups():
     }), 404
 
 
-@version1.route("/meetups/<int:meetup_id>", methods=["GET"])
+@version2.route("/meetups/<int:meetup_id>", methods=["GET"])
 def get_single_meetup(meetup_id):
     """
     Fetches a single meetup
@@ -79,7 +79,7 @@ def get_single_meetup(meetup_id):
         return jsonify({"status": 200, "data": meetup}), 200
     return jsonify({"status": 404, "data": "Meetup not found"}), 404
 
-@version1.route("/meetups/<int:meetup_id>/rsvps/<resp>", methods=['POST'])
+@version2.route("/meetups/<int:meetup_id>/rsvps/<resp>", methods=['POST'])
 def meetup_rsvp(meetup_id, resp):
     """
     A user can respond to a meetup rsvp
@@ -94,7 +94,7 @@ def meetup_rsvp(meetup_id, resp):
                                            'topic':meetup['topic'],
                                            'Attending':resp}]}), 200
 
-@version1.route("/meetups/<int:meetup_id>", methods=['DELETE'])
+@version2.route("/meetups/<int:meetup_id>", methods=['DELETE'])
 @token_required
 def delete_a_meetup(current_user, meetup_id):
     """

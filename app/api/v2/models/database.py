@@ -44,8 +44,10 @@ def set_up_tables():
         meetup_id SERIAL PRIMARY KEY,
         topic VARCHAR (24) NOT NULL,
         meetup_date INTEGER NOT NULL,
+        meetup_location VARCHAR (24) NOT NULL,
         meetup_images VARCHAR (24) NOT NULL,
-        meetup_tags VARCHAR (24) NOT NULL
+        meetup_tags VARCHAR (24) NOT NULL,
+        created_at TIMESTAMP
     )"""
 
     questions_table_query = """

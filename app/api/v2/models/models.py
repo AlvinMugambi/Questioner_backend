@@ -91,7 +91,6 @@ class Meetup:
         """
         The initialization of the Meetup class that defines its variables
         """
-        self.id = len(MEETUPS)+1
         self.topic = topic
         self.meetup_date = meetup_date
         self.location = location
@@ -103,7 +102,12 @@ class Meetup:
         """
         saves new meetup to store
         """
-        MEETUPS.append(self)
+        query = """
+        INSERT INTO meetups(topic, meetup_date, meetup_location, meetup_images, meetup_tags, created_at) VALUES(
+            '{}', '{}', '{}', '{}', '{}'
+        )""".format(self.topic, self.meetup_date, self.location, self.images, self.tags, self.created_at)
+
+        database.query_db_no_return(query)
 
     @staticmethod
     def get_all_meetups():
