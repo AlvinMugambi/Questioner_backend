@@ -66,6 +66,17 @@ def validate_email(email):
     return email
 
 
+def check_if_admin():
+    """
+    Checks if the user is an admin
+    """
+    username = decode_token()
+
+    if username['username'] != "iamtheadmin":
+        return False
+    return True
+
+
 def check_duplication(params, table_name):
     """
         Check if a user is already in db, abort if found
