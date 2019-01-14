@@ -89,7 +89,8 @@ def check_duplication(params, table_name):
         if duplicated:
             # Abort if duplicated
             abort(make_response(jsonify(
-                message="Error. '{}' '{}' \
+                status=400,
+                error="Error. '{}' '{}' \
 is already in use".format(key, value)), 400))
 
 
@@ -104,10 +105,11 @@ def token_required(f):
 
         try:
             data = jwt.decode(token, key)
-            current_user = None
-            for user in USERS:
-                if user.username == data['username']:
-                    current_user = user
+            query = """
+            SELECT username FROM users
+            WHERE users.username = '{}'""".format(data['username'])
+
+            current_user = select_from_db(query)
 
         except:
             return jsonify({'message':'Token is expired or invalid'}), 401
