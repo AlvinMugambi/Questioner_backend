@@ -71,9 +71,7 @@ class Meetup:
             "topic": meetup.topic,
             "meetup_date": meetup.meetup_date,
             "location": meetup.location,
-            # "images": meetup.images,
             "tags": meetup.tags,
-            # "created_at": meetup.created_at
         }
 
 class Question:
@@ -135,7 +133,6 @@ class Comment:
 
     def __init__(self, comment, question_id):
         self.comment = comment
-        # self.user_id = user_id
         self.comment_id = len(COMMENTS)+1
         self.question_id = question_id
 
@@ -152,7 +149,6 @@ class Comment:
 
     def __init__(self, comment, question_id):
         self.comment = comment
-        # self.user_id = user_id
         self.comment_id = len(COMMENTS)+1
         self.question_id = question_id
 

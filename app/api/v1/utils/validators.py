@@ -12,6 +12,7 @@ from app.api.v1.models.models import User, USERS
 
 key = os.getenv("SECRET_KEY")
 
+
 def check_password(password, confirmed_password):
     """
     The checker function that checks if password meets required parameters
@@ -73,12 +74,12 @@ def validate_email(email):
 
     return email
 
+
 def check_for_whitespace(data):
-    for key,value in data.items():
-        # if isinstance(field, str):
+    for keys, value in data.items():
         if not value.strip():
             abort(make_response(jsonify({
-                'error':'{} field cannot be left blank'.format(key)})))
+                'error':'{} field cannot be left blank'.format(keys)})))
 
     return True
 
@@ -94,6 +95,7 @@ def query_db_wrong_password(username, password):
                 wrong_pass = True
 
     return wrong_pass
+
 
 def query_db_wrong_username(username, password):
     """
@@ -120,6 +122,7 @@ def verify_if_admin(username):
         admin = False
     return admin
 
+
 def check_if_admin():
     """
     Checks if the user is an admin
@@ -131,10 +134,11 @@ def check_if_admin():
     return True
 
 
-
 def token_required(f):
+    """The token required decorator"""
     @wraps(f)
     def decorated(*args, **kwargs):
+        """The decrated function"""
         token = None
         if 'x-access-token' in request.headers:
             token = request.headers['x-access-token']
@@ -154,7 +158,11 @@ def token_required(f):
         return f(current_user, *args, **kwargs)
     return decorated
 
+
 def decode_token():
+    """
+    Decode token to query for the logged in user username
+    """
     token = request.headers['x-access-token']
     try:
         username = jwt.decode(token, key)
