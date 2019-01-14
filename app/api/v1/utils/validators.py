@@ -18,23 +18,28 @@ def check_password(password, confirmed_password):
     """
         # check if password meets required length
     if len(password) < 6 or len(password) > 12:
-        abort(make_response(jsonify(error="Password should not be less than 6 characters or exceed 12"), 400))
+        abort(make_response(jsonify(
+            error="Password should not be less than 6 characters or exceed 12"), 400))
 
     # check if password contains at least an alphabet(a-z)
     if not re.search("[a-z]", password):
-        abort(make_response(jsonify(error="Password should contain a letter between a-z"), 400))
+        abort(make_response(jsonify(
+            error="Password should contain a letter between a-z"), 400))
 
     # check if password contains at least an upper case letter
     if not re.search("[A-Z]", password):
-        abort(make_response(jsonify(error="Password should contain a capital letter"), 400))
+        abort(make_response(jsonify(
+            error="Password should contain a capital letter"), 400))
 
     # check if password contains at least a number(0-9)
     if not re.search("[0-9]", password):
-        abort(make_response(jsonify(error="Password should contain a number(0-9)"), 400))
+        abort(make_response(jsonify(
+            error="Password should contain a number(0-9)"), 400))
 
     # Checks if passwords provided by the users match
     if password != confirmed_password:
-        abort(make_response(jsonify(error="Passwords don't match!"), 400))
+        abort(make_response(jsonify(
+            error="Passwords don't match!"), 400))
 
     # If they match..
     hashed_password = generate_password_hash(password, method='sha256')
@@ -67,6 +72,41 @@ def validate_email(email):
         abort(make_response(jsonify(error="Invalid Email"), 400))
 
     return email
+
+def check_for_whitespace(data):
+    for key,value in data.items():
+        # if isinstance(field, str):
+        if not value.strip():
+            abort(make_response(jsonify({
+                'error':'{} field cannot be left blank'.format(key)})))
+
+    return True
+
+
+def query_db_wrong_password(username, password):
+    """
+    Query db for a registered user but enters wrong password
+    """
+    wrong_pass = None
+    for user in USERS:
+        if user.username == username:
+            if user.password != password:
+                wrong_pass = True
+
+    return wrong_pass
+
+def query_db_wrong_username(username, password):
+    """
+    Query db for a registered user but enters wrong password
+    """
+    wrong_pass = None
+    for user in USERS:
+        if user.password == password:
+            if user.username != username:
+                wrong_pass = True
+
+    return wrong_pass
+
 
 def verify_if_admin(username):
     """
