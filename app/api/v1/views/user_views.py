@@ -1,10 +1,13 @@
+""""The User route endpints"""
+
 import os
+import datetime
+
 import jwt
 from flask import request, jsonify, abort, make_response
-import datetime
 from werkzeug.security import generate_password_hash, check_password_hash
 
-from app.api.v1.utils.validators import validate_email, check_password, check_if_admin,verify_if_admin
+from app.api.v1.utils import validators
 from app.api.v1.models.models import User
 from app.api.v1 import version1
 
@@ -12,20 +15,27 @@ KEY = os.getenv('SECRET_KEY')
 
 @version1.route("/auth/signup", methods=['POST'])
 def user_sign_up():
+    """
+    The user sign up route
+    """
     try:
-        firstname = request.get_json()['firstname']
-        lastname = request.get_json()['lastname']
-        username = request.get_json()['username']
-        email = request.get_json()['email']
-        password = request.get_json()['password']
-        confirm_pass = request.get_json()['confirm_password']
+        data = request.get_json()
+        firstname = data['firstname']
+        lastname = data['lastname']
+        username = data['username']
+        email = data['email']
+        password = data['password']
+        confirm_pass = data['confirm_password']
 
     except KeyError:
-        abort(make_response(jsonify({'status': 400,
-                                     'error': "Check your json keys"}), 400))
+        abort(make_response(jsonify({
+            'error':'Check your json keys', 'status': 400}), 400))
 
-    check_password(password, confirm_pass)
-    email = validate_email(email)
+
+    validators.check_for_whitespace(data)
+
+    validators.check_password(password, confirm_pass)
+    email = validators.validate_email(email)
 
     user = User(firstname=firstname,
                 username=username,
@@ -39,19 +49,38 @@ def user_sign_up():
 
 @version1.route("/auth/login", methods=['POST'])
 def user_login():
+    """
+    The user login route
+    """
     try:
-        username = request.get_json()['username']
-        password = request.get_json()['password']
+        data = request.get_json()
+        username = data['username']
+        password = data['password']
 
     except KeyError:
-        abort(make_response(jsonify({'status': 400,
-                                     ' error': "Check your json keys. Should be username & password"}), 400))
+        abort(make_response(jsonify({
+            'status': 400,
+            ' error': "Check your json keys. Should be username & password"}), 400))
 
-    verify_if_admin(username)
+    validators.check_for_whitespace(data)
+    validators.verify_if_admin(username)
+
+    wrong_username = validators.query_db_wrong_username(username, password)
+    if wrong_username:
+        return jsonify({"status": 400, "error":"The username is incorrect"}), 400
+
+    wrong_pass = validators.query_db_wrong_password(username, password)
+    if wrong_pass:
+        abort(make_response(jsonify({
+            'status':400, 'error':'Wrong password'}), 400))
 
     user = User.query_users(username, password)
+
     if not user:
-        return jsonify({"status": 400, "data":"Register first"}), 400
+        return jsonify({"status": 400, "data":"Please Register first"}), 400
 
     token = jwt.encode({"username":username}, KEY, algorithm='HS256')
-    return jsonify({"status": 200, "token":token.decode('UTF-8'), "message": "Logged in successfully"}), 200
+    return jsonify({
+        "status": 200,
+        "token":token.decode('UTF-8'),
+        "message": "Logged in successfully"}), 200

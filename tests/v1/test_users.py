@@ -19,10 +19,10 @@ class UserBaseTest(unittest.TestCase):
 
         self.signup_user1 = {"firstname":"alvo",
                              "lastname": "mugz",
-                             "username":"alvomugz",
-                             "email":"alvo@gmail.com",
-                             "password": "Alvino123",
-                             "confirm_password":"Alvino123"}
+                             "username":"alvomugzqw",
+                             "email":"alvosa@gmail.com",
+                             "password": "Alvino123a",
+                             "confirm_password":"Alvino123a"}
 
         self.signup_user2 = {"firstname":"Lord",
                              "lastname": "Vader",
@@ -38,18 +38,18 @@ class UserBaseTest(unittest.TestCase):
                              "password": "LukeSkyies1",
                              "confirm_password":"LukeSkyies1"}
 
-        self.signup_user4 = {"firstname":"obi",
-                             "lastname": "wan",
-                             "username":"obiwan",
-                             "email":"canobi@gmail.com",
-                             "password": "ObiLight1",
-                             "confirm_password":"ObiLight1"}
+        self.signup_user4 = {"firstname":"han",
+                             "lastname": "solo",
+                             "username":"hansolo",
+                             "email":"hansolo@gmail.com",
+                             "password": "Chewie2",
+                             "confirm_password":"Chewie2"}
 
-        self.login_user1 = {"username":"alvomugz",
-                            "password":"alvino"}
+        self.login_user1 = {"username":"alvomugzqw",
+                            "password":"Alvino123a"}
 
-        self.login_user4 = {"username":"obiwan",
-                            "password":"ObiLight1"}
+        self.login_user4 = {"username":"hansolo",
+                            "password":"Chewie2"}
 
     def tearDown(self):
         """
@@ -98,4 +98,4 @@ class TestUserEndpoints(UserBaseTest):
         response = self.client.post("api/v1/auth/login", data = json.dumps(self.login_user1), content_type = "application/json")
         self.assertEqual(response.status_code, 400)
         result = json.loads(response.data.decode('utf-8'))
-        self.assertEqual(result["data"], "Register first")
+        self.assertEqual(result["data"], "Please Register first")

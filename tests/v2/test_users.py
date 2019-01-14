@@ -124,7 +124,7 @@ class TestUserEndpoints(UserBaseTest):
         response = self.client.post("api/v2/auth/login", data = json.dumps(self.login_user1), content_type = "application/json")
         self.assertEqual(response.status_code, 400)
         result = json.loads(response.data.decode('utf-8'))
-        self.assertEqual(result["data"], "Register first")
+        self.assertEqual(result["data"], "The username or passsword is incorrect")
 
     def test_user_login_wrong_password(self):
         """
