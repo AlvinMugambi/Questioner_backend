@@ -1,6 +1,7 @@
 asn1crypto==0.24.0
 atomicwrites==1.2.1
 attrs==18.2.0
+autoenv==1.0.0
 blueprint==3.4.2
 certifi==2018.11.29
 cffi==1.11.5
