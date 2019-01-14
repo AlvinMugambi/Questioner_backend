@@ -1,4 +1,5 @@
 """The validator functions that validate user data"""
+
 import os
 import re
 from functools import wraps
@@ -51,7 +52,7 @@ def check_password(password, confirmed_password):
 def validate_email(email):
     """
     The checker function for validating an Email
-     check if the email is a valid email and if it is already in use
+    if the email is a valid email and if it is already in use
     """
 
     for user in USERS:
@@ -76,6 +77,9 @@ def validate_email(email):
 
 
 def check_for_whitespace(data):
+    """
+    Check for whitespace only in input data
+    """
     for keys, value in data.items():
         if not value.strip():
             abort(make_response(jsonify({
