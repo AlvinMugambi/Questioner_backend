@@ -20,12 +20,12 @@ class QuestionBaseTest(unittest.TestCase):
 
         self.signup_user = {"firstname":"obi",
                             "lastname": "wan",
-                            "username":"obiwan",
-                            "email":"canobi@gmail.com",
-                            "password": "ObiLight1",
-                            "confirm_password":"ObiLight1"}
-        self.login_user = {"username":"obiwan",
-                           "password":"ObiLight1"}
+                            "username":"obiwanca",
+                            "email":"canobiedw@gmail.com",
+                            "password": "ObiLigh1",
+                            "confirm_password":"ObiLigh1"}
+        self.login_user = {"username":"obiwanca",
+                           "password":"ObiLigh1"}
 
         self.meetup = {"topic":"Python",
                        "meetup_date":"3/01/1991",
@@ -46,7 +46,7 @@ class QuestionBaseTest(unittest.TestCase):
         self.post_comment = {"comment":"I would love to hear this question answered"}
 
         self.question_and_comment = {"body": "I would like to know this",
-                                     "comments": ["I would love to hear this question answered",{"username": "obiwan"}],
+                                     "comments": ["I would love to hear this question answered",{"username": "obiwanca"}],
                                      "meetup_id": 1,
                                      "question_id": 1,
                                      "title": "what are languages?",
@@ -78,9 +78,11 @@ class TestQuestionEndpoint(QuestionBaseTest):
     """
     def login(self):
         self.client.post(
-            'api/v1/auth/signup', data=json.dumps(self.signup_user), content_type="application/json")
+            'api/v1/auth/signup', data=json.dumps(self.signup_user),
+            content_type="application/json")
         login = self.client.post(
-            'api/v1/auth/login', data=json.dumps(self.login_user), content_type="application/json")
+            'api/v1/auth/login', data=json.dumps(self.login_user),
+            content_type="application/json")
         data = json.loads(login.data.decode('utf-8'))
         self.token = data["token"]
         return self.token
