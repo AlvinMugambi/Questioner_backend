@@ -196,6 +196,7 @@ class User:
         """
         USERS.append(self)
 
+
     @staticmethod
     def query_users(username, password):
         """
