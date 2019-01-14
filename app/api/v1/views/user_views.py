@@ -1,7 +1,10 @@
+""""The User route endpints"""
+
 import os
+import datetime
+
 import jwt
 from flask import request, jsonify, abort, make_response
-import datetime
 from werkzeug.security import generate_password_hash, check_password_hash
 
 from app.api.v1.utils import validators
