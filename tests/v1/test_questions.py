@@ -46,7 +46,7 @@ class QuestionBaseTest(unittest.TestCase):
         self.post_comment = {"comment":"I would love to hear this question answered"}
 
         self.question_and_comment = {"body": "I would like to know this",
-                                     "comments": ["I would love to hear this question answered",{"username": "obiwanca"}],
+                                     "comments": ["I would love to hear this question answered", {"username": "obiwanca"}],
                                      "meetup_id": 1,
                                      "question_id": 1,
                                      "title": "what are languages?",
@@ -88,14 +88,18 @@ class TestQuestionEndpoint(QuestionBaseTest):
         return self.token
 
 
-
     def test_user_can_post_a_question(self):
         """
         test to show a user can successfully post a question
         """
         self.token = self.login()
-        self.client.post("api/v1/meetups", data = json.dumps(self.meetup), content_type = "application/json")
-        response = self.client.post("api/v1/meetups/1/questions", data = json.dumps(self.post_question1), headers={'x-access-token': self.token}, content_type = "application/json")
+        self.client.post("api/v1/meetups",
+                         data=json.dumps(self.meetup),
+                         content_type="application/json")
+        response = self.client.post("api/v1/meetups/1/questions",
+                                    data=json.dumps(self.post_question1),
+                                    headers={'x-access-token': self.token},
+                                    content_type="application/json")
         self.assertEqual(response.status_code, 201)
 
         result = json.loads(response.data.decode('utf-8'))
@@ -109,36 +113,55 @@ class TestQuestionEndpoint(QuestionBaseTest):
         test a user can upvote a question
         """
         self.token = self.login()
-        self.client.post("api/v1/meetups", data = json.dumps(self.meetup), content_type = "application/json")
-        self.client.post("api/v1/meetups/1/questions", data = json.dumps(self.post_question1), headers={'x-access-token': self.token}, content_type = "application/json")
-        response = self.client.patch("api/v1/questions/1/upvote", headers={'x-access-token': self.token}, content_type = "application/json")
+        self.client.post("api/v1/meetups",
+                         data=json.dumps(self.meetup),
+                         content_type="application/json")
+        self.client.post("api/v1/meetups/1/questions",
+                         data=json.dumps(self.post_question1),
+                         headers={'x-access-token': self.token},
+                         content_type="application/json")
+        response = self.client.patch("api/v1/questions/1/upvote",
+                                     headers={'x-access-token': self.token},
+                                     content_type="application/json")
         self.assertEqual(response.status_code, 200)
 
-        # result = json.loads(response.data.decode('utf-8'))
-        # self.assertEqual(result['data'], self.upvoted_question)
 
     def test_downvote_question(self):
         """
         test a user can upvote a question
         """
         self.token = self.login()
-        self.client.post("api/v1/meetups", data = json.dumps(self.meetup), content_type = "application/json")
-        self.client.post("api/v1/meetups/1/questions", data = json.dumps(self.post_question1), headers={'x-access-token': self.token}, content_type = "application/json")
-        response = self.client.patch("api/v1/questions/1/downvote", headers={'x-access-token': self.token}, content_type = "application/json")
+        self.client.post("api/v1/meetups",
+                         data=json.dumps(self.meetup),
+                         content_type="application/json")
+        self.client.post("api/v1/meetups/1/questions",
+                         data=json.dumps(self.post_question1),
+                         headers={'x-access-token': self.token},
+                         content_type="application/json")
+        response = self.client.patch("api/v1/questions/1/downvote",
+                                     headers={'x-access-token': self.token},
+                                     content_type="application/json")
         self.assertEqual(response.status_code, 200)
 
-        # result = json.loads(response.data.decode('utf-8'))
-        # self.assertEqual(result['data'], self.downvoted_question)
 
     def test_get_all_questions(self):
         """
         Test a user can get all the questions posted to a meetup
         """
         self.token = self.login()
-        self.client.post("api/v1/meetups", data = json.dumps(self.meetup), content_type = "application/json")
-        self.client.post("api/v1/meetups/1/questions", data = json.dumps(self.post_question1), headers={'x-access-token': self.token}, content_type = "application/json")
-        self.client.post("api/v1/meetups/1/questions", data = json.dumps(self.post_question2), headers={'x-access-token': self.token}, content_type = "application/json")
-        response = self.client.get("api/v1/meetups/1/questions", content_type = "application/json")
+        self.client.post("api/v1/meetups",
+                         data=json.dumps(self.meetup),
+                         content_type="application/json")
+        self.client.post("api/v1/meetups/1/questions",
+                         data=json.dumps(self.post_question1),
+                         headers={'x-access-token': self.token},
+                         content_type="application/json")
+        self.client.post("api/v1/meetups/1/questions",
+                         data=json.dumps(self.post_question2),
+                         headers={'x-access-token': self.token},
+                         content_type="application/json")
+        response = self.client.get("api/v1/meetups/1/questions",
+                                   content_type="application/json")
         self.assertEqual(response.status_code, 200)
 
     def test_comment_on_a_question(self):
@@ -146,9 +169,42 @@ class TestQuestionEndpoint(QuestionBaseTest):
         Test to show a user can comment on a specific question
         """
         self.token = self.login()
-        self.client.post("api/v1/meetups", data = json.dumps(self.meetup), content_type = "application/json")
-        self.client.post("api/v1/meetups/1/questions", data = json.dumps(self.post_question3), headers={'x-access-token': self.token}, content_type = "application/json")
-        response = self.client.post("api/v1/questions/1/comment", data = json.dumps(self.post_comment), headers={'x-access-token': self.token}, content_type = "application/json")
+        self.client.post("api/v1/meetups",
+                         data=json.dumps(self.meetup),
+                         content_type="application/json")
+        self.client.post("api/v1/meetups/1/questions",
+                         data=json.dumps(self.post_question3),
+                         headers={'x-access-token': self.token},
+                         content_type="application/json")
+        response = self.client.post("api/v1/questions/1/comment",
+                                    data=json.dumps(self.post_comment),
+                                    headers={'x-access-token': self.token},
+                                    content_type="application/json")
         self.assertEqual(response.status_code, 201)
         result = json.loads(response.data.decode("utf'8"))
         self.assertEqual(result['data'], self.question_and_comment)
+
+    def test_token_missing(self):
+        """
+        test a user cannot post a question if not logged in
+        """
+        response = self.client.post("api/v1/meetups/1/questions",
+                                    data=json.dumps(self.post_question1),
+                                    headers={'x-access-token': self.token},
+                                    content_type="application/json")
+        self.assertEqual(response.status_code, 401)
+        result = json.loads(response.data.decode('utf-8'))
+        self.assertEqual(result['message'], "Token is missing")
+
+    def test_token_is_invalid(self):
+        """
+        test a user cannot post a question if not logged in
+        """
+        token = "aduneoneuaounwLJNWEOI23E239P422O2423"
+        response = self.client.post("api/v1/meetups/1/questions",
+                                    data=json.dumps(self.post_question1),
+                                    headers={'x-access-token': token},
+                                    content_type="application/json")
+        self.assertEqual(response.status_code, 401)
+        result = json.loads(response.data.decode('utf-8'))
+        self.assertEqual(result['message'], "Token is expired or invalid")
