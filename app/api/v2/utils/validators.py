@@ -8,7 +8,7 @@ from flask import jsonify, request, abort, make_response
 from werkzeug.security import generate_password_hash
 
 # local imports
-from app.api.v1.models.models import User, USERS
+from app.api.v2.models.models import User
 from app.api.v2.models.database import select_from_db
 
 key = os.getenv("SECRET_KEY")
@@ -48,10 +48,6 @@ def validate_email(email):
     The checker function for validating an Email
      check if the email is a valid email and if it is already in use
     """
-
-    for user in USERS:
-        if email == user.email:
-            abort(make_response(jsonify(error="Email already taken!"), 400))
     try:
         user, domain = str(email).split("@")
     except ValueError:
@@ -68,28 +64,6 @@ def validate_email(email):
         abort(make_response(jsonify(error="Invalid Email"), 400))
 
     return email
-
-def verify_if_admin(username):
-    """
-    Verifies if the user is admin
-    """
-    admin = None
-    for user in USERS:
-        if username == 'iamtheadmin':
-            user.is_admin = True
-            admin = True
-        admin = False
-    return admin
-
-def check_if_admin():
-    """
-    Checks if the user is an admin
-    """
-    username = decode_token()
-
-    if username['username'] != "iamtheadmin":
-        return False
-    return True
 
 
 def check_duplication(params, table_name):
