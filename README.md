@@ -50,8 +50,7 @@ $ pip install -r requirements.txt
 
 - Set the environment variables
 ```
-$ mv .env.example .env
-$ source .env
+$ source .env_sample
 ```
 
 - Run the app
