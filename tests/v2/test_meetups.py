@@ -24,12 +24,12 @@ class MeetupsBaseTest(unittest.TestCase):
         init_db(self.db_url)
 
         self.signup_admin = {"username":"iamtheadmin",
-                             "email":"masteryoda@gmail.com",
-                             "password": "NumberForce1",
-                             "confirm_password":"NumberForce1"}
+                             "email":"mastryoda@gmail.com",
+                             "password": "NumberFrce1",
+                             "confirm_password":"NumberFrce1"}
 
         self.login_admin = {"username":"iamtheadmin",
-                            "password":"NumberForce1"}
+                            "password":"NumberFrce1"}
 
         self.signup_user2 = {"username":"fakestyoda",
                              "email":"yodason@gmail.com",

@@ -18,12 +18,13 @@ class ValidatorsBaseTest(unittest.TestCase):
         # initialize db, create tables
         init_db(self.db_url)
 
-        self.user_signup = {"firstname":"star",
-                            "lastname": "wars",
-                            "username":"starwars",
-                            "email":"galaxy@gmail.com",
-                            "password": "TheRepubl1c",
-                            "confirm_password":"TheRepubl1c"}
+        self.signup_user = {"username":"chewbacca",
+                            "email":"chewbacca@gmail.com",
+                            "password":"Hansolo1",
+                            "confirm_password":"Hansolo1"}
+
+        self.login_user = {"username":"chewbacca",
+                           "password":"Hansolo1"}
 
         self.user_invalid_email1 = {"firstname":"fay",
                                     "lastname": "sky",
@@ -83,11 +84,11 @@ class TestValidations(ValidatorsBaseTest):
         """
         Test if a user registers with an already in use Email
         """
-        self.client.post("api/v2/auth/signup", data = json.dumps(self.user_signup), content_type = "application/json")
-        response = self.client.post("api/v2/auth/signup", data = json.dumps(self.user_signup), content_type = "application/json")
+        self.client.post("api/v2/auth/signup", data = json.dumps(self.signup_user), content_type = "application/json")
+        response = self.client.post("api/v2/auth/signup", data = json.dumps(self.signup_user), content_type = "application/json")
         self.assertEqual(response.status_code, 400)
         result = json.loads(response.data.decode('utf-8'))
-        self.assertEqual(result['error'],"Email already taken!")
+        self.assertEqual(result['error'],"Error. 'username' 'chewbacca' is already in use")
 
     def test_invalid_email(self):
         """
