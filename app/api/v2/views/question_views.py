@@ -2,11 +2,11 @@
 
 from flask import jsonify, request, make_response, abort
 
-from app.api.v1.models.models import Question, Comment
-from app.api.v1.utils.validators import token_required, decode_token
-from app.api.v1 import version1
+from app.api.v2.models.models import Question, Comment
+from app.api.v2.utils.validators import token_required, decode_token
+from app.api.v2 import version2
 
-@version1.route("/meetups/<int:meetup_id>/questions", methods=['POST'])
+@version2.route("/meetups/<int:meetup_id>/questions", methods=['POST'])
 @token_required
 def create_question(current_user, meetup_id):
     """
@@ -41,7 +41,7 @@ def create_question(current_user, meetup_id):
                              "body": body}]}), 201
 
 
-@version1.route("/questions/<int:question_id>/upvote", methods=['PATCH'])
+@version2.route("/questions/<int:question_id>/upvote", methods=['PATCH'])
 @token_required
 def upvote_question(current_user, question_id):
     """
@@ -55,7 +55,7 @@ def upvote_question(current_user, question_id):
     return jsonify({"status": 404, "error": "Question not found"}), 404
 
 
-@version1.route("/questions/<int:question_id>/downvote", methods=['PATCH'])
+@version2.route("/questions/<int:question_id>/downvote", methods=['PATCH'])
 @token_required
 def downvote_question(current_user, question_id):
     """
@@ -69,7 +69,7 @@ def downvote_question(current_user, question_id):
     return jsonify({"status": 404, "error": "Question not found"}), 404
 
 
-@version1.route("/meetups/<int:meet_id>/questions", methods=['GET'])
+@version2.route("/meetups/<int:meet_id>/questions", methods=['GET'])
 def get_all_questions_for_a_meetup(meet_id):
     """
     The get all questions for a specific meetup route endpoint
@@ -80,7 +80,7 @@ def get_all_questions_for_a_meetup(meet_id):
     return jsonify({"status": 404, "data": "No questions posted yet for this meetup"}), 404
 
 
-@version1.route("/questions/<int:question_id>/comment", methods=['POST'])
+@version2.route("/questions/<int:question_id>/comment", methods=['POST'])
 @token_required
 def comment_on_a_question(current_user, question_id):
     """
