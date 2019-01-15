@@ -29,10 +29,12 @@ def user_sign_up():
 
     except KeyError:
         abort(make_response(jsonify({
-            'error':'Check your json keys', 'status': 400}), 400))
+            'error':'Check your json keys. Should be firstname, lastname, username, email, password, confirm_password',
+            'status': 400}), 400))
 
 
     validators.check_for_whitespace(data)
+    validators.check_if_string(firstname, lastname, username)
 
     validators.check_password(password, confirm_pass)
     email = validators.validate_email(email)
