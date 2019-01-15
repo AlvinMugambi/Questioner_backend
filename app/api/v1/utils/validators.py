@@ -68,6 +68,9 @@ def validate_email(email):
                 error="Email already taken!"), 409))
     try:
         user, domain = str(email).split("@")
+        if not re.match("^[A-Za-z]*$", user):
+            abort(make_response(jsonify({
+                "status": 400, "Error":  "Invalid Email"}), 400))
     except ValueError:
         abort(make_response(jsonify(
             status=400,
@@ -78,6 +81,12 @@ def validate_email(email):
     # Check that domain is valid
     try:
         dom_1, dom_2 = domain.split(".")
+        if not re.match("^[A-Za-z]*$", dom_1):
+            abort(make_response(jsonify({
+                "status": 400, "Error":  "Invalid Email"}), 400))
+        if not re.match("^[A-Za-z]*$", dom_2):
+            abort(make_response(jsonify({
+                "status": 400, "Error":  "Invalid Email"}), 400))
     except ValueError:
         abort(make_response(jsonify(
             status=400,
@@ -86,6 +95,8 @@ def validate_email(email):
         abort(make_response(jsonify(
             status=400,
             error="Invalid Email"), 400))
+    # if not re.match(r"(^[a-zA-z0-9_.]+@[a-zA-z0-9-]+\.[a-z]+$)", email):
+    #     abort(make_response(jsonify({'error': 'Invalid email format', 'status': 400}), 400))
 
     return email
 
