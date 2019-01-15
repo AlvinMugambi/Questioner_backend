@@ -58,8 +58,8 @@ def validate_username(username):
     for user in USERS:
         if username == user.username:
             abort(make_response(jsonify({
-                'status': 400,
-                'error': 'Username already in use. Choose another'}), 400))
+                'status': 409,
+                'error': 'Username already in use. Choose another'}), 409))
 
 
 def validate_email(email):
