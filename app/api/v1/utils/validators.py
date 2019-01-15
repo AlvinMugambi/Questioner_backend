@@ -2,6 +2,7 @@
 
 import os
 import re
+from datetime import datetime
 from functools import wraps
 
 import jwt
@@ -166,9 +167,20 @@ def check_if_admin():
     return True
 
 def check_date(date):
-    if not re.match(r"^([1-9]|[12][0-9]|3[01])\/(0[1-9]|1[0-2])\/([12][0-9]{3})$", date):
+    if not re.match(r"^(0[1-9]|[12][0-9]|3[01])\/(0[1-9]|1[0-2])\/([12][0-9]{3})$", date):
         abort(make_response(jsonify({
             "status": 400, "Error":  "Invalid date format. Should be DD/MM/YYYY"}), 400))
+
+
+    date_format = "%d/%m/%Y"
+
+    # create datetime objects from the strings
+    date = datetime.strptime(date, date_format)
+    now = datetime.now()
+
+    if date < now:
+        abort(make_response(jsonify({
+            "status": 400, "Error":  "Date should be in the future"}), 400))
 
 
 def token_required(f):
