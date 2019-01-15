@@ -1,7 +1,7 @@
 
 # Questioner_backend
 
-[![Build Status](https://travis-ci.org/AlvinMugambi/Questioner_backend.svg?branch=develop)](https://travis-ci.org/AlvinMugambi/Questioner_backend)[![Maintainability](https://api.codeclimate.com/v1/badges/c4e627cf1f50880cb8fb/maintainability)](https://codeclimate.com/github/AlvinMugambi/Questioner_backend/maintainability)[![Coverage Status](https://coveralls.io/repos/github/AlvinMugambi/Questioner_backend/badge.svg?branch=ft-api-get-all-meetups-%23163033399)](https://coveralls.io/github/AlvinMugambi/Questioner_backend?branch=ft-api-get-all-meetups-%23163033399)
+[![Build Status](https://travis-ci.org/AlvinMugambi/Questioner_backend.svg?branch=develop)](https://travis-ci.org/AlvinMugambi/Questioner_backend)[![Maintainability](https://api.codeclimate.com/v1/badges/c4e627cf1f50880cb8fb/maintainability)](https://codeclimate.com/github/AlvinMugambi/Questioner_backend/maintainability)[![Coverage Status](https://coveralls.io/repos/github/AlvinMugambi/Questioner_backend/badge.svg?branch=develop-v2)](https://coveralls.io/github/AlvinMugambi/Questioner_backend?branch=develop-v2)
 
 
 Crowd-source questions for a meetup. Questioner helps the meetup organizer prioritize questions to be answered.
