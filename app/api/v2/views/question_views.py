@@ -17,12 +17,14 @@ def create_question(current_user, meetup_id):
         body = request.get_json()['body']
 
     except KeyError:
-        abort(make_response(jsonify({'status': 400,
-                                     ' error': "Check your json keys. Should be topic and body"}), 400))
+        abort(make_response(jsonify({
+            'status': 400,
+            ' error': "Check your json keys. Should be topic and body"}), 400))
 
     if not title:
-        abort(make_response(jsonify({'status': 400,
-                                     'error': 'topic field is required'}), 400))
+        abort(make_response(jsonify({
+            'status': 400,
+            'error': 'topic field is required'}), 400))
 
     if not body:
         abort(make_response(jsonify({'status': 400,
@@ -77,7 +79,8 @@ def get_all_questions_for_a_meetup(meet_id):
     questions = Question.get_all_questions(meet_id)
     if questions:
         return jsonify({"status": 200, "data": questions}), 200
-    return jsonify({"status": 404, "data": "No questions posted yet for this meetup"}), 404
+    return jsonify({"status": 404,
+                    "data": "No questions posted yet for this meetup"}), 404
 
 
 @version2.route("/questions/<int:question_id>/comment", methods=['POST'])
@@ -89,10 +92,10 @@ def comment_on_a_question(current_user, question_id):
     try:
         comment = request.get_json()['comment']
     except KeyError:
-        abort(make_response(jsonify({'status': 400, 'error':'Check your json key. Should be comment'})))
+        abort(make_response(jsonify({
+            'status': 400,
+            'error':'Check your json key. Should be comment'})))
 
-    # my_comment = Comment(comment=comment, question_id=question_id)
-    # my_comment.save_comment()
     username = decode_token()
 
     question = Question.get_question(question_id)

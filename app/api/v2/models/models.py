@@ -13,13 +13,17 @@ class User:
     The user models
     """
 
-    def __init__(self, username, email, password):
+    def __init__(self, username, email, password,
+                 firstname, lastname, phone_number):
         """
         Define the user model and its attributes
         """
 
+        self.firstname = firstname
+        self.lastname = lastname
         self.username = username
         self.email = email
+        self.phone_number = phone_number
         self.password = self.encrypt_password_on_signup(password)
 
 
@@ -28,9 +32,9 @@ class User:
         Add a new user to the users store
         """
         query = """
-        INSERT INTO users(username, email, password) VALUES(
-            '{}', '{}', '{}'
-        )""".format(self.username, self.email, self.password)
+        INSERT INTO users(username, firstname, lastname, phoneNumber, email, password) VALUES(
+            '{}', '{}', '{}', '{}', '{}', '{}'
+        )""".format(self.username, self.firstname, self.lastname, self.phone_number, self.email, self.password)
 
         database.query_db_no_return(query)
 

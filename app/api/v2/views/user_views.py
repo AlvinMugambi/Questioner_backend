@@ -13,22 +13,34 @@ KEY = os.getenv('SECRET_KEY')
 @version2.route("/auth/signup", methods=['POST'])
 def user_sign_up():
     try:
-        username = request.get_json()['username']
-        email = request.get_json()['email']
-        password = request.get_json()['password']
-        confirm_pass = request.get_json()['confirm_password']
+        data = request.get_json()
+        firstname = data['firstname']
+        lastname = data['lastname']
+        username = data['username']
+        email = data['email']
+        password = data['password']
+        confirm_pass = data['confirmpassword']
+        phone_number = data['phoneNumber']
 
     except KeyError:
-        abort(make_response(jsonify({'status': 400,
-                                     'error': "Check your json keys"}), 400))
+        abort(make_response(jsonify({
+            'status': 400,
+            'error': "Should be firstname, lastname, username, email, password and confirmpassword"}), 400))
 
+
+    validators.check_for_whitespace(data)
+    validators.check_if_string(data)
+    validators.check_phone_number(phone_number)
     validators.check_password(password, confirm_pass)
     email = validators.validate_email(email)
 
     validators.check_duplication({"username": username}, "users")
     validators.check_duplication({"email": email}, "users")
 
-    user = User(username=username,
+    user = User(firstname=firstname,
+                lastname=lastname,
+                phone_number=phone_number,
+                username=username,
                 email=email,
                 password=password)
 
@@ -39,16 +51,23 @@ def user_sign_up():
 @version2.route("/auth/login", methods=['POST'])
 def user_login():
     try:
-        username = request.get_json()['username']
-        password = request.get_json()['password']
+        data = request.get_json()
+        username = data['username']
+        password = data['password']
 
     except KeyError:
-        abort(make_response(jsonify({'status': 400,
-                                     'error': "Check your json keys. Should be username & password"}), 400))
+        abort(make_response(jsonify({
+            'status': 400,
+            'error': "Should be username & password"}), 400))
+
+
+    validators.check_for_whitespace(data)
+
     try:
         user = User.get_user_by_username(username)
         if not user:
-            return jsonify({"status": 400, "data":"The username or passsword is incorrect"}), 400
+            return jsonify({"status": 400,
+                            "data":"The username or passsword is incorrect"}), 400
 
         user_id = user[0][0]
         username = user[0][1]

@@ -34,6 +34,9 @@ def set_up_tables():
     CREATE TABLE users (
         user_id SERIAL PRIMARY KEY,
         username VARCHAR (24) NOT NULL UNIQUE,
+        firstname VARCHAR (24) NOT NULL,
+        lastname VARCHAR (24) NOT NULL,
+        phoneNumber INTEGER NOT NULL,
         email VARCHAR (30) NOT NULL UNIQUE,
         password VARCHAR (128) NOT NULL,
         admin BOOLEAN
@@ -61,7 +64,7 @@ def set_up_tables():
     )"""
 
     comments_table_query = """
-    CREATE TABLE questions (
+    CREATE TABLE comments (
         comment_id SERIAL PRIMARY KEY,
         question_id INTEGER NOT NULL
     )"""

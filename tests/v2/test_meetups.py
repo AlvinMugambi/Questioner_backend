@@ -23,18 +23,24 @@ class MeetupsBaseTest(unittest.TestCase):
         # initialize db, create tables
         init_db(self.db_url)
 
-        self.signup_admin = {"username":"iamtheadmin",
+        self.signup_admin = {"firstname":"the",
+                             "lastname":"admin",
+                             "phoneNumber":"0712345678",
+                             "username":"iamtheadmin",
                              "email":"mastryoda@gmail.com",
                              "password": "NumberFrce1",
-                             "confirm_password":"NumberFrce1"}
+                             "confirmpassword":"NumberFrce1"}
 
         self.login_admin = {"username":"iamtheadmin",
                             "password":"NumberFrce1"}
 
-        self.signup_user2 = {"username":"fakestyoda",
+        self.signup_user2 = {"firstname":"iam",
+                             "lastname":"yoda",
+                             "phoneNumber":"0702345678",
+                             "username":"fakestyoda",
                              "email":"yodason@gmail.com",
                              "password":"Obi1ight1",
-                             "confirm_password":"Obi1ight1"}
+                             "confirmpassword":"Obi1ight1"}
 
         self.login_user2 = {"username":"fakestyoda",
                             "password":"Obi1ight1"}

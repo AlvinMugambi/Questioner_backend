@@ -23,37 +23,55 @@ class UserBaseTest(unittest.TestCase):
         # initialize db, create tables
         init_db(self.db_url)
 
-        self.signup_user1 = {"username":"alvomugz",
-                             "email":"alvo@gmail.com",
+        self.signup_user1 = {"firstname":"fa",
+                             "lastname": "sy",
+                             "phoneNumber":"0723456789",
+                             "username":"alvomugs",
+                             "email":"alvio@gmail.com",
                              "password": "Alvino123",
-                             "confirm_password":"Alvino123"}
+                             "confirmpassword":"Alvino123"}
 
-        self.signup_user2 = {"username":"Lordvader",
+        self.signup_user2 = {"firstname":"lord",
+                             "lastname": "vader",
+                             "phoneNumber":"0734567890",
+                             "username":"Lordvader",
                              "email":"darth@gmail.com",
                              "password": "LordDarthV1",
-                             "confirm_password":"Darthvader1"}
+                             "confirmpassword":"Darthvader1"}
 
-        self.signup_user3 = {"username":"skywalker",
+        self.signup_user3 = {"firstname":"fa",
+                             "lastname": "sy",
+                             "phoneNumber":"0703456789",
+                             "username":"skywalker",
                              "email":"skywalker@gmail.com",
                              "password": "LukeSkyies1",
-                             "confirm_password":"LukeSkyies1"}
+                             "confirmpassword":"LukeSkyies1"}
 
-        self.signup_user4 = {"username":"mrcanobi",
+        self.signup_user4 = {"firstname":"fa",
+                             "lastname": "sy",
+                             "phoneNumber":"0793456789",
+                             "username":"mrcanobi",
                              "email":"canobi@gmail.com",
                              "password": "ObiLight1",
-                             "confirm_password":"ObiLight1"}
+                             "confirmpassword":"ObiLight1"}
 
-        self.signup_user5 = {"username":"kyloRen",
+        self.signup_user5 = {"firstname":"fa",
+                             "lastname": "sy",
+                             "phoneNumber":"0723456080",
+                             "username":"kyloRen",
                              "email":"newdarth@gmail.com",
                              "password": "kyloRen1",
-                             "confirm_password":"kyloRen1"}
+                             "confirmpassword":"kyloRen1"}
 
-        self.signup_user6 = {"name":"chwebacca",
+        self.signup_user6 = {"firstname":"fa",
+                             "lastname": "sy",
+                             "phoneNumber":"0743456789",
+                             "name":"chwebacca",
                              "emal":"chewie@gmail.com",
                              "passrd": "chewie123",
-                             "confirm_assword":"chewie123"}
+                             "confirmpassword":"chewie123"}
 
-        self.login_user1 = {"username":"alvomugz",
+        self.login_user1 = {"username":"alvomugs",
                             "password":"alvino"}
 
         self.login_user4 = {"username":"mrcanobi",
@@ -84,19 +102,21 @@ class TestUserEndpoints(UserBaseTest):
         Test to show a user can sign up successfully
         """
         response = self.client.post("api/v2/auth/signup",
-                                    data = json.dumps(self.signup_user6),
-                                    content_type = "application/json")
+                                    data=json.dumps(self.signup_user6),
+                                    content_type="application/json")
         self.assertEqual(response.status_code, 400)
         result = json.loads(response.data.decode('utf-8'))
-        self.assertEqual(result['error'], 'Check your json keys')
+        self.assertEqual(
+            result['error'],
+            'Should be firstname, lastname, username, email, password and confirmpassword')
 
     def test_user_can_sign_up(self):
         """
         Test to show a user can sign up successfully
         """
         response = self.client.post("api/v2/auth/signup",
-                                    data = json.dumps(self.signup_user1),
-                                    content_type = "application/json")
+                                    data=json.dumps(self.signup_user1),
+                                    content_type="application/json")
         self.assertEqual(response.status_code, 201)
         result = json.loads(response.data.decode('utf-8'))
         self.assertEqual(result['data'], 'Registered successfully!')
@@ -106,8 +126,8 @@ class TestUserEndpoints(UserBaseTest):
         Test to assert that sign up passwords must match
         """
         response = self.client.post("api/v2/auth/signup",
-                                    data = json.dumps(self.signup_user2),
-                                    content_type = "application/json")
+                                    data=json.dumps(self.signup_user2),
+                                    content_type="application/json")
         self.assertEqual(response.status_code, 400)
         result = json.loads(response.data.decode('utf-8'))
         self.assertEqual(result["error"], "Passwords don't match!")
@@ -118,9 +138,9 @@ class TestUserEndpoints(UserBaseTest):
         """
         self.client.post("api/v2/auth/signup",
                          data = json.dumps(self.signup_user5),
-                         content_type = "application/json")
+                         content_type="application/json")
         response = self.client.post("api/v2/auth/login",
-                                    data=json.dumps(self.login_user5), 
+                                    data=json.dumps(self.login_user5),
                                     content_type="application/json")
         self.assertEqual(response.status_code, 200)
         result = json.loads(response.data.decode('utf-8'))
@@ -132,8 +152,8 @@ class TestUserEndpoints(UserBaseTest):
         Test to show an unregistered user cannot be logged in
         """
         response = self.client.post("api/v2/auth/login",
-                                    data = json.dumps(self.login_user1),
-                                    content_type = "application/json")
+                                    data=json.dumps(self.login_user1),
+                                    content_type="application/json")
         self.assertEqual(response.status_code, 400)
         result = json.loads(response.data.decode('utf-8'))
         self.assertEqual(result["data"], "The username or passsword is incorrect")
@@ -146,8 +166,8 @@ class TestUserEndpoints(UserBaseTest):
                          data = json.dumps(self.signup_user5),
                          content_type = "application/json")
         response = self.client.post("api/v2/auth/login",
-                                    data = json.dumps(self.login_user6),
-                                    content_type = "application/json")
+                                    data=json.dumps(self.login_user6),
+                                    content_type="application/json")
         self.assertEqual(response.status_code, 400)
         result = json.loads(response.data.decode('utf-8'))
         self.assertEqual(result["error"], "wrong password")
