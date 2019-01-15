@@ -84,62 +84,78 @@ class TestValidations(ValidatorsBaseTest):
         """
         Test if a user registers with an already in use Email
         """
-        self.client.post("api/v2/auth/signup", data = json.dumps(self.signup_user), content_type = "application/json")
-        response = self.client.post("api/v2/auth/signup", data = json.dumps(self.signup_user), content_type = "application/json")
+        self.client.post("api/v2/auth/signup",
+                         data=json.dumps(self.signup_user),
+                         content_type="application/json")
+        response = self.client.post("api/v2/auth/signup",
+                                    data=json.dumps(self.signup_user),
+                                    content_type="application/json")
         self.assertEqual(response.status_code, 400)
         result = json.loads(response.data.decode('utf-8'))
-        self.assertEqual(result['error'],"Error. 'username' 'chewbacca' is already in use")
+        self.assertEqual(result['error'], "Error. 'username' 'chewbacca' is already in use")
 
     def test_invalid_email(self):
         """
         Test user input an invalid email with no @
         """
-        response = self.client.post("api/v2/auth/signup", data = json.dumps(self.user_invalid_email1), content_type = "application/json")
+        response = self.client.post("api/v2/auth/signup",
+                                    data=json.dumps(self.user_invalid_email1),
+                                    content_type="application/json")
         self.assertEqual(response.status_code, 400)
         result = json.loads(response.data.decode('utf-8'))
-        self.assertEqual(result['error'],"Invalid Email")
+        self.assertEqual(result['error'], "Invalid Email")
 
     def test_invalid_email_2(self):
         """
         Test user input an invalid email with no domain
         """
-        response = self.client.post("api/v2/auth/signup", data = json.dumps(self.user_invalid_email2), content_type = "application/json")
+        response = self.client.post("api/v2/auth/signup",
+                                    data=json.dumps(self.user_invalid_email2),
+                                    content_type="application/json")
         self.assertEqual(response.status_code, 400)
         result = json.loads(response.data.decode('utf-8'))
-        self.assertEqual(result['error'],"Invalid Email")
+        self.assertEqual(result['error'], "Invalid Email")
 
     def test_pasword_length(self):
         """
         Test user input a short a password
         """
-        response = self.client.post("api/v2/auth/signup", data = json.dumps(self.password_length), content_type = "application/json")
+        response = self.client.post("api/v2/auth/signup",
+                                    data=json.dumps(self.password_length),
+                                    content_type="application/json")
         self.assertEqual(response.status_code, 400)
         result = json.loads(response.data.decode('utf-8'))
-        self.assertEqual(result['error'],"Password should not be less than 6 characters or exceed 12")
+        self.assertEqual(result['error'], "Password should not be less than 6 characters or exceed 12")
 
     def test_pasword_alphabets(self):
         """
         Test user input a password with no alphabets
         """
-        response = self.client.post("api/v2/auth/signup", data = json.dumps(self.password_alpha), content_type = "application/json")
+        response = self.client.post("api/v2/auth/signup",
+                                    data=json.dumps(self.password_alpha),
+                                    content_type="application/json")
         self.assertEqual(response.status_code, 400)
         result = json.loads(response.data.decode('utf-8'))
-        self.assertEqual(result['error'],"Password should contain a letter between a-z")
+        self.assertEqual(result['error'], "Password should contain a letter between a-z")
 
     def test_pasword_capital(self):
         """
         Test user input password has no capital letter
         """
-        response = self.client.post("api/v2/auth/signup", data = json.dumps(self.password_capital), content_type = "application/json")
+        response = self.client.post("api/v2/auth/signup",
+                                    data=json.dumps(self.password_capital),
+                                    content_type="application/json")
         self.assertEqual(response.status_code, 400)
         result = json.loads(response.data.decode('utf-8'))
-        self.assertEqual(result['error'],"Password should contain a capital letter")
+        self.assertEqual(result['error'], "Password should contain a capital letter")
 
     def test_pasword_num(self):
         """
         Test user input password has no digits
         """
-        response = self.client.post("api/v2/auth/signup", data = json.dumps(self.password_num), content_type = "application/json")
+        response = self.client.post("api/v2/auth/signup",
+                                    data=json.dumps(self.password_num),
+                                    content_type="application/json")
         self.assertEqual(response.status_code, 400)
         result = json.loads(response.data.decode('utf-8'))
-        self.assertEqual(result['error'],"Password should contain a number(0-9)")
+        self.assertEqual(result['error'], "Password should contain a number(0-9)")

@@ -1,4 +1,5 @@
-"""The meetups routes tests"""
+
+                            """The meetups routes tests"""
 
 import unittest
 import json
@@ -116,7 +117,10 @@ class TestMeetups(MeetupsBaseTest):
         Test if no topic data provided
         """
         self.token = self.login()
-        response = self.client.post("api/v2/meetups", data = json.dumps(self.meetups_topic), headers={'x-access-token': self.token}, content_type = "application/json")
+        response = self.client.post("api/v2/meetups",
+                                    data = json.dumps(self.meetups_topic),
+                                    headers={'x-access-token': self.token},
+                                    content_type = "application/json")
         result = json.loads(response.data.decode('utf-8'))
         self.assertEqual(response.status_code, 400)
         self.assertEqual(result["status"], 400)
@@ -127,7 +131,10 @@ class TestMeetups(MeetupsBaseTest):
         Test if no meetup date data provided
         """
         self.token = self.login()
-        response = self.client.post("api/v2/meetups", data = json.dumps(self.meetups_meetup_date), headers={'x-access-token': self.token}, content_type = "application/json")
+        response = self.client.post("api/v2/meetups",
+                                    data = json.dumps(self.meetups_meetup_date),
+                                    headers={'x-access-token': self.token},
+                                    content_type = "application/json")
         result = json.loads(response.data.decode('utf-8'))
         self.assertEqual(response.status_code, 400)
         self.assertEqual(result["status"], 400)
@@ -138,7 +145,10 @@ class TestMeetups(MeetupsBaseTest):
         Test if no tags data provided
         """
         self.token = self.login()
-        response = self.client.post("api/v2/meetups", data = json.dumps(self.meetups_tags), headers={'x-access-token': self.token}, content_type = "application/json")
+        response = self.client.post("api/v2/meetups",
+                                    data = json.dumps(self.meetups_tags),
+                                    headers={'x-access-token': self.token},
+                                    content_type = "application/json")
         result = json.loads(response.data.decode('utf-8'))
         self.assertEqual(response.status_code, 400)
         self.assertEqual(result["status"], 400)
@@ -149,7 +159,10 @@ class TestMeetups(MeetupsBaseTest):
         Test if no location data provided
         """
         self.token = self.login()
-        response = self.client.post("api/v2/meetups", data = json.dumps(self.meetups_location), headers={'x-access-token': self.token}, content_type = "application/json")
+        response = self.client.post("api/v2/meetups",
+                                    data = json.dumps(self.meetups_location),
+                                    headers={'x-access-token': self.token},
+                                    content_type = "application/json")
         result = json.loads(response.data.decode('utf-8'))
         self.assertEqual(response.status_code, 400)
         self.assertEqual(result["status"], 400)
@@ -160,22 +173,33 @@ class TestMeetups(MeetupsBaseTest):
         Test that an admin user can enter meetup details and create a meetup
         """
         self.token = self.login()
-        response = self.client.post("api/v2/meetups", data = json.dumps(self.post_meetup1), headers={'x-access-token': self.token}, content_type = "application/json")
+        response = self.client.post("api/v2/meetups",
+                                    data = json.dumps(self.post_meetup1),
+                                    headers={'x-access-token': self.token},
+                                    content_type = "application/json")
         result = json.loads(response.data.decode('utf-8'))
         self.assertEqual(response.status_code, 201)
         self.assertEqual(result["status"], 201)
-        self.assertEqual(result["data"], [{"location": "Meru", "meetup_date": "30/01/1990", "tags": ["trees", "vegetation"], "topic": "Miraa"}])
+        self.assertEqual(result["data"],
+                        [{"location": "Meru", "meetup_date": "30/01/1990", "tags": ["trees", "vegetation"], "topic": "Miraa"}])
 
 
     def test_a_regular_user_cannot_create_a_meetup(self):
         """
         Test that a regular user cannot create a meetup
         """
-        self.client.post("api/v2/auth/signup", data = json.dumps(self.signup_user2), content_type = "application/json")
-        login = self.client.post("api/v2/auth/login", data = json.dumps(self.login_user2), content_type = "application/json")
+        self.client.post("api/v2/auth/signup",
+                         data = json.dumps(self.signup_user2),
+                         content_type = "application/json")
+        login = self.client.post("api/v2/auth/login",
+                                 data = json.dumps(self.login_user2),
+                                 content_type = "application/json")
         resp = json.loads(login.data.decode('utf-8'))
         user_token =resp['token']
-        response = self.client.post("api/v2/meetups", data = json.dumps(self.post_meetup1), headers={'x-access-token': user_token}, content_type = "application/json")
+        response = self.client.post("api/v2/meetups",
+                                    data = json.dumps(self.post_meetup1),
+                                    headers={'x-access-token': user_token},
+                                    content_type = "application/json")
         result = json.loads(response.data.decode('utf-8'))
         self.assertEqual(response.status_code, 401)
         self.assertEqual(result["status"], 401)

@@ -83,7 +83,9 @@ class TestUserEndpoints(UserBaseTest):
         """
         Test to show a user can sign up successfully
         """
-        response = self.client.post("api/v2/auth/signup", data = json.dumps(self.signup_user6), content_type = "application/json")
+        response = self.client.post("api/v2/auth/signup",
+                                    data = json.dumps(self.signup_user6),
+                                    content_type = "application/json")
         self.assertEqual(response.status_code, 400)
         result = json.loads(response.data.decode('utf-8'))
         self.assertEqual(result['error'], 'Check your json keys')
@@ -92,7 +94,9 @@ class TestUserEndpoints(UserBaseTest):
         """
         Test to show a user can sign up successfully
         """
-        response = self.client.post("api/v2/auth/signup", data = json.dumps(self.signup_user1), content_type = "application/json")
+        response = self.client.post("api/v2/auth/signup",
+                                    data = json.dumps(self.signup_user1),
+                                    content_type = "application/json")
         self.assertEqual(response.status_code, 201)
         result = json.loads(response.data.decode('utf-8'))
         self.assertEqual(result['data'], 'Registered successfully!')
@@ -101,7 +105,9 @@ class TestUserEndpoints(UserBaseTest):
         """
         Test to assert that sign up passwords must match
         """
-        response = self.client.post("api/v2/auth/signup", data = json.dumps(self.signup_user2), content_type = "application/json")
+        response = self.client.post("api/v2/auth/signup",
+                                    data = json.dumps(self.signup_user2),
+                                    content_type = "application/json")
         self.assertEqual(response.status_code, 400)
         result = json.loads(response.data.decode('utf-8'))
         self.assertEqual(result["error"], "Passwords don't match!")
@@ -110,8 +116,12 @@ class TestUserEndpoints(UserBaseTest):
         """
         Test to show a user can successfully login if registered
         """
-        self.client.post("api/v2/auth/signup", data = json.dumps(self.signup_user5), content_type = "application/json")
-        response = self.client.post("api/v2/auth/login", data = json.dumps(self.login_user5), content_type = "application/json")
+        self.client.post("api/v2/auth/signup",
+                         data = json.dumps(self.signup_user5),
+                         content_type = "application/json")
+        response = self.client.post("api/v2/auth/login",
+                                    data=json.dumps(self.login_user5), 
+                                    content_type="application/json")
         self.assertEqual(response.status_code, 200)
         result = json.loads(response.data.decode('utf-8'))
         self.assertTrue(result['token'])
@@ -121,7 +131,9 @@ class TestUserEndpoints(UserBaseTest):
         """
         Test to show an unregistered user cannot be logged in
         """
-        response = self.client.post("api/v2/auth/login", data = json.dumps(self.login_user1), content_type = "application/json")
+        response = self.client.post("api/v2/auth/login",
+                                    data = json.dumps(self.login_user1),
+                                    content_type = "application/json")
         self.assertEqual(response.status_code, 400)
         result = json.loads(response.data.decode('utf-8'))
         self.assertEqual(result["data"], "The username or passsword is incorrect")
@@ -130,8 +142,12 @@ class TestUserEndpoints(UserBaseTest):
         """
         Test to show a user can successfully login if registered
         """
-        self.client.post("api/v2/auth/signup", data = json.dumps(self.signup_user5), content_type = "application/json")
-        response = self.client.post("api/v2/auth/login", data = json.dumps(self.login_user6), content_type = "application/json")
+        self.client.post("api/v2/auth/signup",
+                         data = json.dumps(self.signup_user5),
+                         content_type = "application/json")
+        response = self.client.post("api/v2/auth/login",
+                                    data = json.dumps(self.login_user6),
+                                    content_type = "application/json")
         self.assertEqual(response.status_code, 400)
         result = json.loads(response.data.decode('utf-8'))
         self.assertEqual(result["error"], "wrong password")
