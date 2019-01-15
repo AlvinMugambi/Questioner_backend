@@ -1,5 +1,4 @@
-
-                            """The meetups routes tests"""
+"""The meetups routes tests"""
 
 import unittest
 import json
@@ -103,10 +102,12 @@ class TestMeetups(MeetupsBaseTest):
         """
         Login a fake admin user
         """
-        self.client.post(
-            'api/v2/auth/signup', data=json.dumps(self.signup_admin), content_type="application/json")
-        login = self.client.post(
-            'api/v2/auth/login', data=json.dumps(self.login_admin), content_type="application/json")
+        self.client.post('api/v2/auth/signup',
+                         data=json.dumps(self.signup_admin),
+                         content_type="application/json")
+        login = self.client.post('api/v2/auth/login',
+                                 data=json.dumps(self.login_admin),
+                                 content_type="application/json")
         data = json.loads(login.data.decode('utf-8'))
         self.token = data["token"]
         return self.token
