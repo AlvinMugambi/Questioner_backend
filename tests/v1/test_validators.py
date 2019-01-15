@@ -87,9 +87,9 @@ class ValidatorsBaseTest(unittest.TestCase):
 
 class TestValidations(ValidatorsBaseTest):
 
-    def test_email_already_taken(self):
+    def test_username_already_taken(self):
         """
-        Test an email is already in use
+        Test an username is already in use
         """
         self.client.post("api/v1/auth/signup",
                          data=json.dumps(self.user_signup),
@@ -99,7 +99,7 @@ class TestValidations(ValidatorsBaseTest):
                                     content_type="application/json")
         self.assertEqual(response.status_code, 409)
         result = json.loads(response.data.decode('utf-8'))
-        self.assertEqual(result['error'], "Email already taken!")
+        self.assertEqual(result['error'], "Username already in use. Choose another")
 
     def test_invalid_email(self):
         """

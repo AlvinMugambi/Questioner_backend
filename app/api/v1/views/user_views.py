@@ -37,6 +37,7 @@ def user_sign_up():
     validators.check_if_string(firstname, lastname, username)
 
     validators.check_password(password, confirm_pass)
+    validators.validate_username(username)
     email = validators.validate_email(email)
 
     user = User(firstname=firstname,
