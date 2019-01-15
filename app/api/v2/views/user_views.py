@@ -19,8 +19,8 @@ def user_sign_up():
         username = data['username']
         email = data['email']
         password = data['password']
-        confirm_pass = data['confirmpassword']
-        phone_number = data['phoneNumber']
+        confirmPass = data['confirmpassword']
+        phone = data['phoneNumber']
 
     except KeyError:
         abort(make_response(jsonify({
@@ -30,8 +30,8 @@ def user_sign_up():
 
     validators.check_for_whitespace(data)
     validators.check_if_string(data)
-    validators.check_phone_number(phone_number)
-    validators.check_password(password, confirm_pass)
+    validators.check_phone_number(phone)
+    validators.check_password(password, confirmPass)
     email = validators.validate_email(email)
 
     validators.check_duplication({"username": username}, "users")
@@ -39,7 +39,7 @@ def user_sign_up():
 
     user = User(firstname=firstname,
                 lastname=lastname,
-                phone_number=phone_number,
+                phone=phone,
                 username=username,
                 email=email,
                 password=password)

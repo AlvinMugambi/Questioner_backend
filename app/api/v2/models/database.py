@@ -36,7 +36,7 @@ def set_up_tables():
         username VARCHAR (24) NOT NULL UNIQUE,
         firstname VARCHAR (24) NOT NULL,
         lastname VARCHAR (24) NOT NULL,
-        phoneNumber INTEGER NOT NULL,
+        phone INTEGER NOT NULL,
         email VARCHAR (30) NOT NULL UNIQUE,
         password VARCHAR (128) NOT NULL,
         admin BOOLEAN
