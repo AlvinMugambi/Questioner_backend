@@ -171,9 +171,7 @@ def check_date(date):
         abort(make_response(jsonify({
             "status": 400, "Error":  "Invalid date format. Should be DD/MM/YYYY"}), 400))
 
-
     date_format = "%d/%m/%Y"
-
     # create datetime objects from the strings
     date = datetime.strptime(date, date_format)
     now = datetime.now()
