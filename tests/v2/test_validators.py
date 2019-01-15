@@ -18,10 +18,13 @@ class ValidatorsBaseTest(unittest.TestCase):
         # initialize db, create tables
         init_db(self.db_url)
 
-        self.signup_user = {"username":"chewbacca",
+        self.signup_user = {"firstname":"chew",
+                            "lastname":"bacca",
+                            "username":"chewbacca",
+                            "phoneNumber":"0712345678",
                             "email":"chewbacca@gmail.com",
                             "password":"Hansolo1",
-                            "confirm_password":"Hansolo1"}
+                            "confirmpassword":"Hansolo1"}
 
         self.login_user = {"username":"chewbacca",
                            "password":"Hansolo1"}
@@ -29,44 +32,50 @@ class ValidatorsBaseTest(unittest.TestCase):
         self.user_invalid_email1 = {"firstname":"fay",
                                     "lastname": "sky",
                                     "username":"walker",
+                                    "phoneNumber":"0712345678",
                                     "email":"faywalkergmail.com",
                                     "password": "theJed1",
-                                    "confirm_password":"theJed1"}
+                                    "confirmpassword":"theJed1"}
 
         self.user_invalid_email2 = {"firstname":"master",
                                     "lastname": "yoda",
                                     "username":"masteryoda",
+                                    "phoneNumber":"0712345678",
                                     "email":"jedithe@gmailcom",
                                     "password": "TheForce1",
-                                    "confirm_password":"TheForce1"}
+                                    "confirmpassword":"TheForce1"}
 
         self.password_length = {"firstname":"alvo",
                                 "lastname": "nana",
                                 "username":"nanaalvo",
+                                "phoneNumber":"0712345678",
                                 "email":"jedithe@gmail.com",
                                 "password": "TheF1",
-                                "confirm_password":"TheF1"}
+                                "confirmpassword":"TheF1"}
 
         self.password_alpha = {"firstname":"alvo",
                                "lastname": "nana",
                                "username":"nanaalvo",
+                               "phoneNumber":"0712345678",
                                "email":"jedis@gmail.com",
                                "password": "1224421",
-                               "confirm_password":"1224421"}
+                               "confirmpassword":"1224421"}
 
         self.password_capital = {"firstname":"alvo",
                                  "lastname": "nana",
                                  "username":"nanaalvo",
+                                 "phoneNumber":"0712345678",
                                  "email":"jedi@gmail.com",
                                  "password": "theforce1",
-                                 "confirm_password":"theforce1"}
+                                 "confirmpassword":"theforce1"}
 
         self.password_num = {"firstname":"alvo",
                              "lastname": "nana",
                              "username":"nanaalvo",
+                             "phoneNumber":"0712345678",
                              "email":"jedione@gmail.com",
                              "password": "TheForce",
-                             "confirm_password":"TheForce"}
+                             "confirmpassword":"TheForce"}
 
     def tearDown(self):
         """
@@ -92,7 +101,9 @@ class TestValidations(ValidatorsBaseTest):
                                     content_type="application/json")
         self.assertEqual(response.status_code, 400)
         result = json.loads(response.data.decode('utf-8'))
-        self.assertEqual(result['error'], "Error. 'username' 'chewbacca' is already in use")
+        self.assertEqual(
+            result['error'],
+            "Error. 'username' 'chewbacca' is already in use")
 
     def test_invalid_email(self):
         """
@@ -125,7 +136,9 @@ class TestValidations(ValidatorsBaseTest):
                                     content_type="application/json")
         self.assertEqual(response.status_code, 400)
         result = json.loads(response.data.decode('utf-8'))
-        self.assertEqual(result['error'], "Password should not be less than 6 characters or exceed 12")
+        self.assertEqual(
+            result['error'],
+            "Password should not be less than 6 characters or exceed 12")
 
     def test_pasword_alphabets(self):
         """
@@ -136,7 +149,9 @@ class TestValidations(ValidatorsBaseTest):
                                     content_type="application/json")
         self.assertEqual(response.status_code, 400)
         result = json.loads(response.data.decode('utf-8'))
-        self.assertEqual(result['error'], "Password should contain a letter between a-z")
+        self.assertEqual(
+            result['error'],
+            "Password should contain a letter between a-z")
 
     def test_pasword_capital(self):
         """
@@ -147,7 +162,9 @@ class TestValidations(ValidatorsBaseTest):
                                     content_type="application/json")
         self.assertEqual(response.status_code, 400)
         result = json.loads(response.data.decode('utf-8'))
-        self.assertEqual(result['error'], "Password should contain a capital letter")
+        self.assertEqual(
+            result['error'],
+            "Password should contain a capital letter")
 
     def test_pasword_num(self):
         """
@@ -158,4 +175,6 @@ class TestValidations(ValidatorsBaseTest):
                                     content_type="application/json")
         self.assertEqual(response.status_code, 400)
         result = json.loads(response.data.decode('utf-8'))
-        self.assertEqual(result['error'], "Password should contain a number(0-9)")
+        self.assertEqual(
+            result['error'],
+            "Password should contain a number(0-9)")
