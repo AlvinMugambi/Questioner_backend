@@ -165,6 +165,11 @@ def check_if_admin():
         return False
     return True
 
+def check_date(date):
+    if not re.match(r"^([1-9]|[12][0-9]|3[01])\/(0[1-9]|1[0-2])\/([12][0-9]{3})$", date):
+        abort(make_response(jsonify({
+            "status": 400, "Error":  "Invalid date format. Should be DD/MM/YYYY"}), 400))
+
 
 def token_required(f):
     """The token required decorator"""
