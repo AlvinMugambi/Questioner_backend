@@ -54,6 +54,13 @@ def check_password(password, confirmed_password):
 
     return hashed_password
 
+def validate_username(username):
+    for user in USERS:
+        if username == user.username:
+            abort(make_response(jsonify({
+                'status': 400,
+                'error': 'Username already in use. Choose another'}), 400))
+
 
 def validate_email(email):
     """
