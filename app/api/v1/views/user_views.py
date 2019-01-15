@@ -25,14 +25,16 @@ def user_sign_up():
         username = data['username']
         email = data['email']
         password = data['password']
-        confirm_pass = data['confirm_password']
+        confirm_pass = data['confirmpassword']
 
     except KeyError:
         abort(make_response(jsonify({
-            'error':'Check your json keys', 'status': 400}), 400))
+            'error': 'Should be firstname, lastname, username, email, password, confirm_password',
+            'status': 400}), 400))
 
 
     validators.check_for_whitespace(data)
+    validators.check_if_string(firstname, lastname, username)
 
     validators.check_password(password, confirm_pass)
     email = validators.validate_email(email)
@@ -60,7 +62,7 @@ def user_login():
     except KeyError:
         abort(make_response(jsonify({
             'status': 400,
-            ' error': "Check your json keys. Should be username & password"}), 400))
+            ' error': "Should be username & password"}), 400))
 
     validators.check_for_whitespace(data)
     validators.verify_if_admin(username)

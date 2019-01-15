@@ -2,6 +2,7 @@
 
 import os
 import re
+from datetime import datetime
 from functools import wraps
 
 import jwt
@@ -21,26 +22,31 @@ def check_password(password, confirmed_password):
         # check if password meets required length
     if len(password) < 6 or len(password) > 12:
         abort(make_response(jsonify(
+            status=400,
             error="Password should not be less than 6 characters or exceed 12"), 400))
 
     # check if password contains at least an alphabet(a-z)
     if not re.search("[a-z]", password):
         abort(make_response(jsonify(
+            status=400,
             error="Password should contain a letter between a-z"), 400))
 
     # check if password contains at least an upper case letter
     if not re.search("[A-Z]", password):
         abort(make_response(jsonify(
+            status=400,
             error="Password should contain a capital letter"), 400))
 
     # check if password contains at least a number(0-9)
     if not re.search("[0-9]", password):
         abort(make_response(jsonify(
+            status=400,
             error="Password should contain a number(0-9)"), 400))
 
     # Checks if passwords provided by the users match
     if password != confirmed_password:
         abort(make_response(jsonify(
+            status=400,
             error="Passwords don't match!"), 400))
 
     # If they match..
@@ -57,21 +63,38 @@ def validate_email(email):
 
     for user in USERS:
         if email == user.email:
-            abort(make_response(jsonify(error="Email already taken!"), 400))
+            abort(make_response(jsonify(
+                status="409",
+                error="Email already taken!"), 409))
     try:
         user, domain = str(email).split("@")
+        if not re.match("^[A-Za-z]*$", user):
+            abort(make_response(jsonify({
+                "status": 400, "Error":  "Invalid Email"}), 400))
     except ValueError:
-        abort(make_response(jsonify(error="Invalid Email"), 400))
+        abort(make_response(jsonify(
+            status=400,
+            error="Invalid Email"), 400))
     if not user or not domain:
         abort(make_response(jsonify(error="Invalid Email"), 400))
 
     # Check that domain is valid
     try:
         dom_1, dom_2 = domain.split(".")
+        if not re.match("^[A-Za-z]*$", dom_1):
+            abort(make_response(jsonify({
+                "status": 400, "Error":  "Invalid Email"}), 400))
+        if not re.match("^[A-Za-z]*$", dom_2):
+            abort(make_response(jsonify({
+                "status": 400, "Error":  "Invalid Email"}), 400))
     except ValueError:
-        abort(make_response(jsonify(error="Invalid Email"), 400))
+        abort(make_response(jsonify(
+            status=400,
+            error="Invalid Email"), 400))
     if not dom_1 or not dom_2:
-        abort(make_response(jsonify(error="Invalid Email"), 400))
+        abort(make_response(jsonify(
+            status=400,
+            error="Invalid Email"), 400))
 
     return email
 
@@ -87,6 +110,20 @@ def check_for_whitespace(data):
                 'error':'{} field cannot be left blank'.format(keys)}), 400))
 
     return True
+
+
+def check_if_string(firstname, lastname, username):
+    if not re.match("^[A-Za-z]*$", firstname):
+        abort(make_response(jsonify({
+            "status": 400, "Error":  "Make sure you only use letters in your firstname"}), 400))
+
+    if not re.match("^[A-Za-z]*$", lastname):
+        abort(make_response(jsonify({
+            "status": 400, "Error":  "Make sure you only use letters in your lastname"}), 400))
+
+    if not re.match("^[A-Za-z]*$", username):
+        abort(make_response(jsonify({
+            "status": 400, "Error":  "Make sure you only use letters in your username"}), 400))
 
 
 def query_db_wrong_password(username, password):
@@ -137,6 +174,20 @@ def check_if_admin():
     if username['username'] != "iamtheadmin":
         return False
     return True
+
+def check_date(date):
+    if not re.match(r"^(0[1-9]|[12][0-9]|3[01])\/(0[1-9]|1[0-2])\/([12][0-9]{3})$", date):
+        abort(make_response(jsonify({
+            "status": 400, "Error":  "Invalid date format. Should be DD/MM/YYYY"}), 400))
+
+    date_format = "%d/%m/%Y"
+    # create datetime objects from the strings
+    date = datetime.strptime(date, date_format)
+    now = datetime.now()
+
+    if date < now:
+        abort(make_response(jsonify({
+            "status": 400, "Error":  "Date should be in the future"}), 400))
 
 
 def token_required(f):

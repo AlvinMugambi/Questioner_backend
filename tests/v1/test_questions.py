@@ -23,7 +23,7 @@ class QuestionBaseTest(unittest.TestCase):
                             "username":"obiwanca",
                             "email":"canobiedw@gmail.com",
                             "password": "ObiLigh1",
-                            "confirm_password":"ObiLigh1"}
+                            "confirmpassword":"ObiLigh1"}
         self.login_user = {"username":"obiwanca",
                            "password":"ObiLigh1"}
 

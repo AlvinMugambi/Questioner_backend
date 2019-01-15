@@ -142,21 +142,6 @@ class Comment:
         """
         COMMENTS.append(self)
 
-class Comment:
-    """
-    The comments models
-    """
-
-    def __init__(self, comment, question_id):
-        self.comment = comment
-        self.comment_id = len(COMMENTS)+1
-        self.question_id = question_id
-
-    def save_comment(self):
-        """
-        Save the comment to the comments store
-        """
-        COMMENTS.append(self)
 
     @staticmethod
     def to_json(comment):

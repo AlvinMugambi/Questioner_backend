@@ -15,71 +15,71 @@ class ValidatorsBaseTest(unittest.TestCase):
                             "username":"starwars",
                             "email":"galaxy@gmail.com",
                             "password": "TheRepubl1c",
-                            "confirm_password":"TheRepubl1c"}
+                            "confirmpassword":"TheRepubl1c"}
 
         self.user_login = {"username":"starwars",
                            "password": "TheRepubl1",
-                           "confirm_password":"TheRepubl1"}
+                           "confirmpassword":"TheRepubl1"}
 
         self.user_signup1 = {"firstname":"hans",
                              "lastname": "olo",
                              "username":"pilot",
                              "email":"thefly@gmail.com",
                              "password": "Chewbacca1",
-                             "confirm_password":"Chewbacca1"}
+                             "confirmpassword":"Chewbacca1"}
 
         self.user_login1 = {"username":"piloti",
                             "password": "Chewbacca1",
-                            "confirm_password":"Chewbacca1"}
+                            "confirmpassword":"Chewbacca1"}
 
         self.user_signup2 = {"firstname":"    ",
                              "lastname": "wars",
                              "username":"stars",
                              "email":"galaxies@gmail.com",
                              "password": "TheRepubl1cs",
-                             "confirm_password":"TheRepubl1cs"}
+                             "confirmpassword":"TheRepubl1cs"}
 
         self.user_invalid_email1 = {"firstname":"fay",
                                     "lastname": "sky",
                                     "username":"walker",
                                     "email":"faywalkergmail.com",
                                     "password": "theJed1",
-                                    "confirm_password":"theJed1"}
+                                    "confirmpassword":"theJed1"}
 
         self.user_invalid_email2 = {"firstname":"master",
                                     "lastname": "yoda",
                                     "username":"masteryoda",
                                     "email":"jedithe@gmailcom",
                                     "password": "TheForce1",
-                                    "confirm_password":"TheForce1"}
+                                    "confirmpassword":"TheForce1"}
 
         self.password_length = {"firstname":"alvo",
                                 "lastname": "nana",
                                 "username":"nanaalvo",
                                 "email":"jedithe@gmail.com",
                                 "password": "TheF1",
-                                "confirm_password":"TheF1"}
+                                "confirmpassword":"TheF1"}
 
         self.password_alpha = {"firstname":"alvo",
                                "lastname": "nana",
                                "username":"nanaalvo",
                                "email":"jedis@gmail.com",
                                "password": "1224421",
-                               "confirm_password":"1224421"}
+                               "confirmpassword":"1224421"}
 
         self.password_capital = {"firstname":"alvo",
                                  "lastname": "nana",
                                  "username":"nanaalvo",
                                  "email":"jedi@gmail.com",
                                  "password": "theforce1",
-                                 "confirm_password":"theforce1"}
+                                 "confirmpassword":"theforce1"}
 
         self.password_num = {"firstname":"alvo",
                              "lastname": "nana",
                              "username":"nanaalvo",
                              "email":"jedione@gmail.com",
                              "password": "TheForce",
-                             "confirm_password":"TheForce"}
+                             "confirmpassword":"TheForce"}
 
     def tearDown(self):
         self.app.testing = False
@@ -97,7 +97,7 @@ class TestValidations(ValidatorsBaseTest):
         response = self.client.post("api/v1/auth/signup",
                                     data=json.dumps(self.user_signup),
                                     content_type="application/json")
-        self.assertEqual(response.status_code, 400)
+        self.assertEqual(response.status_code, 409)
         result = json.loads(response.data.decode('utf-8'))
         self.assertEqual(result['error'], "Email already taken!")
 

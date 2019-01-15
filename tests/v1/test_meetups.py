@@ -20,25 +20,25 @@ class MeetupsBaseTest(unittest.TestCase):
         self.signup_user = {"firstname":"yoda",
                             "lastname": "master",
                             "username":"iamtheadmin",
-                            "email":"yoda@gmail.com",
-                            "password": "ObiLight1",
-                            "confirm_password":"ObiLight1"}
+                            "email":"yodamaster@gmail.com",
+                            "password": "Obitight1",
+                            "confirmpassword":"Obitight1"}
 
         self.login_user = {"username":"iamtheadmin",
-                           "password":"ObiLight1"}
+                           "password":"Obitight1"}
 
         self.signup_user2 = {"firstname":"yoda",
                              "lastname": "master",
                              "username":"fakeyoda",
                              "email":"yoda@gmail.com",
                              "password": "ObiLight1",
-                             "confirm_password":"ObiLight1"}
+                             "confirmpassword":"ObiLight1"}
 
         self.login_user2 = {"username":"fakeyoda",
                             "password":"ObiLight1"}
 
         self.post_meetup1 = {"topic":"Miraa",
-                             "meetup_date":"30/01/1990",
+                             "meetup_date":"30/01/2020",
                              "location":"Meru",
                              "images":["me.png", "you.png"],
                              "tags":["trees", "vegetation"]
@@ -55,7 +55,7 @@ class MeetupsBaseTest(unittest.TestCase):
                                 "topic": "Miraa"}]
 
         self.meetups_topic = {"topic":"",
-                              "meetup_date":"30/01/1990",
+                              "meetup_date":"30/01/2020",
                               "location":"Meru",
                               "images":["me.png", "you.png"],
                               "tags":["trees", "vegetation"]}
@@ -67,16 +67,16 @@ class MeetupsBaseTest(unittest.TestCase):
                                     "tags":["trees", "vegetation"]}
 
         self.meetups_location = {"topic":"Miraa",
-                                 "meetup_date":"30/01/1990",
+                                 "meetup_date":"30/01/2020",
                                  "location":"",
                                  "images":["me.png", "you.png"],
                                  "tags":["trees", "vegetation"]}
 
         self.meetups_tags = {"topic":"Miraa",
-                             "meetup_date":"30/01/1990",
+                             "meetup_date":"30/01/2020",
                              "location":"Meru",
                              "images":["me.png", "you.png"],
-                             "tags":[]}
+                             "tags":["  "]}
 
         self.token = ''
 
@@ -113,7 +113,7 @@ class TestMeetups(MeetupsBaseTest):
         result = json.loads(response.data.decode('utf-8'))
         self.assertEqual(response.status_code, 400)
         self.assertEqual(result["status"], 400)
-        self.assertEqual(result["error"], 'topic field is required')
+        self.assertEqual(result["error"], 'topic field cannot be left blank')
 
     def test_no_meetup_date_data(self):
         """
@@ -127,7 +127,7 @@ class TestMeetups(MeetupsBaseTest):
         result = json.loads(response.data.decode('utf-8'))
         self.assertEqual(response.status_code, 400)
         self.assertEqual(result["status"], 400)
-        self.assertEqual(result["error"], 'meetup_date field is required')
+        self.assertEqual(result["error"], 'meetup_date field cannot be left blank')
 
     def test_no_tags_data(self):
         """
@@ -141,7 +141,7 @@ class TestMeetups(MeetupsBaseTest):
         result = json.loads(response.data.decode('utf-8'))
         self.assertEqual(response.status_code, 400)
         self.assertEqual(result["status"], 400)
-        self.assertEqual(result["error"], 'tags field is required')
+        self.assertEqual(result["error"], 'tags field cannot be left blank')
 
     def test_no_location_data(self):
         """
@@ -155,7 +155,7 @@ class TestMeetups(MeetupsBaseTest):
         result = json.loads(response.data.decode('utf-8'))
         self.assertEqual(response.status_code, 400)
         self.assertEqual(result["status"], 400)
-        self.assertEqual(result["error"], 'location field is required')
+        self.assertEqual(result["error"], 'location field cannot be left blank')
 
     def test_an_admin_user_can_create_a_meetup(self):
         """
@@ -170,7 +170,7 @@ class TestMeetups(MeetupsBaseTest):
         self.assertEqual(response.status_code, 201)
         self.assertEqual(result["status"], 201)
         self.assertEqual(result["data"],
-                        [{"location": "Meru", "meetup_date": "30/01/1990", "tags": ["trees", "vegetation"], "topic": "Miraa"}])
+                        [{"location": "Meru", "meetup_date": "30/01/2020", "tags": ["trees", "vegetation"], "topic": "Miraa"}])
 
     def test_admin_can_delete_a_meetup(self):
         """
@@ -250,7 +250,7 @@ class TestMeetups(MeetupsBaseTest):
         self.assertEqual(result['status'], 200)
         self.assertEqual(result['data'], [{"id": 1,
                                            "location": "Meru",
-                                           "meetup_date": "30/01/1990",
+                                           "meetup_date": "30/01/2020",
                                            "tags": ["trees", "vegetation"],
                                            "topic": "Miraa"}])
 

@@ -2,7 +2,7 @@
 
 from flask import jsonify, request, make_response, abort
 
-from app.api.v1.utils.validators import token_required, check_if_admin
+from app.api.v1.utils.validators import token_required, check_if_admin, check_for_whitespace, check_date
 from app.api.v1.models.models import Meetup
 from app.api.v1 import version1
 
@@ -23,22 +23,26 @@ def create_meetup(current_user):
         return jsonify({
             'status':400,
             'error':
-                'Check your json keys. Should be topic, meetup_date, location, images and tags'}), 400
+                'Should be topic, meetup_date, location, images and tags'}), 400
 
-    if not topic:
+    if not topic.strip():
         abort(make_response(jsonify({
-            'status':400, 'error':'topic field is required'}), 400))
-    if not meetup_date:
+            'status':400, 'error':'topic field cannot be left blank'}), 400))
+    if not meetup_date.strip():
         abort(make_response(jsonify({
-            'status':400, 'error':'meetup_date field is required'}), 400))
+            'status':400, 'error':'meetup_date field cannot be left blank'}), 400))
 
-    if not location:
+    if not location.strip():
         abort(make_response(jsonify({
-            'status':400, 'error':'location field is required'}), 400))
+            'status':400, 'error':'location field cannot be left blank'}), 400))
 
-    if not tags:
-        abort(make_response(jsonify({
-            'status':400, 'error':'tags field is required'}), 400))
+    for tag in tags:
+        if not tag.strip():
+            abort(make_response(jsonify({
+                'status': 400,
+                'error':'tags field cannot be left blank'}), 400))
+
+    check_date(meetup_date)
 
     admin = check_if_admin()
     if not admin:

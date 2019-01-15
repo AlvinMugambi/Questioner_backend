@@ -2,8 +2,8 @@
 
 from flask import jsonify, request, make_response, abort
 
-from app.api.v1.models.models import Question, Comment
-from app.api.v1.utils.validators import token_required, decode_token
+from app.api.v1.models.models import Question, Comment, Meetup
+from app.api.v1.utils.validators import token_required, decode_token, check_for_whitespace
 from app.api.v1 import version1
 
 @version1.route("/meetups/<int:meetup_id>/questions", methods=['POST'])
@@ -13,21 +13,21 @@ def create_question(current_user, meetup_id):
     The POST method for the questions route that allows a user to post a question
     """
     try:
-        title = request.get_json()['title']
-        body = request.get_json()['body']
+        data = request.get_json()
+        title = data['title']
+        body = data['body']
 
     except KeyError:
         abort(make_response(jsonify({
             'status': 400,
-            ' error': "Check your json keys. Should be topic and body"}), 400))
+            ' error': "Should be topic and body"}), 400))
 
-    if not title:
-        abort(make_response(jsonify({'status': 400,
-                                     'error': 'topic field is required'}), 400))
+    check_for_whitespace(data)
 
-    if not body:
-        abort(make_response(jsonify({'status': 400,
-                                     'error': 'body field is required'}), 400))
+    meetup = Meetup.get_meetup(meetup_id)
+    if not meetup:
+        abort(make_response(jsonify({
+            'status': 404, 'error':'Meetup with id {} not found'.format(meetup_id)})))
 
     question = Question(title=title,
                         body=body,
@@ -88,10 +88,13 @@ def comment_on_a_question(current_user, question_id):
     The add comment to a question endpoint
     """
     try:
-        comment = request.get_json()['comment']
+        data = request.get_json()
+        comment = data['comment']
     except KeyError:
         abort(make_response(jsonify({
             'status': 400, 'error':'Check your json key. Should be comment'})))
+
+    check_for_whitespace(data)
 
     username = decode_token()
 
@@ -102,4 +105,5 @@ def comment_on_a_question(current_user, question_id):
         comments.append(comment)
         comments.append(username)
         return jsonify({"status": 201, "data": my_question}), 201
-    return jsonify({'status': 404, 'error':'Question not found'}), 404
+    return jsonify({
+        'status': 404, 'error':'Question with id {} not found'.format(question_id)}), 404
