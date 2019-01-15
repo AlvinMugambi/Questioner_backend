@@ -88,10 +88,13 @@ def comment_on_a_question(current_user, question_id):
     The add comment to a question endpoint
     """
     try:
-        comment = request.get_json()['comment']
+        data = request.get_json()
+        comment = data['comment']
     except KeyError:
         abort(make_response(jsonify({
             'status': 400, 'error':'Check your json key. Should be comment'})))
+
+    check_for_whitespace(data)
 
     username = decode_token()
 
