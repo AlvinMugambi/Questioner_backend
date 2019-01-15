@@ -91,9 +91,11 @@ class TestValidations(ValidatorsBaseTest):
         """
         Test an email is already in use
         """
-        self.client.post("api/v1/auth/signup", data=json.dumps(self.user_signup),
+        self.client.post("api/v1/auth/signup",
+                         data=json.dumps(self.user_signup),
                          content_type="application/json")
-        response = self.client.post("api/v1/auth/signup", data=json.dumps(self.user_signup),
+        response = self.client.post("api/v1/auth/signup",
+                                    data=json.dumps(self.user_signup),
                                     content_type="application/json")
         self.assertEqual(response.status_code, 400)
         result = json.loads(response.data.decode('utf-8'))
@@ -103,7 +105,8 @@ class TestValidations(ValidatorsBaseTest):
         """
         Test an email has no @
         """
-        response = self.client.post("api/v1/auth/signup", data=json.dumps(self.user_invalid_email1),
+        response = self.client.post("api/v1/auth/signup",
+                                    data=json.dumps(self.user_invalid_email1),
                                     content_type="application/json")
         self.assertEqual(response.status_code, 400)
         result = json.loads(response.data.decode('utf-8'))
@@ -113,7 +116,8 @@ class TestValidations(ValidatorsBaseTest):
         """
         Test an email has no .com
         """
-        response = self.client.post("api/v1/auth/signup", data=json.dumps(self.user_invalid_email2),
+        response = self.client.post("api/v1/auth/signup",
+                                    data=json.dumps(self.user_invalid_email2),
                                     content_type="application/json")
         self.assertEqual(response.status_code, 400)
         result = json.loads(response.data.decode('utf-8'))
@@ -123,7 +127,8 @@ class TestValidations(ValidatorsBaseTest):
         """
         Test an password is too short
         """
-        response = self.client.post("api/v1/auth/signup", data=json.dumps(self.password_length),
+        response = self.client.post("api/v1/auth/signup",
+                                    data=json.dumps(self.password_length),
                                     content_type="application/json")
         self.assertEqual(response.status_code, 400)
         result = json.loads(response.data.decode('utf-8'))
@@ -134,7 +139,8 @@ class TestValidations(ValidatorsBaseTest):
         """
         Test an password has no alphabets
         """
-        response = self.client.post("api/v1/auth/signup", data=json.dumps(self.password_alpha),
+        response = self.client.post("api/v1/auth/signup",
+                                    data=json.dumps(self.password_alpha),
                                     content_type="application/json")
         self.assertEqual(response.status_code, 400)
         result = json.loads(response.data.decode('utf-8'))
@@ -144,7 +150,8 @@ class TestValidations(ValidatorsBaseTest):
         """
         Test an password has no capital letter
         """
-        response = self.client.post("api/v1/auth/signup", data=json.dumps(self.password_capital),
+        response = self.client.post("api/v1/auth/signup",
+                                    data=json.dumps(self.password_capital),
                                     content_type="application/json")
         self.assertEqual(response.status_code, 400)
         result = json.loads(response.data.decode('utf-8'))
@@ -154,7 +161,8 @@ class TestValidations(ValidatorsBaseTest):
         """
         Test an password has no digits
         """
-        response = self.client.post("api/v1/auth/signup", data=json.dumps(self.password_num),
+        response = self.client.post("api/v1/auth/signup",
+                                    data=json.dumps(self.password_num),
                                     content_type="application/json")
         self.assertEqual(response.status_code, 400)
         result = json.loads(response.data.decode('utf-8'))
@@ -164,9 +172,11 @@ class TestValidations(ValidatorsBaseTest):
         """
         Test an user input correct username but wrong password
         """
-        self.client.post("api/v1/auth/signup", data=json.dumps(self.user_signup),
+        self.client.post("api/v1/auth/signup",
+                         data=json.dumps(self.user_signup),
                          content_type="application/json")
-        response = self.client.post("api/v1/auth/login", data=json.dumps(self.user_login),
+        response = self.client.post("api/v1/auth/login",
+                                    data=json.dumps(self.user_login),
                                     content_type="application/json")
         self.assertEqual(response.status_code, 400)
         result = json.loads(response.data.decode('utf-8'))
@@ -177,9 +187,11 @@ class TestValidations(ValidatorsBaseTest):
         """
         Test an user input correct password but wrong username
         """
-        self.client.post("api/v1/auth/signup", data=json.dumps(self.user_signup1),
+        self.client.post("api/v1/auth/signup",
+                         data=json.dumps(self.user_signup1),
                          content_type="application/json")
-        response = self.client.post("api/v1/auth/login", data=json.dumps(self.user_login1),
+        response = self.client.post("api/v1/auth/login",
+                                    data=json.dumps(self.user_login1),
                                     content_type="application/json")
         self.assertEqual(response.status_code, 400)
         result = json.loads(response.data.decode('utf-8'))
@@ -191,7 +203,8 @@ class TestValidations(ValidatorsBaseTest):
         """
         Test an user input whitespace at data request
         """
-        response = self.client.post("api/v1/auth/signup", data=json.dumps(self.user_signup2),
+        response = self.client.post("api/v1/auth/signup",
+                                    data=json.dumps(self.user_signup2),
                                     content_type="application/json")
         self.assertEqual(response.status_code, 400)
         result = json.loads(response.data.decode('utf-8'))
