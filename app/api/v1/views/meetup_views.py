@@ -27,14 +27,14 @@ def create_meetup(current_user):
 
     if not topic.strip():
         abort(make_response(jsonify({
-            'status':400, 'error':'topic field is required'}), 400))
+            'status':400, 'error':'topic field cannot be left blank'}), 400))
     if not meetup_date.strip():
         abort(make_response(jsonify({
-            'status':400, 'error':'meetup_date field is required'}), 400))
+            'status':400, 'error':'meetup_date field cannot be left blank'}), 400))
 
     if not location.strip():
         abort(make_response(jsonify({
-            'status':400, 'error':'location field is required'}), 400))
+            'status':400, 'error':'location field cannot be left blank'}), 400))
 
     for tag in tags:
         if not tag.strip():

@@ -97,7 +97,7 @@ class TestValidations(ValidatorsBaseTest):
         response = self.client.post("api/v1/auth/signup",
                                     data=json.dumps(self.user_signup),
                                     content_type="application/json")
-        self.assertEqual(response.status_code, 400)
+        self.assertEqual(response.status_code, 409)
         result = json.loads(response.data.decode('utf-8'))
         self.assertEqual(result['error'], "Email already taken!")
 
