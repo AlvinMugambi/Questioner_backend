@@ -25,11 +25,12 @@ def user_sign_up():
         username = data['username']
         email = data['email']
         password = data['password']
-        confirm_pass = data['confirm_password']
+        confirm_pass = data['confirmpassword']
 
     except KeyError:
         abort(make_response(jsonify({
-            'error':'Check your json keys. Should be firstname, lastname, username, email, password, confirm_password',
+            'error':'Check your json keys.\
+                Should be firstname, lastname, username, email, password, confirm_password',
             'status': 400}), 400))
 
 
