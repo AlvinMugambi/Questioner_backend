@@ -95,8 +95,6 @@ def validate_email(email):
         abort(make_response(jsonify(
             status=400,
             error="Invalid Email"), 400))
-    # if not re.match(r"(^[a-zA-z0-9_.]+@[a-zA-z0-9-]+\.[a-z]+$)", email):
-    #     abort(make_response(jsonify({'error': 'Invalid email format', 'status': 400}), 400))
 
     return email
 

@@ -29,8 +29,7 @@ def user_sign_up():
 
     except KeyError:
         abort(make_response(jsonify({
-            'error':'Check your json keys.\
-                Should be firstname, lastname, username, email, password, confirm_password',
+            'error': 'Should be firstname, lastname, username, email, password, confirm_password',
             'status': 400}), 400))
 
 
@@ -63,7 +62,7 @@ def user_login():
     except KeyError:
         abort(make_response(jsonify({
             'status': 400,
-            ' error': "Check your json keys. Should be username & password"}), 400))
+            ' error': "Should be username & password"}), 400))
 
     validators.check_for_whitespace(data)
     validators.verify_if_admin(username)

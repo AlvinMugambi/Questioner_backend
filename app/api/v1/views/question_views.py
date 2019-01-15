@@ -20,7 +20,7 @@ def create_question(current_user, meetup_id):
     except KeyError:
         abort(make_response(jsonify({
             'status': 400,
-            ' error': "Check your json keys. Should be topic and body"}), 400))
+            ' error': "Should be topic and body"}), 400))
 
     check_for_whitespace(data)
 

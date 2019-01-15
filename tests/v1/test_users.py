@@ -22,28 +22,28 @@ class UserBaseTest(unittest.TestCase):
                              "username":"alvomugzqw",
                              "email":"alvosa@gmail.com",
                              "password": "Alvino123a",
-                             "confirm_password":"Alvino123a"}
+                             "confirmpassword":"Alvino123a"}
 
         self.signup_user2 = {"firstname":"Lord",
                              "lastname": "Vader",
                              "username":"Lordvader",
                              "email":"darth@gmail.com",
                              "password": "LordDarthV1",
-                             "confirm_password":"Darthvader1"}
+                             "confirmpassword":"Darthvader1"}
 
         self.signup_user3 = {"firstname":"luke",
                              "lastname": "Skywalker",
                              "username":"skywalker",
                              "email":"skywalker@gmail.com",
                              "password": "LukeSkyies1",
-                             "confirm_password":"LukeSkyies1"}
+                             "confirmpassword":"LukeSkyies1"}
 
         self.signup_user4 = {"firstname":"han",
                              "lastname": "solo",
                              "username":"hansolo",
                              "email":"hansolo@gmail.com",
                              "password": "Chewie2",
-                             "confirm_password":"Chewie2"}
+                             "confirmpassword":"Chewie2"}
 
         self.login_user1 = {"username":"alvomugzqw",
                             "password":"Alvino123a"}

@@ -23,7 +23,7 @@ def create_meetup(current_user):
         return jsonify({
             'status':400,
             'error':
-                'Check your json keys. Should be topic, meetup_date, location, images and tags'}), 400
+                'Should be topic, meetup_date, location, images and tags'}), 400
 
     if not topic.strip():
         abort(make_response(jsonify({
