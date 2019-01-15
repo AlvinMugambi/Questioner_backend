@@ -22,14 +22,20 @@ def create_app(app_environment):
 
     @app.errorhandler(404)
     def page_not_found(error):
-        return jsonify({'error':'Url not found', 'status': 404}), 404
+        return jsonify({
+            'error':'Url not found. Check the url and try again',
+            'status': 404}), 404
 
     @app.errorhandler(405)
     def method_not_allowed(error):
-        return jsonify({'error':'Method not allowed', 'status': 405}), 405
+        return jsonify({
+            'error':'Method not allowed. Check the method and try again',
+            'status': 405}), 405
 
     @app.errorhandler(400)
     def jso_syntax_error(error):
-        return jsonify({'error':'json object syntax error', 'status': 400}), 400
+        return jsonify({
+            'error':'json object syntax error. Check your commas and brackets and try again',
+            'status': 400}), 400
 
     return app
