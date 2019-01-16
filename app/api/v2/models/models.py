@@ -108,7 +108,7 @@ class Meetup:
         """
         query = """
         INSERT INTO meetups(topic, meetup_date, meetup_location, meetup_images, meetup_tags, created_at) VALUES(
-            '{}', '{}', '{}', '{}', '{}'
+            '{}', '{}', '{}', '{}', '{}', '{}'
         )""".format(self.topic, self.meetup_date, self.location, self.images, self.tags, self.created_at)
 
         database.query_db_no_return(query)
@@ -125,7 +125,12 @@ class Meetup:
         """
         get a specific meetup using its id
         """
-        return [Meetup.to_json(meetup) for meetup in MEETUPS if meetup.id == meet_id]
+        query = """
+        SELECT meetup_id, topic, meetup_date, meetup_location FROM meetups
+        WHERE meetups.meetup_id = '{}'""".format(meet_id)
+
+        meetup = database.select_from_db(query)
+        return meetup
 
     @staticmethod
     def delete_meetup(meet_id):
@@ -148,13 +153,13 @@ class Meetup:
         format meetup object to a readable dictionary
         """
         return {
-            "id": meetup.id,
-            "topic": meetup.topic,
-            "meetup_date": meetup.meetup_date,
-            "location": meetup.location,
+            "meetup__id": meetup[0],
+            "topic": meetup[1],
+            "meetup_date": meetup[2],
+            "location": meetup[3],
             # "images": meetup.images,
-            "tags": meetup.tags,
-            # "created_at": meetup.created_at
+            "tags": meetup[5],
+            "created_at": meetup[6]
         }
 
 class Question:
