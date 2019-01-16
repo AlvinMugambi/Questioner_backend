@@ -2,6 +2,7 @@
 import os
 import re
 from functools import wraps
+from datetime import datetime
 
 import jwt
 from flask import jsonify, request, abort, make_response
@@ -103,20 +104,40 @@ def check_for_whitespace(data):
     return True
 
 def check_if_string(data):
-    if not re.match("^[A-Za-z]*$", data['firstname']):
-        abort(make_response(jsonify({
-            "status": 400,
-            "Error":  "Make sure you only use letters in your firstname"}), 400))
+    for key, value in data.items():
+        if key == 'firstname':
+            if not re.match("^[A-Za-z]*$", data['firstname']):
+                abort(make_response(jsonify({
+                    "status": 400,
+                    "Error":  "Make sure you only use letters in your firstname"}), 400))
+        if key == 'lastname':
+            if not re.match("^[A-Za-z]*$", data['lastname']):
+                abort(make_response(jsonify({
+                    "status": 400, "Error":
+                    "Make sure you only use letters in your lastname"}), 400))
+        if key == 'username':
+            if not re.match("^[A-Za-z]*$", data['username']):
+                abort(make_response(jsonify({
+                    "status": 400,
+                    "Error":  "Make sure you only use letters in your username"}), 400))
+        if key == 'topic':
+            if not re.match("^[A-Za-z]*$", data['topic']):
+                abort(make_response(jsonify({
+                    "status": 400,
+                    "Error":  "Make sure you only use letters in your username"}), 400))
 
-    if not re.match("^[A-Za-z]*$", data['lastname']):
-        abort(make_response(jsonify({
-            "status": 400, "Error":
-            "Make sure you only use letters in your lastname"}), 400))
+        if key == 'location':
+            if not re.match("^[A-Za-z]*$", data['location']):
+                abort(make_response(jsonify({
+                    "status": 400,
+                    "Error":  "Make sure you only use letters in your username"}), 400))
 
-    if not re.match("^[A-Za-z]*$", data['username']):
-        abort(make_response(jsonify({
-            "status": 400,
-            "Error":  "Make sure you only use letters in your username"}), 400))
+        if key == 'tags':
+            if not re.match("^[A-Za-z]*$", data['tags']):
+                abort(make_response(jsonify({
+                    "status": 400,
+                    "Error":  "Make sure you only use letters in your username"}), 400))
+
 
 
 def check_phone_number(phone):
@@ -129,6 +150,21 @@ def check_phone_number(phone):
         abort(make_response(jsonify({
             "status": 400,
             "Error":  "Phone number should be 10 digits."}), 400))
+
+
+def check_date(date):
+    if not re.match(r"^(0[1-9]|[12][0-9]|3[01])\/(0[1-9]|1[0-2])\/([12][0-9]{3})$", date):
+        abort(make_response(jsonify({
+            "status": 400, "Error":  "Invalid date format. Should be DD/MM/YYYY"}), 400))
+
+    date_format = "%d/%m/%Y"
+    # create datetime objects from the strings
+    date = datetime.strptime(date, date_format)
+    now = datetime.now()
+
+    if date < now:
+        abort(make_response(jsonify({
+            "status": 400, "Error":  "Date should be in the future"}), 400))
 
 
 def check_if_admin():
