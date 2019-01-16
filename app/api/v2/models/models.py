@@ -118,7 +118,23 @@ class Meetup:
         """
         gets all meetups
         """
-        return [Meetup.to_json(meetup) for meetup in MEETUPS]
+        query = """
+        SELECT meetup_id, topic, meetup_date, meetup_location, meetup_tags, created_at FROM meetups
+        """
+
+        meetups = database.select_from_db(query)
+        data = []
+        for meetup in meetups:
+            meetup = {'meetupId' : meetup["meetup_id"],
+                      'topic' : meetup["topic"],
+                      'meetupDate' : meetup["meetup_date"],
+                      'meetupLocation' : meetup["meetup_location"],
+                      'meetupTags' : meetup["meetup_tags"],
+                      'createdAt' : meetup["created_at"]}
+            data.append(meetup)
+
+        return data
+
 
     @staticmethod
     def get_meetup(meet_id):
@@ -152,15 +168,15 @@ class Meetup:
         """
         format meetup object to a readable dictionary
         """
-        return {
-            "meetup__id": meetup[0],
-            "topic": meetup[1],
-            "meetup_date": meetup[2],
-            "location": meetup[3],
-            # "images": meetup.images,
-            "tags": meetup[5],
-            "created_at": meetup[6]
+        meetup = {
+            "meetup__id": meetup[0][0],
+            "topic": meetup[0][1],
+            "meetup_date": meetup[0][2],
+            "location": meetup[0][3],
+            "tags": meetup[0][5],
+            "created_at": meetup[0][6]
         }
+        return meetup
 
 class Question:
     """
