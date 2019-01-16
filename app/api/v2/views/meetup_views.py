@@ -2,7 +2,8 @@
 
 from flask import jsonify, request, make_response, abort
 
-from app.api.v2.utils.validators import token_required, check_if_admin
+from app.api.v2.utils.validators import token_required
+from app.api.v2.utils import validators
 from app.api.v2.models.models import Meetup
 from app.api.v2 import version2
 
@@ -13,37 +14,28 @@ def create_meetup(current_user):
     The POST method for the meetups route that allows a user to create a meetup
     """
     try:
-        topic = request.get_json()['topic']
-        meetup_date = request.get_json()['meetup_date']
-        location = request.get_json()['location']
-        images = request.get_json()['images']
-        tags = request.get_json()['tags']
+        data = request.get_json()
+        topic = data['topic']
+        meetup_date = data['meetup_date']
+        location = data['location']
+        images = data['images']
+        tags = data['tags']
 
     except KeyError:
         return jsonify({
             'status':400,
             'error': 'Check your json keys. Should be topic, meetup_date, location, images and tags'}), 400
-
-    if not topic:
-        abort(make_response(jsonify({
-            'status':400,
-            'error':'topic field is required'}), 400))
-    if not meetup_date:
-        abort(make_response(jsonify({
-            'status':400,
-            'error':'meetup_date field is required'}), 400))
-
-    if not location:
-        abort(make_response(jsonify({
-            'status':400,
-            'error':'location field is required'}), 400))
+    validators.check_for_whitespace(data)
+    validators.check_if_string(data)
 
     if not tags:
         abort(make_response(jsonify({
             'status':400,
             'error':'tags field is required'}), 400))
 
-    admin = check_if_admin()
+
+    validators.check_date(meetup_date)
+    admin = validators.check_if_admin()
     if not admin:
         return jsonify({
             'status': 401,
@@ -115,7 +107,7 @@ def delete_a_meetup(current_user, meetup_id):
     """
     The endpoint that allows a user to delete a meetup
     """
-    admin = check_if_admin()
+    admin = validators.check_if_admin()
     if not admin:
         return jsonify({
             'status': 401,
