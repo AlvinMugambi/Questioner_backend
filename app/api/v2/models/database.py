@@ -4,6 +4,7 @@
 import os
 import sys
 import psycopg2
+import psycopg2.extras
 
 
 def init_db(db_url=None):
@@ -105,7 +106,7 @@ def connect_to_and_query_db(query=None, db_url=None):
         # connect to db
         conn = psycopg2.connect(db_url)
         print("\n\nConnected {}\n".format(conn.get_dsn_parameters()))
-        cursor = conn.cursor()
+        cursor = conn.cursor(cursor_factory=psycopg2.extras.DictCursor)
 
         if query:
             # Execute query
