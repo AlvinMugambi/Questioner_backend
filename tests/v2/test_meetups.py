@@ -58,6 +58,14 @@ class MeetupsBaseTest(unittest.TestCase):
                              "images":"them.png",
                              "tags":"Snake"
                             }
+
+        self.post_meetup3 = {"toic":"Python",
+                             "meeup_date":"3/01/2091",
+                             "locaton":"Nyeri",
+                             "imaes":"them.png",
+                             "tgs":"Snake"
+                            }
+
         self.rsvp_response1 = [{"Attending": "yes",
                                 "meetup": 1,
                                 "topic": "Miraa"}]
@@ -85,6 +93,30 @@ class MeetupsBaseTest(unittest.TestCase):
                              "location":"Meru",
                              "images":"me.png",
                              "tags": ""}
+
+        self.meetups_whitespace = {"topic":"     ",
+                                   "meetup_date":"30/01/2120",
+                                   "location":"Meru",
+                                   "images":"me.png",
+                                   "tags": "zcasc"}
+
+        self.meetups_non_alpha = {"topic":"1235454",
+                                  "meetup_date":"30/01/2120",
+                                  "location":"Meru",
+                                  "images":"me.png",
+                                  "tags": "sdvsvs"}
+
+        self.meetups_wrong_date = {"topic":"pythonia",
+                                   "meetup_date":"12142333545",
+                                   "location":"Meru",
+                                   "images":"me.png",
+                                   "tags": "sdvsvs"}
+
+        self.meetups_past_date = {"topic":"pythonia",
+                                  "meetup_date":"30/04/1990",
+                                  "location":"Meru",
+                                  "images":"me.png",
+                                  "tags": "sdvsvs"}
 
         self.token = ''
 
@@ -125,13 +157,14 @@ class TestMeetups(MeetupsBaseTest):
         """
         self.token = self.login()
         response = self.client.post("api/v2/meetups",
-                                    data = json.dumps(self.meetups_topic),
+                                    data=json.dumps(self.meetups_topic),
                                     headers={'x-access-token': self.token},
-                                    content_type = "application/json")
+                                    content_type="application/json")
         result = json.loads(response.data.decode('utf-8'))
         self.assertEqual(response.status_code, 400)
         self.assertEqual(result["status"], 400)
         self.assertEqual(result["error"], 'topic field cannot be left blank')
+
 
     def test_no_meetup_date_data(self):
         """
@@ -139,13 +172,14 @@ class TestMeetups(MeetupsBaseTest):
         """
         self.token = self.login()
         response = self.client.post("api/v2/meetups",
-                                    data = json.dumps(self.meetups_meetup_date),
+                                    data=json.dumps(self.meetups_meetup_date),
                                     headers={'x-access-token': self.token},
-                                    content_type = "application/json")
+                                    content_type="application/json")
         result = json.loads(response.data.decode('utf-8'))
         self.assertEqual(response.status_code, 400)
         self.assertEqual(result["status"], 400)
         self.assertEqual(result["error"], 'meetup_date field cannot be left blank')
+
 
     def test_no_tags_data(self):
         """
@@ -153,13 +187,14 @@ class TestMeetups(MeetupsBaseTest):
         """
         self.token = self.login()
         response = self.client.post("api/v2/meetups",
-                                    data = json.dumps(self.meetups_tags),
+                                    data=json.dumps(self.meetups_tags),
                                     headers={'x-access-token': self.token},
-                                    content_type = "application/json")
+                                    content_type="application/json")
         result = json.loads(response.data.decode('utf-8'))
         self.assertEqual(response.status_code, 400)
         self.assertEqual(result["status"], 400)
         self.assertEqual(result["error"], 'tags field cannot be left blank')
+
 
     def test_no_location_data(self):
         """
@@ -167,13 +202,92 @@ class TestMeetups(MeetupsBaseTest):
         """
         self.token = self.login()
         response = self.client.post("api/v2/meetups",
-                                    data = json.dumps(self.meetups_location),
+                                    data=json.dumps(self.meetups_location),
                                     headers={'x-access-token': self.token},
-                                    content_type = "application/json")
+                                    content_type="application/json")
         result = json.loads(response.data.decode('utf-8'))
         self.assertEqual(response.status_code, 400)
         self.assertEqual(result["status"], 400)
         self.assertEqual(result["error"], 'location field cannot be left blank')
+
+
+    def test_wrong_json_keys(self):
+        """
+        Test that an admin user enters the wrong keys
+        """
+        self.token = self.login()
+        response = self.client.post("api/v2/meetups",
+                                    data=json.dumps(self.post_meetup3),
+                                    headers={'x-access-token': self.token},
+                                    content_type="application/json")
+        result = json.loads(response.data.decode('utf-8'))
+        self.assertEqual(response.status_code, 400)
+        self.assertEqual(result["status"], 400)
+        self.assertEqual(
+            result["error"], 'Should be topic, meetup_date, location, images and tags')
+
+
+    def test_user_input_whitespace(self):
+        """
+        Test if only whitespace provided on input
+        """
+        self.token = self.login()
+        response = self.client.post("api/v2/meetups",
+                                    data=json.dumps(self.meetups_whitespace),
+                                    headers={'x-access-token': self.token},
+                                    content_type="application/json")
+        result = json.loads(response.data.decode('utf-8'))
+        self.assertEqual(response.status_code, 400)
+        self.assertEqual(result["status"], 400)
+        self.assertEqual(result["error"], 'topic field cannot be left blank')
+
+
+    def test_user_input_non_alpha(self):
+        """
+        Test if user input digits or non alphabet characters in string fields
+        """
+        self.token = self.login()
+        response = self.client.post("api/v2/meetups",
+                                    data=json.dumps(self.meetups_non_alpha),
+                                    headers={'x-access-token': self.token},
+                                    content_type="application/json")
+        result = json.loads(response.data.decode('utf-8'))
+        self.assertEqual(response.status_code, 400)
+        self.assertEqual(result["status"], 400)
+        self.assertEqual(
+            result["Error"], 'Make sure you only use letters in your topic')
+
+
+    def test_user_input_invalid_date(self):
+        """
+        Test if user input an invalid date or format
+        """
+        self.token = self.login()
+        response = self.client.post("api/v2/meetups",
+                                    data=json.dumps(self.meetups_wrong_date),
+                                    headers={'x-access-token': self.token},
+                                    content_type="application/json")
+        result = json.loads(response.data.decode('utf-8'))
+        self.assertEqual(response.status_code, 400)
+        self.assertEqual(result["status"], 400)
+        self.assertEqual(
+            result["Error"], "Invalid date format. Should be DD/MM/YYYY")
+
+
+    def test_user_input_past_date(self):
+        """
+        Test if user input a date that is in the past
+        """
+        self.token = self.login()
+        response = self.client.post("api/v2/meetups",
+                                    data=json.dumps(self.meetups_past_date),
+                                    headers={'x-access-token': self.token},
+                                    content_type="application/json")
+        result = json.loads(response.data.decode('utf-8'))
+        self.assertEqual(response.status_code, 400)
+        self.assertEqual(result["status"], 400)
+        self.assertEqual(result["Error"], "Date should be in the future")
+
 
     def test_an_admin_user_can_create_a_meetup(self):
         """
@@ -181,14 +295,15 @@ class TestMeetups(MeetupsBaseTest):
         """
         self.token = self.login()
         response = self.client.post("api/v2/meetups",
-                                    data = json.dumps(self.post_meetup1),
+                                    data=json.dumps(self.post_meetup1),
                                     headers={'x-access-token': self.token},
-                                    content_type = "application/json")
+                                    content_type="application/json")
         result = json.loads(response.data.decode('utf-8'))
         self.assertEqual(response.status_code, 201)
         self.assertEqual(result["status"], 201)
-        self.assertEqual(result["data"],
-                        [{"location": "Meru", "meetup_date": "30/01/2900", "tags": "trees", "topic": "Miraa"}])
+        self.assertEqual(
+            result["data"],
+            [{"location": "Meru", "meetup_date": "30/01/2900", "tags": "trees", "topic": "Miraa"}])
 
 
     def test_a_regular_user_cannot_create_a_meetup(self):
@@ -196,33 +311,35 @@ class TestMeetups(MeetupsBaseTest):
         Test that a regular user cannot create a meetup
         """
         self.client.post("api/v2/auth/signup",
-                         data = json.dumps(self.signup_user2),
-                         content_type = "application/json")
+                         data=json.dumps(self.signup_user2),
+                         content_type="application/json")
         login = self.client.post("api/v2/auth/login",
-                                 data = json.dumps(self.login_user2),
-                                 content_type = "application/json")
+                                 data=json.dumps(self.login_user2),
+                                 content_type="application/json")
         resp = json.loads(login.data.decode('utf-8'))
-        user_token =resp['token']
+        user_token = resp['token']
         response = self.client.post("api/v2/meetups",
-                                    data = json.dumps(self.post_meetup1),
+                                    data=json.dumps(self.post_meetup1),
                                     headers={'x-access-token': user_token},
-                                    content_type = "application/json")
+                                    content_type="application/json")
         result = json.loads(response.data.decode('utf-8'))
         self.assertEqual(response.status_code, 401)
         self.assertEqual(result["status"], 401)
-        self.assertEqual(result["error"], "You are not allowed to perfom this function")
+        self.assertEqual(
+            result["error"], "You are not allowed to perfom this function")
 
 
     def test_user_can_get_a_specific_meetup(self):
         """
-        Test to show that a user can successfully get a specific meetup using a metup id
+        Test to show that a user can successfully get a specific meetup using a meetup id
         """
         self.token = self.login()
         self.client.post("api/v2/meetups",
                          data=json.dumps(self.post_meetup1),
                          headers={'x-access-token': self.token},
                          content_type="application/json")
-        response = self.client.get("api/v2/meetups/1", content_type = "application/json")
+        response = self.client.get("api/v2/meetups/1",
+                                   content_type="application/json")
         self.assertEqual(response.status_code, 200)
 
         result = json.loads(response.data.decode('utf-8'))
@@ -230,8 +347,64 @@ class TestMeetups(MeetupsBaseTest):
         self.assertEqual(result['data'], [[1,
                                            "Miraa",
                                            "30/01/2900",
-                                           "Meru"
-                                           ]])
+                                           "Meru"]])
+
+
+    def test_user_can_get_all_meetups(self):
+        """
+        Tests to show that a user can successfully get all meetups
+        """
+        self.token = self.login()
+        self.client.post("api/v2/meetups",
+                         data=json.dumps(self.post_meetup1),
+                         headers={'x-access-token': self.token},
+                         content_type="application/json")
+        self.client.post("api/v2/meetups",
+                         data=json.dumps(self.post_meetup2),
+                         headers={'x-access-token': self.token},
+                         content_type="application/json")
+
+        response = self.client.get("api/v2/meetups/upcoming",
+                                   content_type="application/json")
+        self.assertEqual(response.status_code, 200)
+
+        result = json.loads(response.data.decode('utf-8'))
+        self.assertEqual(result["status"], 200)
+        self.assertTrue(result["data"])
+
+
+    def test_user_cannot_get_all_meetups_if_no_meetup_posted(self):
+        """
+        Tests to show that a user cannot get all meetups when there is no meetup posted
+        """
+        response = self.client.get("api/v2/meetups/upcoming",
+                                   content_type="application/json")
+        self.assertEqual(response.status_code, 404)
+
+        result = json.loads(response.data.decode('utf-8'))
+        self.assertEqual(result["status"], 404)
+        self.assertEqual(
+            result["data"], "Currently there are no meetups scheduled.")
+
+
+    def test_meetup_not_found(self):
+        """
+        Test response when a meetup is not found
+        """
+        self.token = self.login()
+        self.client.post("api/v2/meetups",
+                         data=json.dumps(self.post_meetup1),
+                         headers={'x-access-token': self.token},
+                         content_type="application/json")
+        response = self.client.get("api/v2/meetups/10",
+                                   headers={'x-access-token': self.token},
+                                   content_type="application/json")
+        result = json.loads(response.data.decode('utf-8'))
+        self.assertEqual(response.status_code, 404)
+        self.assertEqual(result["status"], 404)
+        self.assertEqual(result["data"], "Meetup with id 10 not found")
+
+
     # def test_admin_can_delete_a_meetup(self):
     #     """
     #     Test an admin user can delete a meetup
@@ -244,36 +417,7 @@ class TestMeetups(MeetupsBaseTest):
     #     self.assertEqual(result["status"], 200)
     #     self.assertEqual(result["data"], "Deleted successfully")
 
-    # def test_meetup_not_found(self):
-    #     """
-    #     Test response when a meetup is not found
-    #     """
-    #     self.token = self.login()
-    #     self.client.post("api/v2/meetups", data = json.dumps(self.post_meetup1), headers={'x-access-token': self.token}, content_type = "application/json")
-    #     response = self.client.delete("api/v2/meetups/10", headers={'x-access-token': self.token}, content_type = "application/json")
-    #     result = json.loads(response.data.decode('utf-8'))
-    #     self.assertEqual(response.status_code, 404)
-    #     self.assertEqual(result["status"], 404)
-    #     self.assertEqual(result["data"], "Meetup with id 10 not found")
 
-
-    # def test_user_can_get_all_meetups(self):
-    #     """
-    #     Tests to show that a user can successfully get all meetups
-    #     """
-    #     self.client.post("api/v2/meetups", data = json.dumps(self.post_meetup1), headers={'x-access-token': self.token}, content_type = "application/json")
-    #     self.client.post("api/v2/meetups", data = json.dumps(self.post_meetup2),  headers={'x-access-token': self.token}, content_type = "application/json")
-    #
-    #     response = self.client.get("api/v2/meetups/upcoming", content_type = "application/json")
-    #     self.assertEqual(response.status_code, 200)
-    #
-    #     result = json.loads(response.data.decode('utf-8'))
-    #     self.assertEqual(result["status"], 200)
-    #     self.assertTrue(result["data"])
-    #
-    #
-
-    #
     # def test_user_can_set_rsvp_response(self):
     #     """
     #     Tests to show a user can successfully post ther attendance status
