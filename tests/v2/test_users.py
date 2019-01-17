@@ -137,7 +137,7 @@ class TestUserEndpoints(UserBaseTest):
         Test to show a user can successfully login if registered
         """
         self.client.post("api/v2/auth/signup",
-                         data = json.dumps(self.signup_user5),
+                         data=json.dumps(self.signup_user5),
                          content_type="application/json")
         response = self.client.post("api/v2/auth/login",
                                     data=json.dumps(self.login_user5),
@@ -163,8 +163,8 @@ class TestUserEndpoints(UserBaseTest):
         Test to show a user can successfully login if registered
         """
         self.client.post("api/v2/auth/signup",
-                         data = json.dumps(self.signup_user5),
-                         content_type = "application/json")
+                         data=json.dumps(self.signup_user5),
+                         content_type="application/json")
         response = self.client.post("api/v2/auth/login",
                                     data=json.dumps(self.login_user6),
                                     content_type="application/json")
