@@ -25,7 +25,7 @@ def user_sign_up():
     except KeyError:
         abort(make_response(jsonify({
             'status': 400,
-            'error': "Should be firstname, lastname, username, email, password and confirmpassword"}), 400))
+            'error': "Should be firstname, lastname, username, email, password, confirmpassword and phoneNumber"}), 400))
 
 
     validators.check_for_whitespace(data)

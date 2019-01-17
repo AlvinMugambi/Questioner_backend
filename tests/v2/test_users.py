@@ -108,7 +108,7 @@ class TestUserEndpoints(UserBaseTest):
         result = json.loads(response.data.decode('utf-8'))
         self.assertEqual(
             result['error'],
-            'Should be firstname, lastname, username, email, password and confirmpassword')
+            'Should be firstname, lastname, username, email, password, confirmpassword and phoneNumber')
 
     def test_user_can_sign_up(self):
         """
