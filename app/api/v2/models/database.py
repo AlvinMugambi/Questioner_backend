@@ -77,7 +77,17 @@ def set_up_tables():
         comment VARCHAR
     )"""
 
-    return [users_table_query, meetups_table_query, questions_table_query, comments_table_query]
+    rsvps_table_query = """
+    CREATE TABLE rsvps (
+        rsvp_id SERIAL PRIMARY KEY,
+        meetup_id INTEGER,
+        user_id INTEGER,
+        meetup_topic VARCHAR,
+        rsvp VARCHAR
+    )"""
+
+    return [users_table_query, meetups_table_query,
+            questions_table_query, comments_table_query, rsvps_table_query]
 
 
 def drop_table_if_exists():
@@ -96,7 +106,11 @@ def drop_table_if_exists():
     drop_comments_table = """
     DROP TABLE IF EXISTS comments"""
 
-    return [drop_comments_table, drop_meetups_table, drop_questions_table, drop_users_table]
+    drop_rsvps_table = """
+    DROP TABLE IF EXISTS rsvps"""
+
+    return [drop_comments_table, drop_meetups_table,
+            drop_questions_table, drop_users_table, drop_rsvps_table]
 
 
 def connect_to_and_query_db(query=None, db_url=None):
