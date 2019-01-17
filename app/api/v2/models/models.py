@@ -165,21 +165,6 @@ class Meetup:
         return False
 
 
-    @staticmethod
-    def to_json(meetup):
-        """
-        format meetup object to a readable dictionary
-        """
-        meetup = {
-            "meetup__id": meetup[0][0],
-            "topic": meetup[0][1],
-            "meetup_date": meetup[0][2],
-            "location": meetup[0][3],
-            "tags": meetup[0][5],
-            "created_at": meetup[0][6]
-        }
-        return meetup
-
 class Question:
     """
     The question class that contains the questions models and methods
@@ -245,19 +230,6 @@ class Question:
         question = database.select_from_db(query)
         return question
 
-    @staticmethod
-    def to_json(question):
-        """
-        format question object to a readable dictionary
-        """
-        return {
-            "question_id": question.question_id,
-            "title": question.title,
-            "meetup_id": question.meetup_id,
-            "votes": question.votes,
-            "body": question.body,
-            "comments": question.comments}
-
 
 class Comment:
     """
@@ -279,5 +251,32 @@ class Comment:
         INSERT INTO comments(user_id, question_id, title, body, comment) VALUES(
             '{}', '{}', '{}', '{}', '{}'
         )""".format(self.user_id, self.question_id, self.title, self.body, self.comment)
+
+        database.query_db_no_return(query)
+
+
+class Rsvp:
+    """
+    The rsvp models
+    """
+
+    def __init__(self, meetup_id, user_id, meetup_topic, rsvp):
+        """
+        The initializer function that sets the rsvp variables
+        """
+        self.meetup_id = meetup_id
+        self.user_id = user_id
+        self.meetup_topic = meetup_topic
+        self.rsvp = rsvp
+
+
+    def save_rsvp(self):
+        """
+        Save the rsvp to the rsvps store
+        """
+        query = """
+        INSERT INTO rsvps(meetup_id, user_id, meetup_topic, rsvp) VALUES(
+            '{}', '{}', '{}', '{}'
+        )""".format(self.user_id, self.meetup_id, self.meetup_topic, self.rsvp)
 
         database.query_db_no_return(query)
