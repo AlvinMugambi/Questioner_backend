@@ -220,8 +220,8 @@ class Question:
         data = []
         for question in questions:
             question = {'questionId' : question["question_id"],
-                        'userID' : question["user_id"],
-                        'meetupID' : question["meetup_id"],
+                        'userId' : question["user_id"],
+                        'meetupId' : question["meetup_id"],
                         'title' : question["title"],
                         'body' : question["body"],
                         'votes' : question["votes"],
@@ -238,7 +238,12 @@ class Question:
         """
         get a specific question using its id
         """
-        return [Question.to_json(question) for question in QUESTIONS if question.question_id == quest_id]
+        query = """
+        SELECT question_id, title, body, comment FROM questions
+        WHERE questions.question_id = '{}'""".format(quest_id)
+
+        question = database.select_from_db(query)
+        return question
 
     @staticmethod
     def to_json(question):
@@ -259,40 +264,20 @@ class Comment:
     The comments models
     """
 
-    def __init__(self, comment, question_id):
+    def __init__(self, title, body, comment, user_id, question_id):
+        self.title = title
+        self.body = body
         self.comment = comment
-        # self.user_id = user_id
-        self.comment_id = len(COMMENTS)+1
+        self.user_id = user_id
         self.question_id = question_id
 
     def save_comment(self):
         """
         Save the comment to the comments store
         """
-        COMMENTS.append(self)
+        query = """
+        INSERT INTO comments(user_id, question_id, title, body, comment) VALUES(
+            '{}', '{}', '{}', '{}', '{}'
+        )""".format(self.user_id, self.question_id, self.title, self.body, self.comment)
 
-class Comment:
-    """
-    The comments models
-    """
-
-    def __init__(self, comment, question_id):
-        self.comment = comment
-        # self.user_id = user_id
-        self.comment_id = len(COMMENTS)+1
-        self.question_id = question_id
-
-    def save_comment(self):
-        """
-        Save the comment to the comments store
-        """
-        COMMENTS.append(self)
-
-    @staticmethod
-    def to_json(comment):
-        """
-        format comment object to a readable dictionary
-        """
-        return {"comment":comment.comment,
-                "comment_id":comment.comment_id,
-                "question_id":comment.question}
+        database.query_db_no_return(query)

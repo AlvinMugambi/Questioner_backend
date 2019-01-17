@@ -96,6 +96,15 @@ def comment_on_a_question(current_user, question_id):
     """
     The add comment to a question endpoint
     """
+    username_dict = validators.decode_token()
+    username = username_dict['username']
+    user = User.get_user_by_username(username)
+    try:
+        user = user[0]
+    except:
+        return jsonify({
+            'status': 400,
+            'error': "Please login first"}), 400
     try:
         comment = request.get_json()['comment']
     except KeyError:
@@ -103,13 +112,26 @@ def comment_on_a_question(current_user, question_id):
             'status': 400,
             'error':'Check your json key. Should be comment'})))
 
-    username = validators.decode_token()
 
     question = Question.get_question(question_id)
     if question:
-        my_question = question[0]
-        comments = my_question['comments']
-        comments.append(comment)
-        comments.append(username)
-        return jsonify({"status": 201, "data": my_question}), 201
-    return jsonify({'status': 404, 'error':'Question not found'}), 404
+        question = question[0]
+        user_id = user['user_id']
+        title = question['title']
+        body = question['body']
+
+        my_comment = Comment(title,
+                             body,
+                             comment,
+                             user_id,
+                             question_id)
+        my_comment.save_comment()
+
+        return jsonify({"status": 201, "data": {"title": my_comment.title,
+                                                "body": my_comment.body,
+                                                "comment": my_comment.comment,
+                                                "userId": my_comment.user_id,
+                                                "question_id": my_comment.question_id,}}), 201
+    return jsonify({
+        'status': 404,
+        'error':'Question with id {} not found'.format(question_id)}), 404
