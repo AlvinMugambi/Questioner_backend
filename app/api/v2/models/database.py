@@ -62,6 +62,7 @@ def set_up_tables():
         title VARCHAR (50) NOT NULL,
         body VARCHAR (200) NOT NULL,
         votes INTEGER NOT NULL,
+        comment VARCHAR,
         voters INTEGER,
         created_at TIMESTAMP
     )"""
@@ -69,7 +70,11 @@ def set_up_tables():
     comments_table_query = """
     CREATE TABLE comments (
         comment_id SERIAL PRIMARY KEY,
-        question_id INTEGER NOT NULL
+        user_id INTEGER,
+        question_id INTEGER NOT NULL,
+        title VARCHAR,
+        body VARCHAR,
+        comment VARCHAR
     )"""
 
     return [users_table_query, meetups_table_query, questions_table_query, comments_table_query]
