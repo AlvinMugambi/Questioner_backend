@@ -18,7 +18,7 @@ def create_meetup(current_user):
         return jsonify({
             'status': 401,
             'error':"You are not allowed to perfom this function"}), 401
-            
+
     try:
         data = request.get_json()
         topic = data['topic']
