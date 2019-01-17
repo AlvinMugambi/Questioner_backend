@@ -13,6 +13,12 @@ def create_meetup(current_user):
     """
     The POST method for the meetups route that allows a user to create a meetup
     """
+    admin = validators.check_if_admin()
+    if not admin:
+        return jsonify({
+            'status': 401,
+            'error':"You are not allowed to perfom this function"}), 401
+            
     try:
         data = request.get_json()
         topic = data['topic']
@@ -25,6 +31,7 @@ def create_meetup(current_user):
         return jsonify({
             'status':400,
             'error': 'Should be topic, meetup_date, location, images and tags'}), 400
+
     validators.check_for_whitespace(data)
     validators.check_if_string(data)
 
@@ -35,11 +42,6 @@ def create_meetup(current_user):
 
 
     meetup_date = validators.check_date(meetup_date)
-    admin = validators.check_if_admin()
-    if not admin:
-        return jsonify({
-            'status': 401,
-            'error':"You are not allowed to perfom this function"}), 401
 
     meetup = Meetup(
         topic=topic,
