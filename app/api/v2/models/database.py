@@ -62,7 +62,7 @@ def set_up_tables():
         title VARCHAR (50) NOT NULL,
         body VARCHAR (200) NOT NULL,
         votes INTEGER NOT NULL,
-        voters INTEGER
+        voters INTEGER,
         created_at TIMESTAMP
     )"""
 
