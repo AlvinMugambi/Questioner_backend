@@ -212,7 +212,25 @@ class Question:
         """
         get all questions asked for a specific meetup
         """
-        return [Question.to_json(question) for question in QUESTIONS if question.meetup_id == meet_id]
+        query = """
+        SELECT question_id, user_id, meetup_id, title, body, votes, voters, created_at FROM questions
+        """
+
+        questions = database.select_from_db(query)
+        data = []
+        for question in questions:
+            question = {'questionId' : question["question_id"],
+                        'userID' : question["user_id"],
+                        'meetupID' : question["meetup_id"],
+                        'title' : question["title"],
+                        'body' : question["body"],
+                        'votes' : question["votes"],
+                        'voters' : question["voters"],
+                        'createdAt' : question["created_at"]
+                       }
+            data.append(question)
+
+        return data
 
 
     @staticmethod
