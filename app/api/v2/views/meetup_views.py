@@ -4,7 +4,7 @@ from flask import jsonify, request, make_response, abort
 
 from app.api.v2.utils.validators import token_required
 from app.api.v2.utils import validators
-from app.api.v2.models.models import Meetup
+from app.api.v2.models.models import Meetup, Rsvp, User
 from app.api.v2 import version2
 
 @version2.route("/meetups", methods=['POST'])
@@ -39,7 +39,6 @@ def create_meetup(current_user):
         abort(make_response(jsonify({
             'status':400,
             'error':'tags field is required'}), 400))
-
 
     meetup_date = validators.check_date(meetup_date)
 
@@ -80,15 +79,31 @@ def get_single_meetup(meetup_id):
     Fetches a single meetup
     """
     meetup = Meetup.get_meetup(meetup_id)
+
     if meetup:
-        return jsonify({"status": 200, "data": meetup}), 200
+        meetup = meetup[0]
+        return jsonify({"status": 200, "data": {'meetupId': meetup['meetup_id'],
+                                                'topic': meetup['topic'],
+                                                'meetupDate': meetup['meetup_date'],
+                                                'meetupLocation': meetup['meetup_location']}}), 200
     return jsonify({"status": 404, "data": "Meetup with id {} not found".format(meetup_id)}), 404
+
 
 @version2.route("/meetups/<int:meetup_id>/rsvps/<resp>", methods=['POST'])
 def meetup_rsvp(meetup_id, resp):
     """
     A user can respond to a meetup rsvp
     """
+    username_dict = validators.decode_token()
+    username = username_dict['username']
+    user = User.get_user_by_username(username)
+    try:
+        user = user[0]
+    except:
+        return jsonify({
+            'status': 400,
+            'error': "Please login first"}), 400
+
     if resp not in ["yes", "no", "maybe"]:
         return jsonify({
             'status':400,
@@ -98,10 +113,19 @@ def meetup_rsvp(meetup_id, resp):
         return jsonify({
             'status': 404,
             'error':'Meetup with id {} not found'.format(meetup_id)}), 404
+
     meetup = meetup[0]
+    user_id = user['user_id']
+    rsvp = Rsvp(meetup_id=meetup_id,
+                user_id=user_id,
+                meetup_topic=meetup['topic'],
+                rsvp=resp)
+    rsvp.save_rsvp()
+
     return jsonify({'status':200, 'data':[{'meetup':meetup_id,
                                            'topic':meetup['topic'],
                                            'Attending':resp}]}), 200
+
 
 @version2.route("/meetups/<int:meetup_id>", methods=['DELETE'])
 @token_required
