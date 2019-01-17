@@ -108,7 +108,7 @@ def check_if_string(data):
         if key not in ['meetup_date', 'password',
                        'phoneNumber', 'email',
                        'confirmpassword', 'images']:
-            if not re.match("^[A-Za-z]*$", value):
+            if not re.match(r"^(\s|\S)*(\S)+(\s|\S)*$", value):
                 abort(make_response(jsonify({
                     "status": 400,
                     "Error":  "Make sure you only use letters in your {}".format(key)}), 400))
