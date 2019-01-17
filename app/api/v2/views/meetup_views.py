@@ -24,7 +24,7 @@ def create_meetup(current_user):
     except KeyError:
         return jsonify({
             'status':400,
-            'error': 'Check your json keys. Should be topic, meetup_date, location, images and tags'}), 400
+            'error': 'Should be topic, meetup_date, location, images and tags'}), 400
     validators.check_for_whitespace(data)
     validators.check_if_string(data)
 
@@ -80,7 +80,7 @@ def get_single_meetup(meetup_id):
     meetup = Meetup.get_meetup(meetup_id)
     if meetup:
         return jsonify({"status": 200, "data": meetup}), 200
-    return jsonify({"status": 404, "data": "Meetup not found"}), 404
+    return jsonify({"status": 404, "data": "Meetup with id {} not found".format(meetup_id)}), 404
 
 @version2.route("/meetups/<int:meetup_id>/rsvps/<resp>", methods=['POST'])
 def meetup_rsvp(meetup_id, resp):
