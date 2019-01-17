@@ -2,8 +2,9 @@
 
 from flask import jsonify, request, make_response, abort
 
-from app.api.v2.models.models import Question, Comment
-from app.api.v2.utils.validators import token_required, decode_token
+from app.api.v2.models.models import Question, Comment, User
+from app.api.v2.utils.validators import token_required
+from app.api.v2.utils import validators
 from app.api.v2 import version2
 
 @version2.route("/meetups/<int:meetup_id>/questions", methods=['POST'])
@@ -30,7 +31,18 @@ def create_question(current_user, meetup_id):
         abort(make_response(jsonify({'status': 400,
                                      'error': 'body field is required'}), 400))
 
-    question = Question(title=title,
+    username_dict = validators.decode_token()
+    username = username_dict['username']
+    user = User.get_user_by_username(username)
+    try:
+        user = user[0]
+    except:
+        return jsonify({
+            'status': 400,
+            'error': "Please login first"}), 400
+    user_id = user['user_id']
+    question = Question(user_id=user_id,
+                        title=title,
                         body=body,
                         meetup_id=meetup_id)
 
@@ -38,7 +50,7 @@ def create_question(current_user, meetup_id):
 
     return jsonify({"status": 201,
                     "data":[{"title": title,
-                             # "user_id": user_id,
+                             "user_id": user_id,
                              "meetup": meetup_id,
                              "body": body}]}), 201
 
@@ -96,7 +108,7 @@ def comment_on_a_question(current_user, question_id):
             'status': 400,
             'error':'Check your json key. Should be comment'})))
 
-    username = decode_token()
+    username = validators.decode_token()
 
     question = Question.get_question(question_id)
     if question:
