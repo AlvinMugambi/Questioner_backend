@@ -220,8 +220,8 @@ class Question:
         data = []
         for question in questions:
             question = {'questionId' : question["question_id"],
-                        'userID' : question["user_id"],
-                        'meetupID' : question["meetup_id"],
+                        'userId' : question["user_id"],
+                        'meetupId' : question["meetup_id"],
                         'title' : question["title"],
                         'body' : question["body"],
                         'votes' : question["votes"],
