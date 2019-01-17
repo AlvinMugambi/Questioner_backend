@@ -185,23 +185,27 @@ class Question:
     The question class that contains the questions models and methods
     """
 
-    def __init__(self, title, body, meetup_id):
+    def __init__(self, user_id, title, body, meetup_id, votes=0):
         """
         The initialization of the Question class that defines its variables
         """
-        self.question_id = len(QUESTIONS)+1
+        self.user_id = user_id
         self.meetup_id = meetup_id
         self.title = title
-        self.votes = 0
         self.body = body
-        self.comments = COMMENTS
+        self.votes = votes
         self.created_at = datetime.now()
 
     def save_question(self):
         """
         saves the question to the question store
         """
-        QUESTIONS.append(self)
+        query = """
+        INSERT INTO questions(user_id, meetup_id, title, body, votes, created_at) VALUES(
+            '{}', '{}', '{}', '{}', '{}', '{}'
+        )""".format(self.user_id, self.meetup_id, self.title, self.body, self.votes, self.created_at)
+
+        database.query_db_no_return(query)
 
     @staticmethod
     def get_all_questions(meet_id):
