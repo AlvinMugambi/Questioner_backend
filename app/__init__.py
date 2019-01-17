@@ -30,4 +30,8 @@ def create_app(app_environment):
     def method_not_allowed(error):
         return jsonify({'error':'Method not allowed', 'status': 405}), 405
 
+    @app.errorhandler(400)
+    def bad_request(error):
+        return jsonify({'error':'Bad request. Check the syntax', 'status': 400}), 400
+
     return app

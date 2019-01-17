@@ -133,12 +133,16 @@ def check_date(date):
 
     date_format = "%d/%m/%Y"
     # create datetime objects from the strings
-    date = datetime.strptime(date, date_format)
+    strpdate = datetime.strptime(date, date_format)
     now = datetime.now()
 
-    if date < now:
+    if strpdate < now:
         abort(make_response(jsonify({
             "status": 400, "Error":  "Date should be in the future"}), 400))
+
+    months = ['Jan', 'Feb', 'March', 'April', 'May', 'June', 'July', 'Aug', 'Sept', 'Oct', 'Nov', 'Dec']
+    format_date = date[0:2]+ " " + months[int(date[3:5]) -1] + " " + date[6:]
+    return format_date
 
 
 def check_if_admin():

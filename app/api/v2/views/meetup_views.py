@@ -34,7 +34,7 @@ def create_meetup(current_user):
             'error':'tags field is required'}), 400))
 
 
-    validators.check_date(meetup_date)
+    meetup_date = validators.check_date(meetup_date)
     admin = validators.check_if_admin()
     if not admin:
         return jsonify({

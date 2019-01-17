@@ -153,14 +153,16 @@ class Meetup:
         """
         Delete a specific meetup in the db
         """
-        found = None
-        for meetup in MEETUPS:
-            if meetup.id == meet_id:
-                MEETUPS.remove(meetup)
-                found = True
-            elif meetup.id != meet_id:
-                found = False
-        return found
+        meetup = Meetup.get_meetup(meet_id)
+
+        if meetup:
+            query = """
+            DELETE FROM meetups
+            WHERE meetups.meetup_id = '{}'""".format(meet_id)
+
+            database.query_db_no_return(query)
+            return True
+        return False
 
 
     @staticmethod
