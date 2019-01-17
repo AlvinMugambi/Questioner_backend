@@ -2,7 +2,7 @@
 
 from flask import jsonify, request, make_response, abort
 
-from app.api.v2.models.models import Question, Comment, User
+from app.api.v2.models.models import Question, Comment, User, Meetup
 from app.api.v2.utils.validators import token_required
 from app.api.v2.utils import validators
 from app.api.v2 import version2
@@ -34,6 +34,11 @@ def create_question(current_user, meetup_id):
             ' error': "Check your json keys. Should be topic and body"}), 400))
 
     validators.check_for_whitespace(data)
+    meetup = Meetup.get_meetup(meetup_id)
+    if not meetup:
+        abort(make_response(jsonify({
+            'status': 404,
+            'error': 'No meetup with id {} found'.format(meetup_id)}), 404))
 
     user_id = user['user_id']
     question = Question(user_id=user_id,
