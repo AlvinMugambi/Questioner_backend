@@ -24,7 +24,7 @@ def create_app(app_environment):
 
     @app.errorhandler(404)
     def page_not_found(error):
-        return jsonify({'error':'Url not found', 'status': 404}), 404
+        return jsonify({'error':'Url not found. Check your url and try again', 'status': 404}), 404
 
     @app.errorhandler(405)
     def method_not_allowed(error):
