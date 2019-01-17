@@ -62,7 +62,8 @@ def set_up_tables():
         title VARCHAR (50) NOT NULL,
         body VARCHAR (200) NOT NULL,
         votes INTEGER NOT NULL,
-        comments VARCHAR (50) NOT NULL
+        voters INTEGER
+        created_at TIMESTAMP
     )"""
 
     comments_table_query = """
