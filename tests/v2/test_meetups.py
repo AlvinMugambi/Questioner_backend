@@ -303,7 +303,7 @@ class TestMeetups(MeetupsBaseTest):
         self.assertEqual(result["status"], 201)
         self.assertEqual(
             result["data"],
-            [{"location": "Meru", "meetup_date": "30/01/2900", "tags": "trees", "topic": "Miraa"}])
+            [{"location": "Meru", "meetup_date": "30 Jan 2900", "tags": "trees", "topic": "Miraa"}])
 
 
     def test_a_regular_user_cannot_create_a_meetup(self):
@@ -346,7 +346,7 @@ class TestMeetups(MeetupsBaseTest):
         self.assertEqual(result['status'], 200)
         self.assertEqual(result['data'], [[1,
                                            "Miraa",
-                                           "30/01/2900",
+                                           "30 Jan 2900",
                                            "Meru"]])
 
 
