@@ -242,22 +242,6 @@ class TestMeetups(MeetupsBaseTest):
         self.assertEqual(result["error"], 'topic field cannot be left blank')
 
 
-    def test_user_input_non_alpha(self):
-        """
-        Test if user input digits or non alphabet characters in string fields
-        """
-        self.token = self.login()
-        response = self.client.post("api/v2/meetups",
-                                    data=json.dumps(self.meetups_non_alpha),
-                                    headers={'x-access-token': self.token},
-                                    content_type="application/json")
-        result = json.loads(response.data.decode('utf-8'))
-        self.assertEqual(response.status_code, 400)
-        self.assertEqual(result["status"], 400)
-        self.assertEqual(
-            result["Error"], 'Make sure you only use letters in your topic')
-
-
     def test_user_input_invalid_date(self):
         """
         Test if user input an invalid date or format
