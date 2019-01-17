@@ -105,10 +105,8 @@ def check_for_whitespace(data):
 
 def check_if_string(data):
     for key, value in data.items():
-        if key not in ['meetup_date', 'password',
-                       'phoneNumber', 'email',
-                       'confirmpassword', 'images']:
-            if not re.match(r"^(\s|\S)*(\S)+(\s|\S)*$", value):
+        if key in ['firstname', 'lastname', 'username']:
+            if not value.isalpha():
                 abort(make_response(jsonify({
                     "status": 400,
                     "Error":  "Make sure you only use letters in your {}".format(key)}), 400))
