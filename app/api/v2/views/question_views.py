@@ -13,24 +13,6 @@ def create_question(current_user, meetup_id):
     """
     The POST method for the questions route that allows a user to post a question
     """
-    try:
-        title = request.get_json()['title']
-        body = request.get_json()['body']
-
-    except KeyError:
-        abort(make_response(jsonify({
-            'status': 400,
-            ' error': "Check your json keys. Should be topic and body"}), 400))
-
-    if not title:
-        abort(make_response(jsonify({
-            'status': 400,
-            'error': 'topic field is required'}), 400))
-
-    if not body:
-        abort(make_response(jsonify({'status': 400,
-                                     'error': 'body field is required'}), 400))
-
     username_dict = validators.decode_token()
     username = username_dict['username']
     user = User.get_user_by_username(username)
@@ -40,6 +22,19 @@ def create_question(current_user, meetup_id):
         return jsonify({
             'status': 400,
             'error': "Please login first"}), 400
+
+    try:
+        data = request.get_json()
+        title = data['title']
+        body = data['body']
+
+    except KeyError:
+        abort(make_response(jsonify({
+            'status': 400,
+            ' error': "Check your json keys. Should be topic and body"}), 400))
+
+    validators.check_for_whitespace(data)
+
     user_id = user['user_id']
     question = Question(user_id=user_id,
                         title=title,
