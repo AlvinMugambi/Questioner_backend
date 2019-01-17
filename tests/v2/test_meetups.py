@@ -405,17 +405,17 @@ class TestMeetups(MeetupsBaseTest):
         self.assertEqual(result["data"], "Meetup with id 10 not found")
 
 
-    # def test_admin_can_delete_a_meetup(self):
-    #     """
-    #     Test an admin user can delete a meetup
-    #     """
-    #     self.token = self.login()
-    #     self.client.post("api/v2/meetups", data = json.dumps(self.post_meetup1), headers={'x-access-token': self.token}, content_type = "application/json")
-    #     response = self.client.delete("api/v2/meetups/1", headers={'x-access-token': self.token}, content_type = "application/json")
-    #     result = json.loads(response.data.decode('utf-8'))
-    #     self.assertEqual(response.status_code, 200)
-    #     self.assertEqual(result["status"], 200)
-    #     self.assertEqual(result["data"], "Deleted successfully")
+    def test_admin_can_delete_a_meetup(self):
+        """
+        Test an admin user can delete a meetup
+        """
+        self.token = self.login()
+        self.client.post("api/v2/meetups", data = json.dumps(self.post_meetup1), headers={'x-access-token': self.token}, content_type = "application/json")
+        response = self.client.delete("api/v2/meetups/1", headers={'x-access-token': self.token}, content_type = "application/json")
+        result = json.loads(response.data.decode('utf-8'))
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(result["status"], 200)
+        self.assertEqual(result["data"], "Deleted successfully")
 
 
     # def test_user_can_set_rsvp_response(self):
