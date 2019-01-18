@@ -107,8 +107,8 @@ def meetup_rsvp(meetup_id, resp):
         user = user[0]
     except:
         return jsonify({
-            'status': 400,
-            'error': "Please login first"}), 400
+            'status': 401,
+            'error': "Please login first"}), 401
 
     if resp not in ["yes", "no", "maybe"]:
         return jsonify({

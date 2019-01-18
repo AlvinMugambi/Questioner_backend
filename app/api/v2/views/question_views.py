@@ -21,8 +21,8 @@ def create_question(current_user, meetup_id):
         user = user[0]
     except:
         return jsonify({
-            'status': 400,
-            'error': "Please login first"}), 400
+            'status': 401,
+            'error': "Please login first"}), 401
 
     try:
         data = request.get_json()
@@ -69,8 +69,8 @@ def upvote_question(current_user, question_id, vote):
         user = user[0]
     except:
         return jsonify({
-            'status': 400,
-            'error': "Please login first"}), 400
+            'status': 401,
+            'error': "Please login first"}), 401
 
     if vote not in ['upvote', 'downvote']:
         abort(make_response(jsonify({
@@ -136,8 +136,8 @@ def comment_on_a_question(current_user, question_id):
         user = user[0]
     except:
         return jsonify({
-            'status': 400,
-            'error': "Please login first"}), 400
+            'status': 401,
+            'error': "Please login first"}), 401
     try:
         comment = request.get_json()['comment']
     except KeyError:
