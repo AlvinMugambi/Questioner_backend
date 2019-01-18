@@ -149,6 +149,19 @@ class Meetup:
         return meetup
 
     @staticmethod
+    def check_if_meetup_already_posted(meetup_location, date):
+        """
+        The function that checks if a user has already posted on a meetup
+        """
+        query = """
+        SELECT meetup_id FROM meetups
+        WHERE meetups.meetup_location = '{}' AND meetups.meetup_date = '{}'
+        """.format(meetup_location, date)
+
+        posted = database.select_from_db(query)
+        return posted
+
+    @staticmethod
     def delete_meetup(meet_id):
         """
         Delete a specific meetup in the db
