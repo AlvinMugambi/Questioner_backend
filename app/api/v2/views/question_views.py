@@ -160,11 +160,12 @@ def comment_on_a_question(current_user, question_id):
                              question_id)
         my_comment.save_comment()
 
-        return jsonify({"status": 201, "data": {"title": my_comment.title,
-                                                "body": my_comment.body,
-                                                "comment": my_comment.comment,
-                                                "userId": my_comment.user_id,
-                                                "question_id": my_comment.question_id,}}), 201
+        return jsonify({"status": 201,
+                        "data": {"title": my_comment.title,
+                                 "body": my_comment.body,
+                                 "comment": my_comment.comment,
+                                 "userId": my_comment.user_id,
+                                 "question_id": my_comment.question_id,}}), 201
     return jsonify({
         'status': 404,
         'error':'Question with id {} not found'.format(question_id)}), 404
