@@ -198,7 +198,7 @@ class Question:
         get all questions asked for a specific meetup
         """
         query = """
-        SELECT question_id, user_id, meetup_id, title, body, votes, voters, created_at FROM questions
+        SELECT question_id, user_id, meetup_id, title, body, votes, created_at FROM questions
         """
 
         questions = database.select_from_db(query)
@@ -210,7 +210,6 @@ class Question:
                         'title' : question["title"],
                         'body' : question["body"],
                         'votes' : question["votes"],
-                        'voters' : question["voters"],
                         'createdAt' : question["created_at"]
                        }
             data.append(question)
@@ -224,7 +223,7 @@ class Question:
         get a specific question using its id
         """
         query = """
-        SELECT question_id, title, body, comment FROM questions
+        SELECT question_id, title, body, comment, votes FROM questions
         WHERE questions.question_id = '{}'""".format(quest_id)
 
         question = database.select_from_db(query)
@@ -280,3 +279,40 @@ class Rsvp:
         )""".format(self.user_id, self.meetup_id, self.meetup_topic, self.rsvp)
 
         database.query_db_no_return(query)
+
+class Vote:
+    """
+    The votes models
+    """
+
+    def __init__(self, question_id, user_id):
+        """
+        The initializer function that sets the votes variables
+        """
+        self.question_id = question_id
+        self.user_id = user_id
+
+
+    def save_vote(self):
+        """
+        Save the votes to the votes store
+        """
+        query = """
+        INSERT INTO votes(user_id, question_id) VALUES(
+            '{}', '{}'
+        )""".format(self.user_id, self.question_id)
+
+        database.query_db_no_return(query)
+
+    @staticmethod
+    def check_if_already_voted(user_id, question_id):
+        """
+        The function that checks if a user has already voted on a question
+        """
+        query = """
+        SELECT user_id, question_id FROM votes
+        WHERE votes.user_id = '{}' AND votes.question_id = '{}'
+        """.format(user_id, question_id)
+
+        voted = database.select_from_db(query)
+        return voted
