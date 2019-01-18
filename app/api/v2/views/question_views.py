@@ -56,9 +56,9 @@ def create_question(current_user, meetup_id):
                              "body": body}]}), 201
 
 
-@version2.route("/questions/<int:question_id>/upvote", methods=['PATCH'])
+@version2.route("/questions/<int:question_id>/<vote>", methods=['PATCH'])
 @token_required
-def upvote_question(current_user, question_id):
+def upvote_question(current_user, question_id, vote):
     """
     The upvote question route endpoint
     """
@@ -72,6 +72,11 @@ def upvote_question(current_user, question_id):
             'status': 400,
             'error': "Please login first"}), 400
 
+    if vote not in ['upvote', 'downvote']:
+        abort(make_response(jsonify({
+            'status': 400,
+            'error': 'url vote should be upvote or downvote'}), 400))
+
     question = Question.get_question(question_id)
     if question:
         user_id = user['user_id']
@@ -80,8 +85,12 @@ def upvote_question(current_user, question_id):
             abort(make_response(jsonify({
                 'status': 409,
                 'error': "You cannot vote twice on a single question"}), 409))
+
         my_question = question[0]
-        my_question['votes'] = my_question['votes'] + 1
+        if vote == 'upvote':
+            my_question['votes'] = my_question['votes'] + 1
+        if vote == 'downvote':
+            my_question['votes'] = my_question['votes'] - 1
 
         query = """
         UPDATE questions SET votes = '{}' WHERE questions.question_id = '{}'
@@ -91,26 +100,15 @@ def upvote_question(current_user, question_id):
         voter = Vote(question_id=question_id,
                      user_id=user_id)
         voter.save_vote()
-        return jsonify({"status": 200, "data": {"questionId": my_question['question_id'],
-                                                "title": my_question['title'],
-                                                "body": my_question['body'],
-                                                "comment": my_question['comment'],
-                                                "votes": my_question['votes']}}), 200
-    return jsonify({"status": 404, "error": "Question not found"}), 404
-
-
-@version2.route("/questions/<int:question_id>/downvote", methods=['PATCH'])
-@token_required
-def downvote_question(current_user, question_id):
-    """
-    The downvote question route endpoint
-    """
-    question = Question.get_question(question_id)
-    if question:
-        my_question = question[0]
-        my_question['votes'] = my_question['votes'] - 1
-        return jsonify({"status": 200, "data": my_question}), 200
-    return jsonify({"status": 404, "error": "Question not found"}), 404
+        return jsonify({"status": 200,
+                        "data": {"questionId": my_question['question_id'],
+                                 "title": my_question['title'],
+                                 "body": my_question['body'],
+                                 "comment": my_question['comment'],
+                                 "votes": my_question['votes']}}), 200
+    return jsonify({
+        "status": 404,
+        "error": "Question with id {} not found".format(question_id)}), 404
 
 
 @version2.route("/meetups/<int:meet_id>/questions", methods=['GET'])
