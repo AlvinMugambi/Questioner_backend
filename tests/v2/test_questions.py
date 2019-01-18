@@ -71,15 +71,13 @@ class QuestionBaseTest(unittest.TestCase):
 
 
         self.upvoted_question = {"body": "I would like to know the kind of food being served at the meetup",
-                                 "meetup_id": 1,
-                                 "comments": "aasa",
-                                 "question_id": 1,
+                                 "comment": None,
+                                 "questionId": 1,
                                  "title": "what are we to eat?",
                                  "votes": 1}
 
         self.downvoted_question = {"body": "I would like to know the kind of food being served at the meetup",
-                                   "meetup_id": 1,
-                                   "comments": [],
+                                   "comments": None,
                                    "question_id": 1,
                                    "title": "what are we to eat?",
                                    "votes": -1}
@@ -172,18 +170,28 @@ class TestQuestionEndpoint(QuestionBaseTest):
         self.assertEqual(result['data'], self.question_and_comment)
 
 
-#     def test_upvote_question(self):
-#         """
-#         test a user can upvote a question
-#         """
-#         self.token = self.login()
-#         self.client.post("api/v2/meetups", data = json.dumps(self.meetup), content_type = "application/json")
-#         self.client.post("api/v2/meetups/1/questions", data = json.dumps(self.post_question1), headers={'x-access-token': self.token}, content_type = "application/json")
-#         response = self.client.patch("api/v2/questions/1/upvote", headers={'x-access-token': self.token}, content_type = "application/json")
-#         self.assertEqual(response.status_code, 200)
-#
-#         # result = json.loads(response.data.decode('utf-8'))
-#         # self.assertEqual(result['data'], self.upvoted_question)
+    def test_upvote_question(self):
+        """
+        test a user can upvote a question
+        """
+        self.token = self.login()
+        y = self.client.post("api/v2/meetups",
+                             data=json.dumps(self.meetup),
+                             headers={'x-access-token': self.token},
+                             content_type="application/json")
+        self.assertEqual(y.status_code, 201)
+        x = self.client.post("api/v2/meetups/1/questions",
+                             data=json.dumps(self.post_question1),
+                             headers={'x-access-token': self.token},
+                             content_type="application/json")
+        self.assertEqual(x.status_code, 201)
+        response = self.client.patch("api/v2/questions/1/upvote",
+                                     headers={'x-access-token': self.token},
+                                     content_type="application/json")
+        self.assertEqual(response.status_code, 200)
+
+        result = json.loads(response.data.decode('utf-8'))
+        self.assertEqual(result['data'], self.upvoted_question)
 #
 #     def test_downvote_question(self):
 #         """

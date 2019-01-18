@@ -64,7 +64,6 @@ def set_up_tables():
         body VARCHAR (200) NOT NULL,
         votes INTEGER NOT NULL,
         comment VARCHAR,
-        voters INTEGER,
         created_at TIMESTAMP
     )"""
 
@@ -87,6 +86,12 @@ def set_up_tables():
         rsvp VARCHAR
     )"""
 
+    votes_table_query = """
+    CREATE TABLE votes (
+        user_id INTEGER,
+        question_id INTEGER
+    )"""
+
     password = generate_password_hash('ThaOG1234')
     create_admin_query = """
     INSERT INTO users(username, firstname, lastname, phone, email, password) VALUES(
@@ -94,7 +99,9 @@ def set_up_tables():
     )""".format('iamtheadmin', 'the', 'admin', '0706673461', 'adminog@gmail.com', password)
 
     return [users_table_query, meetups_table_query,
-            questions_table_query, comments_table_query, rsvps_table_query, create_admin_query]
+            questions_table_query, comments_table_query,
+            rsvps_table_query, create_admin_query,
+            votes_table_query]
 
 
 def drop_table_if_exists():
@@ -116,8 +123,12 @@ def drop_table_if_exists():
     drop_rsvps_table = """
     DROP TABLE IF EXISTS rsvps"""
 
+    drop_votes_table_ = """
+    DROP TABLE IF EXISTS votes"""
+
     return [drop_comments_table, drop_meetups_table,
-            drop_questions_table, drop_users_table, drop_rsvps_table]
+            drop_questions_table, drop_users_table,
+            drop_rsvps_table, drop_votes_table_]
 
 
 def connect_to_and_query_db(query=None, db_url=None):
