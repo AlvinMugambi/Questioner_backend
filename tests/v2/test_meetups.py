@@ -328,10 +328,10 @@ class TestMeetups(MeetupsBaseTest):
 
         result = json.loads(response.data.decode('utf-8'))
         self.assertEqual(result['status'], 200)
-        self.assertEqual(result['data'], [[1,
-                                           "Miraa",
-                                           "30 Jan 2900",
-                                           "Meru"]])
+        self.assertEqual(result['data'], {'meetupId': 1,
+                                          'topic':"Miraa",
+                                          'meetupDate': "30 Jan 2900",
+                                          'meetupLocation':"Meru"})
 
 
     def test_user_can_get_all_meetups(self):
@@ -394,8 +394,13 @@ class TestMeetups(MeetupsBaseTest):
         Test an admin user can delete a meetup
         """
         self.token = self.login()
-        self.client.post("api/v2/meetups", data = json.dumps(self.post_meetup1), headers={'x-access-token': self.token}, content_type = "application/json")
-        response = self.client.delete("api/v2/meetups/1", headers={'x-access-token': self.token}, content_type = "application/json")
+        self.client.post("api/v2/meetups",
+                         data=json.dumps(self.post_meetup1),
+                         headers={'x-access-token': self.token},
+                         content_type="application/json")
+        response = self.client.delete("api/v2/meetups/1",
+                                      headers={'x-access-token': self.token},
+                                      content_type="application/json")
         result = json.loads(response.data.decode('utf-8'))
         self.assertEqual(response.status_code, 200)
         self.assertEqual(result["status"], 200)
@@ -423,8 +428,13 @@ class TestMeetups(MeetupsBaseTest):
     #     """
     #     Tests to show a user can successfully post ther attendance status
     #     """
-    #     self.client.post("api/v2/meetups", data = json.dumps(self.post_meetup2),  headers={'x-access-token': self.token}, content_type = "application/json")
-    #     response = self.client.post("api/v2/meetups/1/rsvps/yes", content_type = "application/json")
+    #     self.client.post("api/v2/meetups",
+    #                      data=json.dumps(self.post_meetup2),
+    #                      headers={'x-access-token': self.token},
+    #                      content_type="application/json")
+    #     response = self.client.post("api/v2/meetups/1/rsvps/yes",
+    #                                 headers={'x-access-token': self.token},
+    #                                 content_type="application/json")
     #     self.assertEqual(response.status_code, 200)
     #     result = json.loads(response.data.decode('utf-8'))
     #     self.assertEqual(result['data'], self.rsvp_response1)

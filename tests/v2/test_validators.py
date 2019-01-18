@@ -89,6 +89,30 @@ class ValidatorsBaseTest(unittest.TestCase):
 
 class TestValidations(ValidatorsBaseTest):
 
+    def test_404_error_handler(self):
+        """
+        Test if a user registers with an already in use Email
+        """
+        response = self.client.post("api/v2/auth/signupssss",
+                                    data=json.dumps(self.signup_user),
+                                    content_type="application/json")
+        self.assertEqual(response.status_code, 404)
+        result = json.loads(response.data.decode('utf-8'))
+        self.assertEqual(
+            result['error'], 'Url not found. Check your url and try again')
+
+    def test_405_error_handler(self):
+        """
+        Test if a user registers with an already in use Email
+        """
+        response = self.client.get("api/v2/auth/signup",
+                                   data=json.dumps(self.signup_user),
+                                   content_type="application/json")
+        self.assertEqual(response.status_code, 405)
+        result = json.loads(response.data.decode('utf-8'))
+        self.assertEqual(
+            result['error'], "Method not allowed")
+
     def test_email_already_taken(self):
         """
         Test if a user registers with an already in use Email
