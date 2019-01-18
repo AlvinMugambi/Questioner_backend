@@ -53,8 +53,8 @@ class MeetupsBaseTest(unittest.TestCase):
                             }
 
         self.post_meetup2 = {"topic":"Python",
-                             "meetup_date":"3/01/2091",
-                             "location":"Nyeri",
+                             "meetup_date":"09/01/2091",
+                             "location":"Nakuru",
                              "images":"them.png",
                              "tags":"Snake"
                             }
@@ -68,7 +68,7 @@ class MeetupsBaseTest(unittest.TestCase):
 
         self.rsvp_response1 = [{"Attending": "yes",
                                 "meetup": 1,
-                                "topic": "Miraa"}]
+                                "topic": "Python"}]
 
         self.meetups_topic = {"topic":"",
                               "meetup_date":"30/01/2040",
@@ -403,6 +403,7 @@ class TestMeetups(MeetupsBaseTest):
         self.assertEqual(result["status"], 200)
         self.assertEqual(result["data"], "Deleted successfully")
 
+
     def test_admin_cannot_delete_a_meetup_not_posted(self):
         """
         Test response when an admin tries to delete a meetup thats not posted
@@ -421,17 +422,52 @@ class TestMeetups(MeetupsBaseTest):
         self.assertEqual(result["data"], "Meetup with id 10 not found")
 
 
-    # def test_user_can_set_rsvp_response(self):
-    #     """
-    #     Tests to show a user can successfully post ther attendance status
-    #     """
-    #     self.client.post("api/v2/meetups",
-    #                      data=json.dumps(self.post_meetup2),
-    #                      headers={'x-access-token': self.token},
-    #                      content_type="application/json")
-    #     response = self.client.post("api/v2/meetups/1/rsvps/yes",
-    #                                 headers={'x-access-token': self.token},
-    #                                 content_type="application/json")
-    #     self.assertEqual(response.status_code, 200)
-    #     result = json.loads(response.data.decode('utf-8'))
-    #     self.assertEqual(result['data'], self.rsvp_response1)
+    def test_user_can_set_rsvp_response(self):
+        """
+        Tests to show a user can successfully post ther attendance status
+        """
+        self.token = self.login()
+        self.client.post("api/v2/meetups",
+                         data=json.dumps(self.post_meetup2),
+                         headers={'x-access-token': self.token},
+                         content_type="application/json")
+        response = self.client.post("api/v2/meetups/1/rsvps/yes",
+                                    headers={'x-access-token': self.token},
+                                    content_type="application/json")
+        self.assertEqual(response.status_code, 200)
+        result = json.loads(response.data.decode('utf-8'))
+        self.assertEqual(result['data'], self.rsvp_response1)
+
+
+    def test_user_set_wrong_rsvp_response(self):
+        """
+        Tests to user input wrong rsvp response
+        """
+        self.token = self.login()
+        self.client.post("api/v2/meetups",
+                         data=json.dumps(self.post_meetup2),
+                         headers={'x-access-token': self.token},
+                         content_type="application/json")
+        response = self.client.post("api/v2/meetups/1/rsvps/idontknow",
+                                    headers={'x-access-token': self.token},
+                                    content_type="application/json")
+        self.assertEqual(response.status_code, 400)
+        result = json.loads(response.data.decode('utf-8'))
+        self.assertEqual(result['error'], 'Response should be either yes, no or maybe')
+
+
+    def test_user_set_rsvp_to_unknown_meetup(self):
+        """
+        Tests user set attendance rsvp to a meetup not posted
+        """
+        self.token = self.login()
+        self.client.post("api/v2/meetups",
+                         data=json.dumps(self.post_meetup2),
+                         headers={'x-access-token': self.token},
+                         content_type="application/json")
+        response = self.client.post("api/v2/meetups/2/rsvps/yes",
+                                    headers={'x-access-token': self.token},
+                                    content_type="application/json")
+        self.assertEqual(response.status_code, 404)
+        result = json.loads(response.data.decode('utf-8'))
+        self.assertEqual(result['error'], 'Meetup with id 2 not found')
