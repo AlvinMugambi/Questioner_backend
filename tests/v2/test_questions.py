@@ -223,3 +223,28 @@ class TestQuestionEndpoint(QuestionBaseTest):
 
         result = json.loads(response.data.decode('utf-8'))
         self.assertEqual(result['data'], self.downvoted_question)
+
+    def test_get_all_comments_on_question(self):
+        """
+        test a user can get all the comments posted to a question
+        """
+        self.token = self.login()
+        a = self.client.post("api/v2/meetups",
+                         data=json.dumps(self.meetup),
+                         headers={'x-access-token': self.token},
+                         content_type="application/json")
+        self.assertEqual(a.status_code, 201)
+        x = self.client.post("api/v2/meetups/1/questions",
+                         data=json.dumps(self.post_question1),
+                         headers={'x-access-token': self.token},
+                         content_type="application/json")
+        self.assertEqual(x.status_code, 201)
+        y = self.client.post("api/v2/questions/1/comment",
+                         headers={'x-access-token': self.token},
+                         data=json.dumps(self.post_comment),
+                         content_type="application/json")
+        self.assertEqual(y.status_code, 201)
+        response = self.client.get("api/v2/questions/1/comments",
+                                   headers={'x-access-token': self.token},
+                                   content_type="application/json")
+        self.assertEqual(response.status_code, 200)
