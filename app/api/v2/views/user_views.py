@@ -2,7 +2,6 @@ import os
 import jwt
 from flask import request, jsonify, abort, make_response
 import psycopg2
-from werkzeug.security import generate_password_hash, check_password_hash
 
 from app.api.v2.utils import validators
 from app.api.v2.models.models import User
@@ -69,9 +68,7 @@ def user_login():
             return jsonify({"status": 400,
                             "data":"The username or passsword is incorrect"}), 400
 
-        user_id = user[0][0]
         username = user[0][1]
-        email = user[0][2]
         hashed_password = user[0][3]
 
         password = User.check_if_password_in_db(hashed_password, password)

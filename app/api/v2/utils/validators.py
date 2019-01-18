@@ -9,7 +9,6 @@ from flask import jsonify, request, abort, make_response
 from werkzeug.security import generate_password_hash
 
 # local imports
-from app.api.v2.models.models import User
 from app.api.v2.models.database import select_from_db
 
 key = os.getenv("SECRET_KEY")
