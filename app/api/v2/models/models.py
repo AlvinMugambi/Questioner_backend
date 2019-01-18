@@ -55,7 +55,6 @@ class User:
             Queries db for user with given username
             Returns user object
         """
-        # Query db for user with those params
         query = """
         SELECT user_id, username, email, password FROM users
         WHERE users.username = '{}'""".format(username)
@@ -135,7 +134,6 @@ class Meetup:
 
         return data
 
-
     @staticmethod
     def get_meetup(meet_id):
         """
@@ -212,7 +210,8 @@ class Question:
         """
         query = """
         SELECT question_id, user_id, meetup_id, title, body, votes, created_at FROM questions
-        """
+        WHERE questions.meetup_id = '{}'
+        """.format(meet_id)
 
         questions = database.select_from_db(query)
         data = []
@@ -267,6 +266,30 @@ class Comment:
         database.query_db_no_return(query)
 
 
+    @staticmethod
+    def get_all_comments(quest_id):
+        """
+        get all comments asked for a specific question
+        """
+        query = """
+        SELECT user_id, question_id, title, body, comment FROM comments
+        WHERE comments.question_id = '{}'
+        """.format(quest_id)
+
+        comments = database.select_from_db(query)
+        data = []
+        for comment in comments:
+            comment = {'userId' : comment["user_id"],
+                       'questionId' : comment["question_id"],
+                       'title' : comment["title"],
+                       'body' : comment["body"],
+                       'comment' : comment["comment"],
+                      }
+            data.append(comment)
+
+        return data
+
+
 class Rsvp:
     """
     The rsvp models
@@ -292,6 +315,7 @@ class Rsvp:
         )""".format(self.user_id, self.meetup_id, self.meetup_topic, self.rsvp)
 
         database.query_db_no_return(query)
+
 
 class Vote:
     """

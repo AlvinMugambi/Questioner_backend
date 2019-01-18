@@ -32,7 +32,7 @@ def create_question(current_user, meetup_id):
     except KeyError:
         abort(make_response(jsonify({
             'status': 400,
-            ' error': "Check your json keys. Should be topic and body"}), 400))
+            'error': "Check your json keys. Should be topic and body"}), 400))
 
     validators.check_for_whitespace(data)
     meetup = Meetup.get_meetup(meetup_id)
@@ -116,6 +116,12 @@ def get_all_questions_for_a_meetup(meet_id):
     """
     The get all questions for a specific meetup route endpoint
     """
+    meetup = Meetup.get_meetup(meet_id)
+    if not meetup:
+        abort(make_response(jsonify({
+            'status': 404,
+            'error': 'Meetup with id {} not found'.format(meet_id)
+        }), 404))
     questions = Question.get_all_questions(meet_id)
     if questions:
         return jsonify({"status": 200, "data": questions}), 200
@@ -145,7 +151,6 @@ def comment_on_a_question(current_user, question_id):
             'status': 400,
             'error':'Check your json key. Should be comment'})))
 
-
     question = Question.get_question(question_id)
     if question:
         question = question[0]
@@ -169,3 +174,24 @@ def comment_on_a_question(current_user, question_id):
     return jsonify({
         'status': 404,
         'error':'Question with id {} not found'.format(question_id)}), 404
+
+
+@version2.route("/questions/<int:question_id>/comments", methods=['GET'])
+@token_required
+def get_all_comments_on_a_question(current_user, question_id):
+    """
+    The get all comments on a question route endpoint
+    """
+    question = Question.get_question(question_id)
+    if not question:
+        abort(make_response(jsonify({
+            'status': 404,
+            'error': 'Question with id {} not found'.format(question_id)})))
+
+    comments = Comment.get_all_comments(question_id)
+    if comments:
+        return jsonify({'status': 200,
+                        'data': comments})
+    return jsonify({
+        'status': 404,
+        'error': 'No comments posted for question with id {}'.format(question_id)}), 404
