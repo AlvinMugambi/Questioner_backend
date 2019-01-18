@@ -28,12 +28,12 @@ class QuestionBaseTest(unittest.TestCase):
                              "lastname": "wan",
                              "username":"iamtheadmin",
                              "email":"cano@gmail.com",
-                             "password": "ObiLight1",
-                             "confirmpassword":"ObiLight1",
+                             "password": "ThaOG1234",
+                             "confirmpassword":"ThaOG1234",
                              "phoneNumber": "0729434944"
                             }
         self.login_admin = {"username":"iamtheadmin",
-                            "password":"ObiLight1"}
+                            "password":"ThaOG1234"}
 
         self.signup_user = {"firstname":"obi",
                             "lastname": "wan",
@@ -96,9 +96,6 @@ class TestQuestionEndpoint(QuestionBaseTest):
     Contains the test methods that assert the endpoints are working
     """
     def login(self):
-        self.client.post('api/v2/auth/signup',
-                         data=json.dumps(self.signup_admin),
-                         content_type="application/json")
         login = self.client.post('api/v2/auth/login',
                                  data=json.dumps(self.login_admin),
                                  content_type="application/json")

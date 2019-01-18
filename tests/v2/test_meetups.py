@@ -28,11 +28,11 @@ class MeetupsBaseTest(unittest.TestCase):
                              "phoneNumber":"0712345678",
                              "username":"iamtheadmin",
                              "email":"mastryoda@gmail.com",
-                             "password": "NumberFrce1",
-                             "confirmpassword":"NumberFrce1"}
+                             "password": "ThaOG1234",
+                             "confirmpassword":"ThaOG1234"}
 
         self.login_admin = {"username":"iamtheadmin",
-                            "password":"NumberFrce1"}
+                            "password":"ThaOG1234"}
 
         self.signup_user2 = {"firstname":"iam",
                              "lastname":"yoda",
@@ -140,9 +140,6 @@ class TestMeetups(MeetupsBaseTest):
         """
         Login a fake admin user
         """
-        self.client.post('api/v2/auth/signup',
-                         data=json.dumps(self.signup_admin),
-                         content_type="application/json")
         login = self.client.post('api/v2/auth/login',
                                  data=json.dumps(self.login_admin),
                                  content_type="application/json")
