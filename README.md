@@ -47,8 +47,20 @@ $ source env/bin/activate
 $ pip install -r requirements.txt
 ```
 
+- Install postgres
+```
+$ sudo apt install postgresql postgresql-contrib (ubuntu)
+```
+
+- Create database
+```
+$ createdb Questioner_db
+$ createdb Questioner_test_db
+```
+
 - Set the environment variables
 ```
+$ Set database URIs in the .env_sample
 $ source .env_sample
 ```
 
@@ -62,22 +74,23 @@ $ python run.py or flask run
 $ pytest --cov=app
 ```
 
-## API Endpoints (V1)
+## API Endpoints (V2)
 
 | **HTTP METHOD** | **URI ** | **ACTION** |
 | --- | --- | --- |
-| **POST** | `/api/v1/auth/login` | Login |
-| **POST** | `/api/v1/auth/Sign Up` | Sign Up |
-| **POST** | `/api/v1/meetups` | Create a meetup |
-| **DELETE** | `/api/v1/meetups/<int:meetup_id>` | Delete a meetup |
-| **POST** | `/api/v1/questions` | Post a question to a specific meetup |
-| **GET** | `/api/v1/meetups/<int:meet_id>/questions` | Get all questions on a meetup |
-| **POST** | `/api/v1/questions/<int:question_id>/comment` | Comment on a question |
-| **GET** | `/api/v1/meetups/upcoming` | Fetch all upcoming meetups |
-| **GET** | `/api/v1/meetups/<int:meetup_id>` | Fetch a specific meetup |
-| **POST** | `/api/v1/meetups/<int:meetup_id>/rsvps/<resp>` | RSVP to a meetup |
-| **PATCH** | `/api/v1/questions/<int:question_id>/upvote` | Upvote a question |
-| **PATCH** | `/api/v1/questions/<int:question_id>/downvote` | Downvote a question |
+| **POST** | `/api/v2/auth/login` | Login |
+| **POST** | `/api/v2/auth/Sign Up` | Sign Up |
+| **POST** | `/api/v2/meetups` | Create a meetup |
+| **DELETE** | `/api/v2/meetups/<int:meetup_id>` | Delete a meetup |
+| **POST** | `/api/v2/questions` | Post a question to a specific meetup |
+| **GET** | `/api/v2/meetups/<int:meet_id>/questions` | Get all questions on a meetup |
+| **POST** | `/api/v2/questions/<int:question_id>/comment` | Comment on a question |
+| **GET** | `/api/v2/questions/<int:question_id>/comments` | Get all comments on a question |
+| **GET** | `/api/v2/meetups/upcoming` | Fetch all upcoming meetups |
+| **GET** | `/api/v2/meetups/<int:meetup_id>` | Fetch a specific meetup |
+| **POST** | `/api/v2/meetups/<int:meetup_id>/rsvps/<resp>` | RSVP to a meetup |
+| **PATCH** | `/api/v2/questions/<int:question_id>/upvote` | Upvote a question |
+| **PATCH** | `/api/v2/questions/<int:question_id>/downvote` | Downvote a question |
 
 ## Author
 
