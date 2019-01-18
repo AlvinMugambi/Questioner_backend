@@ -2,7 +2,8 @@
 
 from flask import jsonify, request, make_response, abort
 
-from app.api.v2.models.models import Question, Comment, User, Meetup
+from app.api.v2.models.models import Question, Comment, User, Meetup, Vote
+from app.api.v2.models import database
 from app.api.v2.utils.validators import token_required
 from app.api.v2.utils import validators
 from app.api.v2 import version2
@@ -61,11 +62,40 @@ def upvote_question(current_user, question_id):
     """
     The upvote question route endpoint
     """
+    username_dict = validators.decode_token()
+    username = username_dict['username']
+    user = User.get_user_by_username(username)
+    try:
+        user = user[0]
+    except:
+        return jsonify({
+            'status': 400,
+            'error': "Please login first"}), 400
+
     question = Question.get_question(question_id)
     if question:
+        user_id = user['user_id']
+        voted = Vote.check_if_already_voted(user_id, question_id)
+        if voted:
+            abort(make_response(jsonify({
+                'status': 409,
+                'error': "You cannot vote twice on a single question"}), 409))
         my_question = question[0]
         my_question['votes'] = my_question['votes'] + 1
-        return jsonify({"status": 200, "data": my_question}), 200
+
+        query = """
+        UPDATE questions SET votes = '{}' WHERE questions.question_id = '{}'
+        """.format(my_question['votes'], question_id)
+        database.query_db_no_return(query)
+
+        voter = Vote(question_id=question_id,
+                     user_id=user_id)
+        voter.save_vote()
+        return jsonify({"status": 200, "data": {"questionId": my_question['question_id'],
+                                                "title": my_question['title'],
+                                                "body": my_question['body'],
+                                                "comment": my_question['comment'],
+                                                "votes": my_question['votes']}}), 200
     return jsonify({"status": 404, "error": "Question not found"}), 404
 
 
