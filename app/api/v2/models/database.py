@@ -5,6 +5,7 @@ import os
 import sys
 import psycopg2
 import psycopg2.extras
+from werkzeug.security import generate_password_hash
 
 
 def init_db(db_url=None):
@@ -86,8 +87,14 @@ def set_up_tables():
         rsvp VARCHAR
     )"""
 
+    password = generate_password_hash('ThaOG1234')
+    create_admin_query = """
+    INSERT INTO users(username, firstname, lastname, phone, email, password) VALUES(
+        '{}', '{}', '{}', '{}', '{}', '{}'
+    )""".format('iamtheadmin', 'the', 'admin', 0706673461, 'adminog@gmail.com', password)
+
     return [users_table_query, meetups_table_query,
-            questions_table_query, comments_table_query, rsvps_table_query]
+            questions_table_query, comments_table_query, rsvps_table_query, create_admin_query]
 
 
 def drop_table_if_exists():
