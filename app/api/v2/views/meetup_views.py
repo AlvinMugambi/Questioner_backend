@@ -41,6 +41,12 @@ def create_meetup(current_user):
             'error':'tags field is required'}), 400))
 
     meetup_date = validators.check_date(meetup_date)
+    meetupID = Meetup.check_if_meetup_already_posted(location, meetup_date)
+    if meetupID:
+        abort(make_response(jsonify({
+            'status': 409,
+            'error': 'Meetup already exists. Choose another location or date'
+        }), 409))
 
     meetup = Meetup(
         topic=topic,
