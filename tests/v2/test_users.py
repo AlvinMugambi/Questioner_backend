@@ -151,6 +151,24 @@ class TestUserEndpoints(UserBaseTest):
         self.assertEqual(result["message"], "Logged in successfully")
 
 
+        def test_user_can_view_their_profile(self):
+            """
+            Test to show a user can view their profile
+            """
+            self.client.post("api/v2/auth/signup",
+                             data=json.dumps(self.signup_user5),
+                             content_type="application/json")
+            login = self.client.post("api/v2/auth/login",
+                                     data=json.dumps(self.login_user5),
+                                     content_type="application/json")
+            login_data = json.loads(login.data.decode('utf-8'))
+            token = login_data['token']
+            response = self.client.post("api/v2/profile",
+                                        headers={'x-access-token': token},
+                                        content_type="application/json")
+            self.assertEqual(response.status_code, 200)
+
+
     def test_unregistered_user_no_login(self):
         """
         Test to show an unregistered user cannot be logged in

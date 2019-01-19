@@ -82,6 +82,19 @@ class User:
         questions = len(questions_list)
         return questions
 
+    @staticmethod
+    def get_user_meetups(user_id):
+        """
+        Get all the meetups a user has purposed to attend
+        """
+        query = """
+        SELECT meetup_id, meetup_topic FROM rsvps
+        WHERE rsvps.user_id = '{}' AND rsvps.rsvp = '{}'
+        """.format(user_id, 'yes')
+
+        meetups = database.select_from_db(query)
+        return meetups
+
 
     @staticmethod
     def to_json(user):
