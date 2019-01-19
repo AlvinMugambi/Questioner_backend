@@ -133,7 +133,7 @@ def drop_table_if_exists():
     DROP TABLE IF EXISTS votes"""
 
     drop_blacklist_tokens_table_ = """
-    DROP TABLE IF EXISTS tokens"""
+    DROP TABLE IF EXISTS blacklist_tokens"""
 
     return [drop_comments_table, drop_meetups_table,
             drop_questions_table, drop_users_table,
