@@ -87,6 +87,24 @@ def user_login():
     except psycopg2.DatabaseError as error:
         abort(make_response(jsonify(message="Server error : {}".format(error)), 500))
 
+@version2.route("/profile", methods=['GET'])
+@token_required
+def user_profile(current_user):
+    username_dict = validators.decode_token()
+    username = username_dict['username']
+    user = User.get_user_by_username(username)
+    try:
+        user = user[0]
+    except:
+        return jsonify({
+            'status': 401,
+            'error': "Please login first"}), 401
+
+    user_id = user['user_id']
+    questions = User.get_user_questions(user_id)
+    return jsonify({"data":questions})
+
+
 @version2.route("auth/logout", methods=["POST"])
 @token_required
 def logout(current_user):
