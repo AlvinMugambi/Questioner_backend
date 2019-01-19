@@ -125,13 +125,24 @@ def meetup_rsvp(current_user, meetup_id, resp):
             'status': 404,
             'error':'Meetup with id {} not found'.format(meetup_id)}), 404
 
-    meetup = meetup[0]
     user_id = user['user_id']
-    rsvp = Rsvp(meetup_id=meetup_id,
-                user_id=user_id,
-                meetup_topic=meetup['topic'],
-                rsvp=resp)
-    rsvp.save_rsvp()
+    meetup = meetup[0]
+    if resp == 'yes':
+        rsvpd = validators.check_if_already_rsvpd(meetup_id, user_id)
+        if rsvpd:
+            abort(make_response(jsonify({'status': 409,
+                                         'error': 'Already confirmed attendance'}), 409))
+
+        rsvp = Rsvp(meetup_id=meetup_id,
+                    user_id=user_id,
+                    meetup_topic=meetup['topic'],
+                    rsvp=resp)
+        rsvp.save_rsvp()
+
+    if resp == 'no':
+        rsvpd = validators.check_if_already_rsvpd(meetup_id, user_id)
+        if rsvpd:
+            Rsvp.update_rsvp(meetup_id, user_id)
 
     return jsonify({'status':200, 'data':[{'meetup':meetup_id,
                                            'topic':meetup['topic'],
