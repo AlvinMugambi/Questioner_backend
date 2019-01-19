@@ -137,7 +137,8 @@ def check_date(date):
         abort(make_response(jsonify({
             "status": 400, "Error":  "Date should be in the future"}), 400))
 
-    months = ['Jan', 'Feb', 'March', 'April', 'May', 'June', 'July', 'Aug', 'Sept', 'Oct', 'Nov', 'Dec']
+    months = ['Jan', 'Feb', 'March', 'April', 'May',
+              'June', 'July', 'Aug', 'Sept', 'Oct', 'Nov', 'Dec']
     format_date = date[0:2]+ " " + months[int(date[3:5]) -1] + " " + date[6:]
     return format_date
 
@@ -192,6 +193,7 @@ def token_required(f):
 
         return f(current_user, *args, **kwargs)
     return decorated
+
 
 def decode_token():
     token = request.headers['x-access-token']
