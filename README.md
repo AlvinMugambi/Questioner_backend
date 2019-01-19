@@ -12,6 +12,8 @@ The repo for the frontend is available at https://github.com/AlvinMugambi/Questi
 ## Deployment
 Website is hosted on [Questioner](https://alvinmugambi.github.io/Questioner/UI/templates/homepage.html)
 
+API Documentation https://documenter.getpostman.com/view/6135035/RznLGw8a
+
 Project API demo is hosted on [Heroku](https://the-questioner-backend.herokuapp.com)
 
 ## Prerequisites
@@ -81,6 +83,7 @@ $ pytest --cov=app
 | **POST** | `/api/v2/auth/login` | Login |
 | **POST** | `/api/v2/auth/Signup` | Sign Up |
 | **POST** | `/api/v2/auth/logout` | Logout |
+| **GET** | `/api/v2/profile` | User Profile |
 | **POST** | `/api/v2/meetups` | Create a meetup |
 | **DELETE** | `/api/v2/meetups/<int:meetup_id>` | Delete a meetup |
 | **POST** | `/api/v2/questions` | Post a question to a specific meetup |
