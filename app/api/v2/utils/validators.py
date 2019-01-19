@@ -172,6 +172,20 @@ def check_duplication(params, table_name):
 is already in use".format(key, value)), 400))
 
 
+def check_if_already_rsvpd(meetup_id, user_id):
+    """
+    Check if a user has already responded yes to a meetup
+    """
+    query = """
+    SELECT rsvp_id FROM rsvps
+    WHERE rsvps.meetup_id = '{}' AND rsvps.user_id = '{}'
+    AND rsvps.rsvp = '{}'
+    """.format(meetup_id, user_id, 'yes')
+
+    rsvp = select_from_db(query)
+    return rsvp
+
+
 def token_required(f):
     @wraps(f)
     def decorated(*args, **kwargs):
