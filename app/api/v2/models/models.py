@@ -40,16 +40,6 @@ class User:
 
         database.query_db_no_return(query)
 
-    @staticmethod
-    def query_users(username):
-        """
-        Query the users store for a user
-        """
-        query = """
-        SELECT user_id, username, email, password FROM users
-        WHERE users.username = '{}'""".format(username)
-
-        return database.select_from_db(query)
 
     @staticmethod
     def get_user_by_username(username):
@@ -63,6 +53,7 @@ class User:
 
         return database.select_from_db(query)
 
+
     def encrypt_password_on_signup(self, password):
         """
         convert password to hashed on user login
@@ -70,12 +61,26 @@ class User:
         hashed_password = generate_password_hash(str(password))
         return hashed_password
 
+
     @staticmethod
     def check_if_password_in_db(password_hash, password):
         """
         Check if input password and db passwords match
         """
         return check_password_hash(password_hash, str(password))
+
+    @staticmethod
+    def get_user_questions(user_id):
+        """
+        Get all the questions a user has posted
+        """
+        query = """
+        SELECT question_id FROM questions
+        WHERE questions.user_id = '{}'""".format(user_id)
+
+        questions_list = database.select_from_db(query)
+        questions = len(questions_list)
+        return questions
 
 
     @staticmethod
