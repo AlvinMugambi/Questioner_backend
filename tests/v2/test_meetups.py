@@ -327,7 +327,7 @@ class TestMeetups(MeetupsBaseTest):
         self.assertEqual(result['status'], 200)
         self.assertEqual(result['data'], {'meetupId': 1,
                                           'topic':"Miraa",
-                                          'meetupDate': "30 Jan 2900",
+                                          'meetupDate': "Sat, 30 Jan 2900 00:00:00 GMT",
                                           'meetupLocation':"Meru"})
 
 

@@ -48,7 +48,7 @@ def set_up_tables():
     CREATE TABLE meetups (
         meetup_id SERIAL PRIMARY KEY,
         topic VARCHAR (24) NOT NULL,
-        meetup_date VARCHAR (24) NOT NULL,
+        meetup_date TIMESTAMP,
         meetup_location VARCHAR (24) NOT NULL,
         meetup_images VARCHAR (24) NOT NULL,
         meetup_tags VARCHAR (24) NOT NULL,

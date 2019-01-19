@@ -32,9 +32,11 @@ class User:
         Add a new user to the users store
         """
         query = """
-        INSERT INTO users(username, firstname, lastname, phone, email, password) VALUES(
+        INSERT INTO users(username, firstname, lastname,
+                          phone, email, password) VALUES(
             '{}', '{}', '{}', '{}', '{}', '{}'
-        )""".format(self.username, self.firstname, self.lastname, self.phone, self.email, self.password)
+        )""".format(self.username, self.firstname, self.lastname,
+                    self.phone, self.email, self.password)
 
         database.query_db_no_return(query)
 
@@ -106,9 +108,11 @@ class Meetup:
         saves new meetup to store
         """
         query = """
-        INSERT INTO meetups(topic, meetup_date, meetup_location, meetup_images, meetup_tags, created_at) VALUES(
+        INSERT INTO meetups(topic, meetup_date, meetup_location,
+                            meetup_images, meetup_tags, created_at) VALUES(
             '{}', '{}', '{}', '{}', '{}', '{}'
-        )""".format(self.topic, self.meetup_date, self.location, self.images, self.tags, self.created_at)
+        )""".format(self.topic, self.meetup_date, self.location,
+                    self.images, self.tags, self.created_at)
 
         database.query_db_no_return(query)
 
@@ -118,7 +122,8 @@ class Meetup:
         gets all meetups
         """
         query = """
-        SELECT meetup_id, topic, meetup_date, meetup_location, meetup_tags, created_at FROM meetups
+        SELECT meetup_id, topic, meetup_date, meetup_location,
+        meetup_tags, created_at FROM meetups
         """
 
         meetups = database.select_from_db(query)
@@ -197,11 +202,14 @@ class Question:
         saves the question to the question store
         """
         query = """
-        INSERT INTO questions(user_id, meetup_id, title, body, votes, created_at) VALUES(
+        INSERT INTO questions(user_id, meetup_id, title,
+                              body, votes, created_at) VALUES(
             '{}', '{}', '{}', '{}', '{}', '{}'
-        )""".format(self.user_id, self.meetup_id, self.title, self.body, self.votes, self.created_at)
+        )""".format(self.user_id, self.meetup_id, self.title,
+                    self.body, self.votes, self.created_at)
 
         database.query_db_no_return(query)
+
 
     @staticmethod
     def get_all_questions(meet_id):
@@ -209,7 +217,8 @@ class Question:
         get all questions asked for a specific meetup
         """
         query = """
-        SELECT question_id, user_id, meetup_id, title, body, votes, created_at FROM questions
+        SELECT question_id, user_id, meetup_id, title,
+        body, votes, created_at FROM questions
         WHERE questions.meetup_id = '{}'
         """.format(meet_id)
 
@@ -261,7 +270,8 @@ class Comment:
         query = """
         INSERT INTO comments(user_id, question_id, title, body, comment) VALUES(
             '{}', '{}', '{}', '{}', '{}'
-        )""".format(self.user_id, self.question_id, self.title, self.body, self.comment)
+        )""".format(self.user_id, self.question_id, self.title,
+                    self.body, self.comment)
 
         database.query_db_no_return(query)
 
@@ -340,6 +350,7 @@ class Vote:
         )""".format(self.user_id, self.question_id)
 
         database.query_db_no_return(query)
+
 
     @staticmethod
     def check_if_already_voted(user_id, question_id):
