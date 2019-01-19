@@ -87,6 +87,7 @@ def user_login():
     except psycopg2.DatabaseError as error:
         abort(make_response(jsonify(message="Server error : {}".format(error)), 500))
 
+
 @version2.route("/profile", methods=['GET'])
 @token_required
 def user_profile(current_user):
@@ -102,7 +103,16 @@ def user_profile(current_user):
 
     user_id = user['user_id']
     questions = User.get_user_questions(user_id)
-    return jsonify({"data":questions})
+    meetups = User.get_user_meetups(user_id)
+    data = []
+    for meetup in meetups:
+        meetup = {'meetupId': meetup['meetup_id'],
+                  'meetupTopic': meetup['meetup_topic']}
+        data.append(meetup)
+
+    return jsonify({"status": 200,
+                    "data":{'questions' : questions,
+                            'meetups': data}}), 200
 
 
 @version2.route("auth/logout", methods=["POST"])
