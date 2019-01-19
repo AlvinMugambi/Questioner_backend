@@ -32,9 +32,11 @@ class User:
         Add a new user to the users store
         """
         query = """
-        INSERT INTO users(username, firstname, lastname, phone, email, password) VALUES(
+        INSERT INTO users(username, firstname, lastname,
+                          phone, email, password) VALUES(
             '{}', '{}', '{}', '{}', '{}', '{}'
-        )""".format(self.username, self.firstname, self.lastname, self.phone, self.email, self.password)
+        )""".format(self.username, self.firstname, self.lastname,
+                    self.phone, self.email, self.password)
 
         database.query_db_no_return(query)
 

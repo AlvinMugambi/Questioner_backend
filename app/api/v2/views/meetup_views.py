@@ -88,11 +88,13 @@ def get_single_meetup(meetup_id):
 
     if meetup:
         meetup = meetup[0]
-        return jsonify({"status": 200, "data": {'meetupId': meetup['meetup_id'],
-                                                'topic': meetup['topic'],
-                                                'meetupDate': meetup['meetup_date'],
-                                                'meetupLocation': meetup['meetup_location']}}), 200
-    return jsonify({"status": 404, "data": "Meetup with id {} not found".format(meetup_id)}), 404
+        return jsonify({"status": 200,
+                        "data": {'meetupId': meetup['meetup_id'],
+                                 'topic': meetup['topic'],
+                                 'meetupDate': meetup['meetup_date'],
+                                 'meetupLocation': meetup['meetup_location']}}), 200
+    return jsonify({"status": 404,
+                    "data": "Meetup with id {} not found".format(meetup_id)}), 404
 
 
 @version2.route("/meetups/<int:meetup_id>/rsvps/<resp>", methods=['POST'])
