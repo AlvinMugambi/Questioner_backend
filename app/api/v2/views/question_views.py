@@ -58,7 +58,7 @@ def create_question(current_user, meetup_id):
 
 @version2.route("/questions/<int:question_id>/<vote>", methods=['PATCH'])
 @token_required
-def upvote_question(current_user, question_id, vote):
+def upvote_downvote_question(current_user, question_id, vote):
     """
     The upvote question route endpoint
     """
