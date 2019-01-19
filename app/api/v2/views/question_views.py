@@ -60,7 +60,7 @@ def create_question(current_user, meetup_id):
 @token_required
 def upvote_downvote_question(current_user, question_id, vote):
     """
-    The upvote question route endpoint
+    The upvote and downvote question route endpoint
     """
     username_dict = validators.decode_token()
     username = username_dict['username']
