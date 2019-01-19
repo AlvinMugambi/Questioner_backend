@@ -344,6 +344,20 @@ class Rsvp:
 
         database.query_db_no_return(query)
 
+
+    @staticmethod
+    def update_rsvp(meetup_id, user_id):
+        """
+        remove a yes response when the same user cancels attendance
+        """
+        query = """
+        UPDATE rsvps SET rsvp = '{}' WHERE rsvps.meetup_id = '{}'
+        AND rsvps.user_id = '{}'
+        """.format('no', meetup_id, user_id)
+
+        database.query_db_no_return(query)
+
+
     @staticmethod
     def get_attendees(meetup_id):
         """
