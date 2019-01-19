@@ -364,3 +364,37 @@ class Vote:
 
         voted = database.select_from_db(query)
         return voted
+
+class Token:
+    """
+    The token class object
+    """
+    def __init__(self, token):
+        """
+        The initializer function that sets he token variables
+        """
+        self.token = token
+
+    def blacklist_token(self):
+        """
+        Save the token to the blacklist token table
+        """
+        query = """
+        INSERT INTO blacklist_tokens(token) VALUES(
+            '{}'
+        )""".format(self.token)
+
+        database.query_db_no_return(query)
+
+    @staticmethod
+    def check_if_token_blacklisted(token):
+        """
+        Check if the token a user is using is blacklisted
+        """
+        query = """
+        SELECT token FROM blacklist_tokens
+        WHERE blacklist_tokens.token = '{}'
+        """.format(token)
+
+        token = database.select_from_db(query)
+        return token

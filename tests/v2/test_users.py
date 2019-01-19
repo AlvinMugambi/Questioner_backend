@@ -110,6 +110,7 @@ class TestUserEndpoints(UserBaseTest):
             result['error'],
             'Should be firstname, lastname, username, email, password, confirmpassword and phoneNumber')
 
+
     def test_user_can_sign_up(self):
         """
         Test to show a user can sign up successfully
@@ -121,6 +122,7 @@ class TestUserEndpoints(UserBaseTest):
         result = json.loads(response.data.decode('utf-8'))
         self.assertEqual(result['data'], 'Registered successfully!')
 
+
     def test_unmatching_passwords(self):
         """
         Test to assert that sign up passwords must match
@@ -131,6 +133,7 @@ class TestUserEndpoints(UserBaseTest):
         self.assertEqual(response.status_code, 400)
         result = json.loads(response.data.decode('utf-8'))
         self.assertEqual(result["error"], "Passwords don't match!")
+
 
     def test_user_can_login(self):
         """
@@ -147,6 +150,7 @@ class TestUserEndpoints(UserBaseTest):
         self.assertTrue(result['token'])
         self.assertEqual(result["message"], "Logged in successfully")
 
+
     def test_unregistered_user_no_login(self):
         """
         Test to show an unregistered user cannot be logged in
@@ -157,6 +161,7 @@ class TestUserEndpoints(UserBaseTest):
         self.assertEqual(response.status_code, 400)
         result = json.loads(response.data.decode('utf-8'))
         self.assertEqual(result["data"], "The username or passsword is incorrect")
+
 
     def test_user_login_wrong_password(self):
         """
@@ -171,3 +176,24 @@ class TestUserEndpoints(UserBaseTest):
         self.assertEqual(response.status_code, 400)
         result = json.loads(response.data.decode('utf-8'))
         self.assertEqual(result["error"], "wrong password")
+
+
+    def test_user_can_logout(self):
+        """
+        Test to show a user can logout successfully if logged in
+        """
+        self.client.post("api/v2/auth/signup",
+                         data=json.dumps(self.signup_user5),
+                         content_type="application/json")
+        login = self.client.post("api/v2/auth/login",
+                                 data=json.dumps(self.login_user5),
+                                 content_type="application/json")
+        login_data = json.loads(login.data.decode('utf-8'))
+        token = login_data['token']
+        response = self.client.post("api/v2/auth/logout",
+                                    headers={'x-access-token': token},
+                                    content_type="application/json")
+        self.assertEqual(response.status_code, 200)
+        result = json.loads(response.data.decode('utf-8'))
+        self.assertTrue(result['status'], 200)
+        self.assertEqual(result["data"], "Logged out successfully")

@@ -79,7 +79,8 @@ $ pytest --cov=app
 | **HTTP METHOD** | **URI ** | **ACTION** |
 | --- | --- | --- |
 | **POST** | `/api/v2/auth/login` | Login |
-| **POST** | `/api/v2/auth/Sign Up` | Sign Up |
+| **POST** | `/api/v2/auth/Signup` | Sign Up |
+| **POST** | `/api/v2/auth/logout` | Logout |
 | **POST** | `/api/v2/meetups` | Create a meetup |
 | **DELETE** | `/api/v2/meetups/<int:meetup_id>` | Delete a meetup |
 | **POST** | `/api/v2/questions` | Post a question to a specific meetup |

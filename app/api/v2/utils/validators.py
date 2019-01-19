@@ -10,6 +10,7 @@ from werkzeug.security import generate_password_hash
 
 # local imports
 from app.api.v2.models.database import select_from_db
+from app.api.v2.models.models import Token
 
 key = os.getenv("SECRET_KEY")
 
@@ -179,6 +180,11 @@ def token_required(f):
             token = request.headers['x-access-token']
         if not token:
             return jsonify({'message':"Token is missing"}), 401
+
+        blacklisted = Token.check_if_token_blacklisted(token)
+        if blacklisted:
+            abort(make_response(jsonify({
+                'message':'Please login again to continue'}), 401))
 
         try:
             data = jwt.decode(token, key)

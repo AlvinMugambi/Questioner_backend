@@ -2,9 +2,11 @@ import os
 import jwt
 from flask import request, jsonify, abort, make_response
 import psycopg2
+import datetime
 
 from app.api.v2.utils import validators
-from app.api.v2.models.models import User
+from app.api.v2.utils.validators import token_required
+from app.api.v2.models.models import User, Token
 from app.api.v2 import version2
 
 KEY = os.getenv('SECRET_KEY')
@@ -76,9 +78,25 @@ def user_login():
             abort(make_response(jsonify({'status': 400,
                                          'error': "wrong password"}), 400))
 
-        token = jwt.encode({"username":username}, KEY, algorithm='HS256')
+        token = jwt.encode({"username":username,
+                            "exp": datetime.datetime.utcnow() + datetime.timedelta(minutes=120)},
+                           KEY, algorithm='HS256')
         return jsonify({"status": 200, "token":token.decode('UTF-8'),
                         "message": "Logged in successfully"}), 200
 
     except psycopg2.DatabaseError as error:
         abort(make_response(jsonify(message="Server error : {}".format(error)), 500))
+
+@version2.route("auth/logout", methods=["POST"])
+@token_required
+def logout(current_user):
+    """
+    The logout route endpoint
+    """
+    token = request.headers['x-access-token']
+
+    blacklist_token = Token(token=token)
+    blacklist_token.blacklist_token()
+
+    return jsonify({'status': 200,
+                    'data': 'Logged out successfully'}), 200

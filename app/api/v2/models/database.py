@@ -92,16 +92,22 @@ def set_up_tables():
         question_id INTEGER
     )"""
 
+    tokens_table_query = """
+    CREATE TABLE blacklist_tokens (
+        token_id SERIAL PRIMARY KEY,
+        token VARCHAR
+    )"""
+
     password = generate_password_hash('ThaOG1234')
     create_admin_query = """
-    INSERT INTO users(username, firstname, lastname, phone, email, password) VALUES(
-        '{}', '{}', '{}', '{}', '{}', '{}'
-    )""".format('iamtheadmin', 'the', 'admin', '0706673461', 'adminog@gmail.com', password)
+    INSERT INTO users(username, firstname, lastname, phone, email, password, admin) VALUES(
+        '{}', '{}', '{}', '{}', '{}', '{}', '{}'
+    )""".format('iamtheadmin', 'the', 'admin', '0706673461', 'adminog@gmail.com', password, True)
 
     return [users_table_query, meetups_table_query,
             questions_table_query, comments_table_query,
             rsvps_table_query, create_admin_query,
-            votes_table_query]
+            votes_table_query, tokens_table_query]
 
 
 def drop_table_if_exists():
@@ -126,9 +132,13 @@ def drop_table_if_exists():
     drop_votes_table_ = """
     DROP TABLE IF EXISTS votes"""
 
+    drop_blacklist_tokens_table_ = """
+    DROP TABLE IF EXISTS tokens"""
+
     return [drop_comments_table, drop_meetups_table,
             drop_questions_table, drop_users_table,
-            drop_rsvps_table, drop_votes_table_]
+            drop_rsvps_table, drop_votes_table_,
+            drop_blacklist_tokens_table_]
 
 
 def connect_to_and_query_db(query=None, db_url=None):
