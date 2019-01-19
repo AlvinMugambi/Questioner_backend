@@ -322,9 +322,23 @@ class Rsvp:
         query = """
         INSERT INTO rsvps(meetup_id, user_id, meetup_topic, rsvp) VALUES(
             '{}', '{}', '{}', '{}'
-        )""".format(self.user_id, self.meetup_id, self.meetup_topic, self.rsvp)
+        )""".format(self.meetup_id, self.user_id, self.meetup_topic, self.rsvp)
 
         database.query_db_no_return(query)
+
+    @staticmethod
+    def get_attendees(meetup_id):
+        """
+        Get the number of people who have confirmed to attend a meetup
+        """
+        query = """
+        SELECT rsvp_id FROM rsvps
+        WHERE rsvps.meetup_id = '{}' AND rsvps.rsvp = '{}'
+        """.format(meetup_id, 'yes')
+
+        attendees_list = database.select_from_db(query)
+        attendees = len(attendees_list)
+        return attendees
 
 
 class Vote:
