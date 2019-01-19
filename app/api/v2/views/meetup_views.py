@@ -87,18 +87,21 @@ def get_single_meetup(meetup_id):
     meetup = Meetup.get_meetup(meetup_id)
 
     if meetup:
+        number = Rsvp.get_attendees(meetup_id)
         meetup = meetup[0]
         return jsonify({"status": 200,
                         "data": {'meetupId': meetup['meetup_id'],
                                  'topic': meetup['topic'],
                                  'meetupDate': meetup['meetup_date'],
-                                 'meetupLocation': meetup['meetup_location']}}), 200
+                                 'meetupLocation': meetup['meetup_location'],
+                                 'Attendees': number}}), 200
     return jsonify({"status": 404,
                     "data": "Meetup with id {} not found".format(meetup_id)}), 404
 
 
 @version2.route("/meetups/<int:meetup_id>/rsvps/<resp>", methods=['POST'])
-def meetup_rsvp(meetup_id, resp):
+@token_required
+def meetup_rsvp(current_user, meetup_id, resp):
     """
     A user can respond to a meetup rsvp
     """
