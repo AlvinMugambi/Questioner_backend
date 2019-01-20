@@ -186,6 +186,19 @@ def check_if_already_rsvpd(meetup_id, user_id):
     return rsvp
 
 
+def check_if_question_asked(title, user_id):
+    """
+    Check if a user has already posted the same question
+    """
+    query = """
+    SELECT question_id FROM questions
+    WHERE questions.title = '{}' AND questions.user_id = '{}'
+    """.format(title, user_id)
+
+    question = select_from_db(query)
+    return question
+
+
 def token_required(f):
     @wraps(f)
     def decorated(*args, **kwargs):
