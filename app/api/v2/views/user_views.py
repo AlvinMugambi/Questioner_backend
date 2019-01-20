@@ -20,7 +20,7 @@ def user_sign_up():
         username = data['username']
         email = data['email']
         password = data['password']
-        confirmPass = data['confirmpassword']
+        confirm_pass = data['confirmpassword']
         phone = data['phoneNumber']
 
     except KeyError:
@@ -32,7 +32,7 @@ def user_sign_up():
     validators.check_for_whitespace(data)
     validators.check_if_string(data)
     validators.check_phone_number(phone)
-    validators.check_password(password, confirmPass)
+    validators.check_password(password, confirm_pass)
     email = validators.validate_email(email)
 
     validators.check_duplication({"username": username}, "users")
