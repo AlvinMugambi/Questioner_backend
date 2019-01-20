@@ -83,6 +83,23 @@ class User:
         return questions
 
     @staticmethod
+    def get_user_commented_questions(user_id):
+        """
+        Get all the questions a user has posted
+        """
+        query = """
+        SELECT question_id FROM comments
+        WHERE comments.user_id = '{}'""".format(user_id)
+
+        comments_list = database.select_from_db(query)
+        data = set()
+        for listed in comments_list:
+            for lists in listed:
+                data.add(lists)
+        comments = len(data)
+        return comments
+
+    @staticmethod
     def get_user_meetups(user_id):
         """
         Get all the meetups a user has purposed to attend

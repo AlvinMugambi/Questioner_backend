@@ -110,8 +110,11 @@ def user_profile(current_user):
                   'meetupTopic': meetup['meetup_topic']}
         data.append(meetup)
 
+    commented_qs = User.get_user_commented_questions(user_id)
+
     return jsonify({"status": 200,
-                    "data":{'questions' : questions,
+                    "data":{'questionsAsked' : questions,
+                            'commentedQuestions': commented_qs,
                             'meetups': data}}), 200
 
 
