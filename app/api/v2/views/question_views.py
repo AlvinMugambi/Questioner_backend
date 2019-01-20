@@ -42,6 +42,12 @@ def create_question(current_user, meetup_id):
             'error': 'No meetup with id {} found'.format(meetup_id)}), 404))
 
     user_id = user['user_id']
+    question_asked = validators.check_if_question_asked(title, user_id)
+    if question_asked:
+        abort(make_response(jsonify({
+            'status': 409,
+            'error': 'You already asked this question'}), 409))
+
     question = Question(user_id=user_id,
                         title=title,
                         body=body,
