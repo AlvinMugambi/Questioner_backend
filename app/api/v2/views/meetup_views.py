@@ -48,6 +48,12 @@ def create_meetup(current_user):
             'error': 'Meetup already exists. Choose another location or date'
         }), 409))
 
+    #format tags to an array
+    tags = '{'
+    for tag in data['tags']:
+        tags += '"' + tag + '",'
+    tags = tags[:-1] + '}'
+
     meetup = Meetup(
         topic=topic,
         meetup_date=meetup_date,
