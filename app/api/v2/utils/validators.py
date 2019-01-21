@@ -96,11 +96,17 @@ def check_for_whitespace(data):
     Check for whitespace only in input data
     """
     for keys, value in data.items():
-        if not value.strip():
-            abort(make_response(jsonify({
-                'status': 400,
-                'error':'{} field cannot be left blank'.format(keys)}), 400))
-
+        if keys != 'tags':
+            if not value.strip():
+                abort(make_response(jsonify({
+                    'status': 400,
+                    'error':'{} field cannot be left blank'.format(keys)}), 400))
+        if keys == 'tags':
+            for tags in data['tags']:
+                if not tags.strip():
+                    abort(make_response(jsonify({
+                        'status': 400,
+                        'error':'tags field cannot be left blank'}), 400))
     return True
 
 def check_if_string(data):

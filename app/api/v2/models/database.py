@@ -51,7 +51,7 @@ def set_up_tables():
         meetup_date TIMESTAMP,
         meetup_location VARCHAR (24) NOT NULL,
         meetup_images VARCHAR (24) NOT NULL,
-        meetup_tags VARCHAR (24) NOT NULL,
+        meetup_tags VARCHAR [],
         created_at TIMESTAMP
     )"""
 
