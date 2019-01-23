@@ -68,7 +68,7 @@ def user_login():
         user = User.get_user_by_username(username)
         if not user:
             return jsonify({"status": 400,
-                            "data":"The username or passsword is incorrect"}), 400
+                            "error":"The username or passsword is incorrect"}), 400
 
         username = user[0][1]
         hashed_password = user[0][3]
