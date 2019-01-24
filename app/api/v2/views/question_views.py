@@ -96,7 +96,8 @@ def upvote_downvote_question(current_user, question_id, vote):
         if vote == 'upvote':
             my_question['votes'] = my_question['votes'] + 1
         if vote == 'downvote':
-            my_question['votes'] = my_question['votes'] - 1
+            if my_question['votes'] > 0:
+                my_question['votes'] = my_question['votes'] - 1
 
         query = """
         UPDATE questions SET votes = '{}' WHERE questions.question_id = '{}'
