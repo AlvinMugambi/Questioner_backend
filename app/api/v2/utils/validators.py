@@ -61,9 +61,10 @@ def validate_email(email):
     """
     try:
         user, domain = str(email).split("@")
-        if not re.match("^[A-Za-z]*$", user):
+        if not user.strip():
             abort(make_response(jsonify({
-                "status": 400, "Error":  "Invalid Email"}), 400))
+                'status': 400,
+                'error':'Invalid Email'}), 400))
     except ValueError:
         abort(make_response(jsonify(
             status=400,
@@ -73,18 +74,18 @@ def validate_email(email):
 
     # Check that domain is valid
     try:
-        dom_1, dom_2 = domain.split(".")
-        if not re.match("^[A-Za-z]*$", dom_1):
+        domain_1, domain_2 = domain.split(".")
+        if not re.match("^[A-Za-z]*$", domain_1):
             abort(make_response(jsonify({
-                "status": 400, "Error":  "Invalid Email"}), 400))
-        if not re.match("^[A-Za-z]*$", dom_2):
+                "status": 400, "error":  "Invalid Email"}), 400))
+        if not re.match("^[A-Za-z]*$", domain_2):
             abort(make_response(jsonify({
-                "status": 400, "Error":  "Invalid Email"}), 400))
+                "status": 400, "error":  "Invalid Email"}), 400))
     except ValueError:
         abort(make_response(jsonify(
             status=400,
             error="Invalid Email"), 400))
-    if not dom_1 or not dom_2:
+    if not domain_1 or not domain_2:
         abort(make_response(jsonify(
             status=400,
             error="Invalid Email"), 400))
@@ -115,19 +116,19 @@ def check_if_string(data):
             if not value.isalpha():
                 abort(make_response(jsonify({
                     "status": 400,
-                    "Error":  "Make sure you only use letters in your {}".format(key)}), 400))
+                    "error":  "Make sure you only use letters in your {}".format(key)}), 400))
 
 
 def check_phone_number(phone):
     if not re.match('^[0-9]*$', phone):
         abort(make_response(jsonify({
             "status": 400,
-            "Error":  "Phone number should be integers only"}), 400))
+            "error":  "Phone number should be integers only"}), 400))
 
     if len(phone) < 10 or len(phone) > 10:
         abort(make_response(jsonify({
             "status": 400,
-            "Error":  "Phone number should be 10 digits."}), 400))
+            "error":  "Phone number should be 10 digits."}), 400))
 
 
 def check_date(date):
