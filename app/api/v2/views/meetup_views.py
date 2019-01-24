@@ -1,4 +1,5 @@
 """The meetup routes"""
+import json
 
 from flask import jsonify, request, make_response, abort
 
@@ -48,11 +49,7 @@ def create_meetup(current_user):
             'error': 'Meetup already exists. Choose another location or date'
         }), 409))
 
-    #format tags to an array
-    tags = '{'
-    for tag in data['tags']:
-        tags += '"' + tag + '",'
-    tags = tags[:-1] + '}'
+    tags = json.dumps(data['tags'])
 
     meetup = Meetup(
         topic=topic,
@@ -64,10 +61,10 @@ def create_meetup(current_user):
     meetup.save_meetup()
 
     return jsonify({"status": 201,
-                    "data": [{"topic": topic,
-                              "location": location,
-                              "meetup_date": meetup_date,
-                              "tags": tags}]}), 201
+                    "data": {"topic": topic,
+                             "location": location,
+                             "meetupDate": meetup_date,
+                             "tags": tags}}), 201
 
 
 @version2.route("/meetups/upcoming", methods=["GET"])
@@ -102,7 +99,7 @@ def get_single_meetup(meetup_id):
                                  'meetupLocation': meetup['meetup_location'],
                                  'Attendees': number}}), 200
     return jsonify({"status": 404,
-                    "data": "Meetup with id {} not found".format(meetup_id)}), 404
+                    "error": "Meetup with id {} not found".format(meetup_id)}), 404
 
 
 @version2.route("/meetups/<int:meetup_id>/rsvps/<resp>", methods=['POST'])
@@ -173,4 +170,4 @@ def delete_a_meetup(current_user, meetup_id):
         return jsonify({'status': 200, 'data':"Deleted successfully"}), 200
     return jsonify({
         'status': 404,
-        'data':"Meetup with id {} not found".format(meetup_id)}), 404
+        'error':"Meetup with id {} not found".format(meetup_id)}), 404
