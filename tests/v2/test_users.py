@@ -178,7 +178,7 @@ class TestUserEndpoints(UserBaseTest):
                                     content_type="application/json")
         self.assertEqual(response.status_code, 400)
         result = json.loads(response.data.decode('utf-8'))
-        self.assertEqual(result["data"], "The username or passsword is incorrect")
+        self.assertEqual(result["error"], "The username or passsword is incorrect")
 
 
     def test_user_login_wrong_password(self):

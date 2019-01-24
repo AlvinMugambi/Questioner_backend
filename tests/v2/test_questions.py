@@ -88,7 +88,7 @@ class QuestionBaseTest(unittest.TestCase):
             "comment": None,
             "questionId": 1,
             "title": "what are we to eat?",
-            "votes": -1}
+            "votes": 0}
 
         self.token = ''
 

@@ -252,7 +252,7 @@ class TestMeetups(MeetupsBaseTest):
         self.assertEqual(response.status_code, 400)
         self.assertEqual(result["status"], 400)
         self.assertEqual(
-            result["Error"], "Invalid date format. Should be DD/MM/YYYY")
+            result["error"], "Invalid date format. Should be DD/MM/YYYY")
 
 
     def test_user_input_past_date(self):
@@ -267,7 +267,7 @@ class TestMeetups(MeetupsBaseTest):
         result = json.loads(response.data.decode('utf-8'))
         self.assertEqual(response.status_code, 400)
         self.assertEqual(result["status"], 400)
-        self.assertEqual(result["Error"], "Date should be in the future")
+        self.assertEqual(result["error"], "Date should be in the future")
 
 
     def test_an_admin_user_can_create_a_meetup(self):
@@ -382,7 +382,7 @@ class TestMeetups(MeetupsBaseTest):
         result = json.loads(response.data.decode('utf-8'))
         self.assertEqual(response.status_code, 404)
         self.assertEqual(result["status"], 404)
-        self.assertEqual(result["data"], "Meetup with id 10 not found")
+        self.assertEqual(result["error"], "Meetup with id 10 not found")
 
 
     def test_admin_can_delete_a_meetup(self):
@@ -418,7 +418,7 @@ class TestMeetups(MeetupsBaseTest):
         result = json.loads(response.data.decode('utf-8'))
         self.assertEqual(response.status_code, 404)
         self.assertEqual(result["status"], 404)
-        self.assertEqual(result["data"], "Meetup with id 10 not found")
+        self.assertEqual(result["error"], "Meetup with id 10 not found")
 
 
     def test_user_can_set_rsvp_response(self):
