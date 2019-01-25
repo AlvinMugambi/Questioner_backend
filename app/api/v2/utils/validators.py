@@ -61,7 +61,7 @@ def validate_email(email):
     """
     try:
         user, domain = str(email).split("@")
-        if not user.strip():
+        if not user.strip() or ' ' in user:
             abort(make_response(jsonify({
                 'status': 400,
                 'error':'Invalid Email'}), 400))
@@ -78,7 +78,7 @@ def validate_email(email):
         if not re.match("^[A-Za-z]*$", domain_1):
             abort(make_response(jsonify({
                 "status": 400, "error":  "Invalid Email"}), 400))
-        if not re.match("^[A-Za-z]*$", domain_2):
+        if not domain_2.isalnum():
             abort(make_response(jsonify({
                 "status": 400, "error":  "Invalid Email"}), 400))
     except ValueError:
