@@ -64,7 +64,9 @@ def set_up_tables():
         body VARCHAR (200) NOT NULL,
         votes INTEGER NOT NULL,
         comment VARCHAR,
-        created_at TIMESTAMP
+        created_at TIMESTAMP,
+        FOREIGN KEY (user_id) REFERENCES users(user_id) ON DELETE CASCADE,
+        FOREIGN KEY (meetup_id) REFERENCES meetups(meetup_id) ON DELETE CASCADE
     )"""
 
     comments_table_query = """
@@ -74,7 +76,9 @@ def set_up_tables():
         question_id INTEGER NOT NULL,
         title VARCHAR,
         body VARCHAR,
-        comment VARCHAR
+        comment VARCHAR,
+        FOREIGN KEY (user_id) REFERENCES users(user_id) ON DELETE CASCADE,
+        FOREIGN KEY (question_id) REFERENCES questions(question_id) ON DELETE CASCADE
     )"""
 
     rsvps_table_query = """
@@ -83,13 +87,17 @@ def set_up_tables():
         meetup_id INTEGER,
         user_id INTEGER,
         meetup_topic VARCHAR,
-        rsvp VARCHAR
+        rsvp VARCHAR,
+        FOREIGN KEY (meetup_id) REFERENCES meetups(meetup_id) ON DELETE CASCADE,
+        FOREIGN KEY (user_id) REFERENCES users(user_id) ON DELETE CASCADE
     )"""
 
     votes_table_query = """
     CREATE TABLE votes (
         user_id INTEGER,
-        question_id INTEGER
+        question_id INTEGER,
+        FOREIGN KEY (user_id) REFERENCES users(user_id) ON DELETE CASCADE,
+        FOREIGN KEY (question_id) REFERENCES questions(question_id) ON DELETE CASCADE
     )"""
 
     tokens_table_query = """
@@ -115,25 +123,25 @@ def drop_table_if_exists():
         Removes all tables on app restart
     """
     drop_users_table = """
-    DROP TABLE IF EXISTS users"""
+    DROP TABLE IF EXISTS users CASCADE """
 
     drop_meetups_table = """
-    DROP TABLE IF EXISTS meetups"""
+    DROP TABLE IF EXISTS meetups CASCADE """
 
     drop_questions_table = """
-    DROP TABLE IF EXISTS questions"""
+    DROP TABLE IF EXISTS questions CASCADE """
 
     drop_comments_table = """
-    DROP TABLE IF EXISTS comments"""
+    DROP TABLE IF EXISTS comments CASCADE """
 
     drop_rsvps_table = """
-    DROP TABLE IF EXISTS rsvps"""
+    DROP TABLE IF EXISTS rsvps CASCADE """
 
     drop_votes_table_ = """
-    DROP TABLE IF EXISTS votes"""
+    DROP TABLE IF EXISTS votes CASCADE """
 
     drop_blacklist_tokens_table_ = """
-    DROP TABLE IF EXISTS blacklist_tokens"""
+    DROP TABLE IF EXISTS blacklist_tokens CASCADE """
 
     return [drop_comments_table, drop_meetups_table,
             drop_questions_table, drop_users_table,
