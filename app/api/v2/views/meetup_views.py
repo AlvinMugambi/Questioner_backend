@@ -23,6 +23,7 @@ def create_meetup(current_user):
     try:
         data = request.get_json()
         topic = data['topic']
+        description = data['description']
         meetup_date = data['meetup_date']
         location = data['location']
         images = data['images']
@@ -62,6 +63,7 @@ def create_meetup(current_user):
 
     return jsonify({"status": 201,
                     "data": {"topic": topic,
+                             "description" : description,
                              "location": location,
                              "meetupDate": meetup_date,
                              "tags": tags}}), 201

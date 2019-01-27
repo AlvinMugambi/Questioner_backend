@@ -127,11 +127,12 @@ class Meetup:
     """
     The Meetup class that contains the meetup models
     """
-    def __init__(self, topic, meetup_date, location, images, tags):
+    def __init__(self, topic, description, meetup_date, location, images, tags):
         """
         The initialization of the Meetup class that defines its variables
         """
         self.topic = topic
+        self.description = description
         self.meetup_date = meetup_date
         self.location = location
         self.images = images
@@ -143,10 +144,10 @@ class Meetup:
         saves new meetup to store
         """
         query = """
-        INSERT INTO meetups(topic, meetup_date, meetup_location,
+        INSERT INTO meetups(topic, description, meetup_date, meetup_location,
                             meetup_images, meetup_tags, created_at) VALUES(
-            '{}', '{}', '{}', '{}', '{}', '{}'
-        )""".format(self.topic, self.meetup_date, self.location,
+            '{}', '{}', '{}', '{}', '{}', '{}', '{}'
+        )""".format(self.topic, self.description, self.meetup_date, self.location,
                     self.images, self.tags, self.created_at)
 
         database.query_db_no_return(query)
@@ -166,6 +167,7 @@ class Meetup:
         for meetup in meetups:
             meetup = {'meetupId' : meetup["meetup_id"],
                       'topic' : meetup["topic"],
+                      'description' : meetup["description"],
                       'meetupDate' : meetup["meetup_date"],
                       'meetupLocation' : meetup["meetup_location"],
                       'meetupTags' : meetup["meetup_tags"],
@@ -180,7 +182,7 @@ class Meetup:
         get a specific meetup using its id
         """
         query = """
-        SELECT meetup_id, topic, meetup_date, meetup_location FROM meetups
+        SELECT meetup_id, topic, description, meetup_date, meetup_location FROM meetups
         WHERE meetups.meetup_id = '{}'""".format(meet_id)
 
         meetup = database.select_from_db(query)
