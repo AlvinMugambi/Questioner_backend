@@ -158,7 +158,7 @@ class Meetup:
         gets all meetups
         """
         query = """
-        SELECT meetup_id, topic, meetup_date, meetup_location,
+        SELECT meetup_id, topic, description, meetup_date, meetup_location,
         meetup_tags, created_at FROM meetups
         """
 
