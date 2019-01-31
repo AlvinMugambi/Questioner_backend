@@ -61,7 +61,7 @@ def set_up_tables():
         question_id SERIAL PRIMARY KEY,
         user_id INTEGER NOT NULL,
         meetup_id INTEGER NOT NULL,
-        title VARCHAR (50) NOT NULL,
+        title VARCHAR (80) NOT NULL,
         body VARCHAR (200) NOT NULL,
         votes INTEGER NOT NULL,
         comment VARCHAR,
