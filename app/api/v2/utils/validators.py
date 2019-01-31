@@ -174,9 +174,9 @@ def check_duplication(params, table_name):
         if duplicated:
             # Abort if duplicated
             abort(make_response(jsonify(
-                status=422,
+                status=409,
                 error="Error. '{}' '{}' \
-is already in use".format(key, value)), 422))
+is already in use".format(key, value)), 409))
 
 
 def check_if_already_rsvpd(meetup_id, user_id):

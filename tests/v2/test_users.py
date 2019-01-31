@@ -130,7 +130,7 @@ class TestUserEndpoints(UserBaseTest):
         response = self.client.post("api/v2/auth/signup",
                                     data=json.dumps(self.signup_user2),
                                     content_type="application/json")
-        self.assertEqual(response.status_code, 400)
+        self.assertEqual(response.status_code, 422)
         result = json.loads(response.data.decode('utf-8'))
         self.assertEqual(result["error"], "Passwords don't match!")
 

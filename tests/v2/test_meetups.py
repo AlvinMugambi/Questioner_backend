@@ -46,6 +46,7 @@ class MeetupsBaseTest(unittest.TestCase):
                             "password":"Obi1ight1"}
 
         self.post_meetup1 = {"topic":"Miraa",
+                             "description":"my description",
                              "meetup_date":"30/01/2900",
                              "location":"Meru",
                              "images":"me.png",
@@ -53,6 +54,7 @@ class MeetupsBaseTest(unittest.TestCase):
                             }
 
         self.post_meetup2 = {"topic":"Python",
+                             "description":"my description",
                              "meetup_date":"09/01/2091",
                              "location":"Nakuru",
                              "images":"them.png",
@@ -60,6 +62,7 @@ class MeetupsBaseTest(unittest.TestCase):
                             }
 
         self.post_meetup3 = {"toic":"Python",
+                             "description":"my description",
                              "meeup_date":"3/01/2091",
                              "locaton":"Nyeri",
                              "imaes":"them.png",
@@ -71,48 +74,56 @@ class MeetupsBaseTest(unittest.TestCase):
                                 "topic": "Python"}]
 
         self.meetups_topic = {"topic":"",
+                              "description":"my description",
                               "meetup_date":"30/01/2040",
                               "location":"Meru",
                               "images":"me.png",
                               "tags":["trees"]}
 
         self.meetups_meetup_date = {"topic":"Miraa",
+                                    "description":"my description",
                                     "meetup_date":"",
                                     "location":"Meru",
                                     "images":"me.png",
                                     "tags":["trees"]}
 
         self.meetups_location = {"topic":"Miraa",
+                                 "description":"my description",
                                  "meetup_date":"30/01/2190",
                                  "location":"",
                                  "images":"me.png",
                                  "tags":["trees"]}
 
         self.meetups_tags = {"topic":"Miraa",
+                             "description":"my description",
                              "meetup_date":"30/01/2120",
                              "location":"Meru",
                              "images":"me.png",
                              "tags": ""}
 
         self.meetups_whitespace = {"topic":"     ",
+                                   "description":"my description",
                                    "meetup_date":"30/01/2120",
                                    "location":"Meru",
                                    "images":"me.png",
                                    "tags": ["zcasc"]}
 
         self.meetups_non_alpha = {"topic":"1235454",
+                                  "description":"my description",
                                   "meetup_date":"30/01/2120",
                                   "location":"Meru",
                                   "images":"me.png",
                                   "tags": ["sdvsvs"]}
 
         self.meetups_wrong_date = {"topic":"pythonia",
+                                   "description":"my description",
                                    "meetup_date":"12142333545",
                                    "location":"Meru",
                                    "images":"me.png",
                                    "tags": ["sdvsvs"]}
 
         self.meetups_past_date = {"topic":"pythonia",
+                                  "description":"my description",
                                   "meetup_date":"30/04/1990",
                                   "location":"Meru",
                                   "images":"me.png",
@@ -158,8 +169,8 @@ class TestMeetups(MeetupsBaseTest):
                                     headers={'x-access-token': self.token},
                                     content_type="application/json")
         result = json.loads(response.data.decode('utf-8'))
-        self.assertEqual(response.status_code, 400)
-        self.assertEqual(result["status"], 400)
+        self.assertEqual(response.status_code, 422)
+        self.assertEqual(result["status"], 422)
         self.assertEqual(result["error"], 'topic field cannot be left blank')
 
 
@@ -173,8 +184,8 @@ class TestMeetups(MeetupsBaseTest):
                                     headers={'x-access-token': self.token},
                                     content_type="application/json")
         result = json.loads(response.data.decode('utf-8'))
-        self.assertEqual(response.status_code, 400)
-        self.assertEqual(result["status"], 400)
+        self.assertEqual(response.status_code, 422)
+        self.assertEqual(result["status"], 422)
         self.assertEqual(result["error"], 'meetup_date field cannot be left blank')
 
 
@@ -203,8 +214,8 @@ class TestMeetups(MeetupsBaseTest):
                                     headers={'x-access-token': self.token},
                                     content_type="application/json")
         result = json.loads(response.data.decode('utf-8'))
-        self.assertEqual(response.status_code, 400)
-        self.assertEqual(result["status"], 400)
+        self.assertEqual(response.status_code, 422)
+        self.assertEqual(result["status"], 422)
         self.assertEqual(result["error"], 'location field cannot be left blank')
 
 
@@ -234,8 +245,8 @@ class TestMeetups(MeetupsBaseTest):
                                     headers={'x-access-token': self.token},
                                     content_type="application/json")
         result = json.loads(response.data.decode('utf-8'))
-        self.assertEqual(response.status_code, 400)
-        self.assertEqual(result["status"], 400)
+        self.assertEqual(response.status_code, 422)
+        self.assertEqual(result["status"], 422)
         self.assertEqual(result["error"], 'topic field cannot be left blank')
 
 
@@ -249,8 +260,8 @@ class TestMeetups(MeetupsBaseTest):
                                     headers={'x-access-token': self.token},
                                     content_type="application/json")
         result = json.loads(response.data.decode('utf-8'))
-        self.assertEqual(response.status_code, 400)
-        self.assertEqual(result["status"], 400)
+        self.assertEqual(response.status_code, 422)
+        self.assertEqual(result["status"], 422)
         self.assertEqual(
             result["error"], "Invalid date format. Should be DD/MM/YYYY")
 
@@ -265,8 +276,8 @@ class TestMeetups(MeetupsBaseTest):
                                     headers={'x-access-token': self.token},
                                     content_type="application/json")
         result = json.loads(response.data.decode('utf-8'))
-        self.assertEqual(response.status_code, 400)
-        self.assertEqual(result["status"], 400)
+        self.assertEqual(response.status_code, 422)
+        self.assertEqual(result["status"], 422)
         self.assertEqual(result["error"], "Date should be in the future")
 
 
@@ -324,6 +335,7 @@ class TestMeetups(MeetupsBaseTest):
         result = json.loads(response.data.decode('utf-8'))
         self.assertEqual(result['status'], 200)
         self.assertEqual(result['data'], {'Attendees': 0,
+                                          'description': 'my description',
                                           'meetupId': 1,
                                           'topic':"Miraa",
                                           'meetupDate': "Sat, 30 Jan 2900 00:00:00 GMT",
