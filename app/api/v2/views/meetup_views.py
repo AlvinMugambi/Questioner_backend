@@ -54,6 +54,7 @@ def create_meetup(current_user):
 
     meetup = Meetup(
         topic=topic,
+        description=description,
         meetup_date=meetup_date,
         location=location,
         images=images,
@@ -97,6 +98,7 @@ def get_single_meetup(meetup_id):
         return jsonify({"status": 200,
                         "data": {'meetupId': meetup['meetup_id'],
                                  'topic': meetup['topic'],
+                                 'description': meetup['description'],
                                  'meetupDate': meetup['meetup_date'],
                                  'meetupLocation': meetup['meetup_location'],
                                  'Attendees': number}}), 200
