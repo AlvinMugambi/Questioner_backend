@@ -96,8 +96,7 @@ def upvote_downvote_question(current_user, question_id, vote):
         if vote == 'upvote':
             my_question['votes'] = my_question['votes'] + 1
         if vote == 'downvote':
-            if my_question['votes'] > 0:
-                my_question['votes'] = my_question['votes'] - 1
+            my_question['votes'] = my_question['votes'] - 1
 
         query = """
         UPDATE questions SET votes = '{}' WHERE questions.question_id = '{}'
@@ -111,7 +110,6 @@ def upvote_downvote_question(current_user, question_id, vote):
                         "data": {"questionId": my_question['question_id'],
                                  "title": my_question['title'],
                                  "body": my_question['body'],
-                                 "comment": my_question['comment'],
                                  "votes": my_question['votes']}}), 200
     return jsonify({
         "status": 404,
@@ -152,11 +150,14 @@ def comment_on_a_question(current_user, question_id):
             'status': 401,
             'error': "Please login first"}), 401
     try:
-        comment = request.get_json()['comment']
+        data = request.get_json()
     except KeyError:
         abort(make_response(jsonify({
             'status': 400,
             'error':'Check your json key. Should be comment'})))
+
+    validators.check_for_whitespace(data)
+    comment = data['comment']
 
     question = Question.get_question(question_id)
     if question:
@@ -199,6 +200,9 @@ def get_all_comments_on_a_question(current_user, question_id):
     if comments:
         return jsonify({'status': 200,
                         'data': comments})
+    question = question[0]
     return jsonify({
         'status': 404,
-        'error': 'No comments posted for question with id {}'.format(question_id)}), 404
+        'title': question['title'],
+        'body': question['body'],
+        'message' : 'No comments posted for question with id {}'.format(question_id)}), 404
