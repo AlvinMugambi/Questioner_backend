@@ -14,7 +14,7 @@ def init_db(db_url=None):
     """
     try:
         conn, cursor = connect_to_and_query_db()
-        all_init_queries = drop_table_if_exists() + set_up_tables()
+        all_init_queries = set_up_tables()
         i = 0
         while i != len(all_init_queries):
             query = all_init_queries[i]
