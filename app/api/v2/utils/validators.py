@@ -21,32 +21,32 @@ def check_password(password, confirmed_password):
         # check if password meets required length
     if len(password) < 6 or len(password) > 12:
         abort(make_response(jsonify(
-            status=400,
-            error="Password should not be less than 6 characters or exceed 12"), 400))
+            status=422,
+            error="Password should not be less than 6 characters or exceed 12"), 422))
 
     # check if password contains at least an alphabet(a-z)
     if not re.search("[a-z]", password):
         abort(make_response(jsonify(
-            status=400,
-            error="Password should contain a letter between a-z"), 400))
+            status=422,
+            error="Password should contain a letter between a-z"), 422))
 
     # check if password contains at least an upper case letter
     if not re.search("[A-Z]", password):
         abort(make_response(jsonify(
-            status=400,
-            error="Password should contain a capital letter"), 400))
+            status=422,
+            error="Password should contain a capital letter"), 422))
 
     # check if password contains at least a number(0-9)
     if not re.search("[0-9]", password):
         abort(make_response(jsonify(
-            status=400,
-            error="Password should contain a number(0-9)"), 400))
+            status=422,
+            error="Password should contain a number(0-9)"), 422))
 
     # Checks if passwords provided by the users match
     if password != confirmed_password:
         abort(make_response(jsonify(
-            status=400,
-            error="Passwords don't match!"), 400))
+            status=422,
+            error="Passwords don't match!"), 422))
 
     # If they match..
     hashed_password = generate_password_hash(password, method='sha256')
@@ -63,32 +63,32 @@ def validate_email(email):
         user, domain = str(email).split("@")
         if not user.strip() or ' ' in user:
             abort(make_response(jsonify({
-                'status': 400,
-                'error':'Invalid Email'}), 400))
+                'status': 422,
+                'error':'Invalid Email'}), 422))
     except ValueError:
         abort(make_response(jsonify(
-            status=400,
-            error="Invalid Email"), 400))
+            status=422,
+            error="Invalid Email"), 422))
     if not user or not domain:
-        abort(make_response(jsonify(error="Invalid Email"), 400))
+        abort(make_response(jsonify(error="Invalid Email"), 422))
 
     # Check that domain is valid
     try:
         domain_1, domain_2 = domain.split(".")
         if not re.match("^[A-Za-z]*$", domain_1):
             abort(make_response(jsonify({
-                "status": 400, "error":  "Invalid Email"}), 400))
+                "status": 422, "error":  "Invalid Email"}), 422))
         if not domain_2.isalnum():
             abort(make_response(jsonify({
-                "status": 400, "error":  "Invalid Email"}), 400))
+                "status": 422, "error":  "Invalid Email"}), 422))
     except ValueError:
         abort(make_response(jsonify(
-            status=400,
-            error="Invalid Email"), 400))
+            status=422,
+            error="Invalid Email"), 422))
     if not domain_1 or not domain_2:
         abort(make_response(jsonify(
-            status=400,
-            error="Invalid Email"), 400))
+            status=422,
+            error="Invalid Email"), 422))
 
     return email
 
@@ -100,14 +100,14 @@ def check_for_whitespace(data):
         if keys != 'tags':
             if not value.strip():
                 abort(make_response(jsonify({
-                    'status': 400,
-                    'error':'{} field cannot be left blank'.format(keys)}), 400))
+                    'status': 422,
+                    'error':'{} field cannot be left blank'.format(keys)}), 422))
         if keys == 'tags':
             for tags in data['tags']:
                 if not tags.strip():
                     abort(make_response(jsonify({
-                        'status': 400,
-                        'error':'tags field cannot be left blank'}), 400))
+                        'status': 422,
+                        'error':'tags field cannot be left blank'}), 422))
     return True
 
 def check_if_string(data):
@@ -115,26 +115,26 @@ def check_if_string(data):
         if key in ['firstname', 'lastname', 'username']:
             if not value.isalpha():
                 abort(make_response(jsonify({
-                    "status": 400,
-                    "error":  "Make sure you only use letters in your {}".format(key)}), 400))
+                    "status": 422,
+                    "error":  "Make sure you only use letters in your {}".format(key)}), 422))
 
 
 def check_phone_number(phone):
     if not re.match('^[0-9]*$', phone):
         abort(make_response(jsonify({
-            "status": 400,
-            "error":  "Phone number should be integers only"}), 400))
+            "status": 422,
+            "error":  "Phone number should be integers only"}), 422))
 
     if len(phone) < 10 or len(phone) > 10:
         abort(make_response(jsonify({
-            "status": 400,
-            "error":  "Phone number should be 10 digits."}), 400))
+            "status": 422,
+            "error":  "Phone number should be 10 digits."}), 422))
 
 
 def check_date(date):
     if not re.match(r"^(0[1-9]|[12][0-9]|3[01])\/(0[1-9]|1[0-2])\/([12][0-9]{3})$", date):
         abort(make_response(jsonify({
-            "status": 400, "error":  "Invalid date format. Should be DD/MM/YYYY"}), 400))
+            "status": 422, "error":  "Invalid date format. Should be DD/MM/YYYY"}), 422))
 
     date_format = "%d/%m/%Y"
     # create datetime objects from the strings
@@ -143,7 +143,7 @@ def check_date(date):
 
     if strpdate < now:
         abort(make_response(jsonify({
-            "status": 400, "error":  "Date should be in the future"}), 400))
+            "status": 422, "error":  "Date should be in the future"}), 422))
 
     months = ['Jan', 'Feb', 'March', 'April', 'May',
               'June', 'July', 'Aug', 'Sept', 'Oct', 'Nov', 'Dec']
@@ -174,9 +174,9 @@ def check_duplication(params, table_name):
         if duplicated:
             # Abort if duplicated
             abort(make_response(jsonify(
-                status=400,
+                status=409,
                 error="Error. '{}' '{}' \
-is already in use".format(key, value)), 400))
+is already in use".format(key, value)), 409))
 
 
 def check_if_already_rsvpd(meetup_id, user_id):

@@ -46,6 +46,7 @@ class QuestionBaseTest(unittest.TestCase):
                            "password":"ObiLight1"}
 
         self.meetup = {"topic":"Python",
+                       "description":"my description",
                        "meetup_date":"03/01/2091",
                        "location":"Nyeri",
                        "images":"them.png",
