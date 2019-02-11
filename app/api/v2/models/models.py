@@ -262,12 +262,21 @@ class Question:
         questions = database.select_from_db(query)
         data = []
         for question in questions:
+            comments = Comment.get_all_comments(question["question_id"])
+            query = """
+            SELECT username FROM users
+            WHERE users.user_id = '{}'""".format(question["user_id"])
+
+            username = database.select_from_db(query)
+            username = username[0][0]
             question = {'questionId' : question["question_id"],
                         'userId' : question["user_id"],
+                        'username' : username,
                         'meetupId' : question["meetup_id"],
                         'title' : question["title"],
                         'body' : question["body"],
                         'votes' : question["votes"],
+                        'comments' : len(comments),
                         'createdAt' : question["created_at"]
                        }
             data.append(question)
@@ -326,7 +335,15 @@ class Comment:
         comments = database.select_from_db(query)
         data = []
         for comment in comments:
+            query = """
+            SELECT username FROM users
+            WHERE users.user_id = '{}'""".format(comment["user_id"])
+
+            username = database.select_from_db(query)
+            username = username[0][0]
+
             comment = {'userId' : comment["user_id"],
+                       'username' : username,
                        'questionId' : comment["question_id"],
                        'title' : comment["title"],
                        'body' : comment["body"],
