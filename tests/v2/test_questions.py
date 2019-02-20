@@ -79,17 +79,15 @@ class QuestionBaseTest(unittest.TestCase):
 
         self.upvoted_question = {
             "body": "I would like to know the kind of food being served at the meetup",
-            "comment": None,
             "questionId": 1,
             "title": "what are we to eat?",
             "votes": 1}
 
         self.downvoted_question = {
             "body": "I would like to know the kind of food being served at the meetup",
-            "comment": None,
             "questionId": 1,
             "title": "what are we to eat?",
-            "votes": 0}
+            "votes": -1}
 
         self.token = ''
 
