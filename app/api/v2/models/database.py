@@ -14,14 +14,14 @@ def init_db(db_url=None):
     """
     try:
         conn, cursor = connect_to_and_query_db()
-        all_init_queries = set_up_tables()
+        all_init_queries = drop_table_if_exists() + set_up_tables()
         i = 0
         while i != len(all_init_queries):
             query = all_init_queries[i]
             cursor.execute(query)
             conn.commit()
             i += 1
-        print("--"*50)
+        # print("--"*50)
         conn.close()
 
     except Exception as error:
@@ -162,7 +162,7 @@ def connect_to_and_query_db(query=None, db_url=None):
     try:
         # connect to db
         conn = psycopg2.connect(db_url)
-        print("\n\nConnected {}\n".format(conn.get_dsn_parameters()))
+        # print("\n\nConnected {}\n".format(conn.get_dsn_parameters()))
         cursor = conn.cursor(cursor_factory=psycopg2.extras.DictCursor)
 
         if query:
