@@ -6,7 +6,7 @@ import unittest
 # local imports
 from app import create_app
 from config import app_config
-from app.api.v2.models.database import init_db
+from app.api.v2.models.database import init_db, drop_table_if_exists
 
 class QuestionBaseTest(unittest.TestCase):
     """
@@ -79,24 +79,23 @@ class QuestionBaseTest(unittest.TestCase):
 
         self.upvoted_question = {
             "body": "I would like to know the kind of food being served at the meetup",
-            "comment": None,
             "questionId": 1,
             "title": "what are we to eat?",
             "votes": 1}
 
         self.downvoted_question = {
             "body": "I would like to know the kind of food being served at the meetup",
-            "comment": None,
             "questionId": 1,
             "title": "what are we to eat?",
-            "votes": 0}
+            "votes": -1}
 
         self.token = ''
 
     def tearDown(self):
         """The tear down method that deletes records after tests run"""
         self.app.testing = False
-        init_db(self.db_url)
+        # init_db(self.db_url)
+        drop_table_if_exists()
 
 
 class TestQuestionEndpoint(QuestionBaseTest):
