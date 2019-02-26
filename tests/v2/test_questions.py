@@ -94,8 +94,8 @@ class QuestionBaseTest(unittest.TestCase):
     def tearDown(self):
         """The tear down method that deletes records after tests run"""
         self.app.testing = False
-        # init_db(self.db_url)
         drop_table_if_exists()
+        init_db(self.db_url)
 
 
 class TestQuestionEndpoint(QuestionBaseTest):

@@ -138,8 +138,8 @@ class MeetupsBaseTest(unittest.TestCase):
         recreate all the tables, wiping all data
         """
         self.app.testing = False
-        # init_db(self.db_url)
         drop_table_if_exists()
+        init_db(self.db_url)
 
 
 
