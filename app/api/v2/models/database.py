@@ -108,17 +108,11 @@ def set_up_tables():
     )"""
 
     # the admin query
-    query = """
-    SELECT username FROM users WHERE users.username = '{}'
-    """.format('iamtheadmin')
-    user = select_from_db(query)
-    if not user:
-        password = generate_password_hash('ThaOG1234')
-        create_admin_query = """
-        INSERT INTO users(username, firstname, lastname, phone, email, password, admin) VALUES(
-        '{}', '{}', '{}', '{}', '{}', '{}', '{}'
-        )""".format('iamtheadmin', 'the', 'admin', '0706673461', 'adminog@gmail.com', password, True)
-    create_admin_query = """SELECT * FROM users"""
+    password = generate_password_hash('ThaOG1234')
+    create_admin_query = """
+    INSERT INTO users(username, firstname, lastname, phone, email, password, admin) VALUES(
+    '{}', '{}', '{}', '{}', '{}', '{}', '{}'
+    )""".format('iamtheadmin', 'the', 'admin', '0706673461', 'adminog@gmail.com', password, True)
 
     return [users_table_query, meetups_table_query,
             questions_table_query, comments_table_query,
