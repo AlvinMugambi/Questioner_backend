@@ -150,9 +150,14 @@ def drop_table_if_exists():
                drop_rsvps_table, drop_votes_table_,
                drop_blacklist_tokens_table_]
 
-    for query in queries:
-        query_db_no_return(query)
-    # return queries
+    conn, cursor = connect_to_and_query_db()
+    i = 0
+    while i != len(queries):
+        query = queries[i]
+        cursor.execute(query)
+        conn.commit()
+        i += 1
+    conn.close()
 
 
 def connect_to_and_query_db(query=None, db_url=None):
