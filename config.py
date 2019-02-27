@@ -15,6 +15,7 @@ class DevelopmentConfig(Config):
     The development configuration class
     """
     DEBUG = True
+    db_url = os.getenv('DATABASE_URL')
 
 
 class TestingConfig(Config):
@@ -22,6 +23,7 @@ class TestingConfig(Config):
     The testing configuration class
     """
     DEBUG = True
+    test_db_url = os.getenv('DATABASE_TEST_URL')
 
 
 app_config = {
