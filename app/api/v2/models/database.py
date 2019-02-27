@@ -33,7 +33,7 @@ def set_up_tables():
         Queries run to set up and create tables
     """
     users_table_query = """
-    CREATE TABLE users (
+    CREATE TABLE IF NOT EXISTS users (
         user_id SERIAL PRIMARY KEY,
         username VARCHAR (24) NOT NULL UNIQUE,
         firstname VARCHAR (24) NOT NULL,
@@ -45,7 +45,7 @@ def set_up_tables():
     )"""
 
     meetups_table_query = """
-    CREATE TABLE meetups (
+    CREATE TABLE IF NOT EXISTS meetups (
         meetup_id SERIAL PRIMARY KEY,
         topic VARCHAR (24) NOT NULL,
         description VARCHAR NOT NULL,
@@ -57,7 +57,7 @@ def set_up_tables():
     )"""
 
     questions_table_query = """
-    CREATE TABLE questions (
+    CREATE TABLE IF NOT EXISTS questions (
         question_id SERIAL PRIMARY KEY,
         user_id INTEGER NOT NULL,
         meetup_id INTEGER NOT NULL,
@@ -71,7 +71,7 @@ def set_up_tables():
     )"""
 
     comments_table_query = """
-    CREATE TABLE comments (
+    CREATE TABLE IF NOT EXISTS comments (
         comment_id SERIAL PRIMARY KEY,
         user_id INTEGER,
         question_id INTEGER NOT NULL,
@@ -83,7 +83,7 @@ def set_up_tables():
     )"""
 
     rsvps_table_query = """
-    CREATE TABLE rsvps (
+    CREATE TABLE IF NOT EXISTS rsvps (
         rsvp_id SERIAL PRIMARY KEY,
         meetup_id INTEGER,
         user_id INTEGER,
@@ -94,7 +94,7 @@ def set_up_tables():
     )"""
 
     votes_table_query = """
-    CREATE TABLE votes (
+    CREATE TABLE IF NOT EXISTS votes (
         user_id INTEGER,
         question_id INTEGER,
         FOREIGN KEY (user_id) REFERENCES users(user_id) ON DELETE CASCADE,
@@ -102,7 +102,7 @@ def set_up_tables():
     )"""
 
     tokens_table_query = """
-    CREATE TABLE blacklist_tokens (
+    CREATE TABLE IF NOT EXISTS blacklist_tokens (
         token_id SERIAL PRIMARY KEY,
         token VARCHAR
     )"""
