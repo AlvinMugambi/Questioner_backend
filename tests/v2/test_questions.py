@@ -6,7 +6,7 @@ import unittest
 # local imports
 from app import create_app
 from config import app_config
-from app.api.v2.models.database import init_db
+from app.api.v2.models.database import init_db, drop_table_if_exists
 
 class QuestionBaseTest(unittest.TestCase):
     """
@@ -94,6 +94,7 @@ class QuestionBaseTest(unittest.TestCase):
     def tearDown(self):
         """The tear down method that deletes records after tests run"""
         self.app.testing = False
+        drop_table_if_exists()
         init_db(self.db_url)
 
 
