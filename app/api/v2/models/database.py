@@ -150,8 +150,7 @@ def drop_table_if_exists():
                drop_rsvps_table, drop_votes_table_,
                drop_blacklist_tokens_table_]
 
-    for query in queries:
-        query_db_no_return(query)
+    return queries
 
 
 def connect_to_and_query_db(query=None, db_url=None):
@@ -188,7 +187,7 @@ def query_db_no_return(query):
         Handles INSERT queries
     """
     try:
-        conn = connect_to_and_query_db(query)[0]
+        conn = connect_to_and_query_db(query=query)[0]
         # After successful INSERT query
         conn.close()
     except psycopg2.Error as error:
@@ -200,7 +199,7 @@ def select_from_db(query):
         Handles SELECT queries
     """
     rows = None
-    conn, cursor = connect_to_and_query_db(query)
+    conn, cursor = connect_to_and_query_db(query=query)
     if conn:
         # Retrieve SELECT query results from db
         rows = cursor.fetchall()
