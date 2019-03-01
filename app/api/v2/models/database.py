@@ -14,7 +14,7 @@ def init_db(db_url=None):
     """
     try:
         conn, cursor = connect_to_and_query_db()
-        all_init_queries = drop_table_if_exists() + set_up_tables()
+        all_init_queries = set_up_tables()
         i = 0
         while i != len(all_init_queries):
             query = all_init_queries[i]
@@ -150,7 +150,7 @@ def drop_table_if_exists():
                drop_rsvps_table, drop_votes_table_,
                drop_blacklist_tokens_table_]
 
-    return queries
+    return [query_db_no_return(query) for query in queries]
 
 
 def connect_to_and_query_db(query=None, db_url=None):
